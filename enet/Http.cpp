@@ -85,32 +85,7 @@ bool enet::Http::setPort(uint16_t _port) {
 	return true;
 }
 
-bool enet::Http::get(const std::string& _address) {
-	m_receiveData.clear();
-	m_receiveHeader.clear();
-	if (connect() == false) {
-		return false;
-	}
-	std::string req = "GET http://" + m_connection.getHostName();
-	if (_address != "") {
-		req += "/";
-		req += _address;
-	}
-	req += " HTTP/1.0\n";
-	// add header properties :
-	for (auto &it : m_sendHeader) {
-		req += it.first + ": " + it.second + "\n";
-	}
-	// end of header
-	req += "\n";
-	// no body:
-	
-	int32_t len = m_connection.write(req, false);
-	ENET_VERBOSE("read write=" << len << " data: " << req);
-	if (len != req.size()) {
-		ENET_ERROR("An error occured when sending data " << len << "!=" << req.size());
-		return false;
-	}
+bool enet::Http::receiveData(void) {
 	std::string header;
 	// Get data
 	char data[1025];
@@ -172,7 +147,7 @@ bool enet::Http::get(const std::string& _address) {
 				continue;
 			}
 			//ENET_INFO("header : key='" << std::string(element, 0, found) << "' value='" << std::string(element, found+2) << "'");
-			m_receiveHeader.insert(make_pair(std::string(element, 0, found), std::string(element, found+2)));
+			m_receiveHeader.insert(make_pair(unEscapeChar(std::string(element, 0, found)), unEscapeChar(std::string(element, found+2))));
 		}
 	}
 	/*
@@ -216,11 +191,81 @@ bool enet::Http::get(const std::string& _address) {
 	return true;
 }
 
-bool enet::Http::post(const std::string& _address) {
+
+bool enet::Http::get(const std::string& _address) {
+	m_receiveData.clear();
+	m_receiveHeader.clear();
 	if (connect() == false) {
 		return false;
 	}
+	std::string req = "GET http://" + m_connection.getHostName();
+	if (_address != "") {
+		req += "/";
+		req += _address;
+	}
+	req += " HTTP/1.0\n";
+	setSendHeaderProperties("Lenght", "0");
+	// add header properties :
+	for (auto &it : m_sendHeader) {
+		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\n";
+	}
+	// end of header
+	req += "\n";
+	// no body:
 	
+	int32_t len = m_connection.write(req, false);
+	ENET_VERBOSE("read write=" << len << " data: " << req);
+	if (len != req.size()) {
+		ENET_ERROR("An error occured when sending data " << len << "!=" << req.size());
+		return false;
+	}
+	return receiveData();
+}
+
+std::string enet::Http::escapeChar(const std::string& _value) {
+	return _value;
+}
+std::string enet::Http::unEscapeChar(const std::string& _value) {
+	return _value;
+}
+
+bool enet::Http::post(const std::string& _address, const std::map<std::string, std::string>& _values) {
+	m_receiveData.clear();
+	m_receiveHeader.clear();
+	if (connect() == false) {
+		return false;
+	}
+	// First create body :
+	std::string body;
+	for (auto &it : _values) {
+		if (body.size() > 0) {
+			body += "&";
+		}
+		body += escapeChar(it.first) + "=" + escapeChar(it.second);
+	}
+	
+	std::string req = "POST http://" + m_connection.getHostName();
+	if (_address != "") {
+		req += "/";
+		req += _address;
+	}
+	req += " HTTP/1.0\n";
+	setSendHeaderProperties("Lenght", std::to_string(body.size()));
+	// add header properties :
+	for (auto &it : m_sendHeader) {
+		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\n";
+	}
+	// end of header
+	req += "\n";
+	req += body;
+	
+	int32_t len = m_connection.write(req, false);
+	ENET_VERBOSE("read write=" << len << " data: " << req);
+	if (len != req.size()) {
+		ENET_ERROR("An error occured when sending data " << len << "!=" << req.size());
+		return false;
+	}
+	return receiveData();
 }
 
 std::string enet::Http::dataString(void) {

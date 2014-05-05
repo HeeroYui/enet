@@ -35,7 +35,7 @@ namespace enet {
 			bool setServer(const std::string& _hostName);
 			bool setPort(uint16_t _port);
 			bool get(const std::string& _address);
-			bool post(const std::string& _address);
+			bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
 			
 			int32_t dataSize(void) {
 				return m_receiveData.size();
