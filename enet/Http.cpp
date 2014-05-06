@@ -21,7 +21,8 @@ static std::map<int32_t, std::string> getErrorList(void) {
 	return g_list;
 }
 
-enet::Http::Http(void) {
+enet::Http::Http(void) :
+  m_keepAlive(false) {
 	m_connection.setPort(80);
 	m_connection.setServer(false);
 }
@@ -42,7 +43,12 @@ bool enet::Http::connect(void) {
 }
 
 void enet::Http::setSendHeaderProperties(const std::string& _key, const std::string& _val) {
-	m_sendHeader.insert(make_pair(_key, _val));
+	auto it = m_sendHeader.find(_key);
+	if (it == m_sendHeader.end()) {
+		m_sendHeader.insert(make_pair(_key, _val));
+	} else {
+		it->second = _val;
+	}
 }
 
 std::string enet::Http::getSendHeaderProperties(const std::string& _key) {
@@ -63,6 +69,10 @@ bool enet::Http::reset(void) {
 	m_sendHeader.clear();
 	m_receiveHeader.clear();
 	setSendHeaderProperties("User-Agent", "e-net (ewol network interface)");
+	if (m_keepAlive == true) {
+		setSendHeaderProperties("Connection", "Keep-Alive");
+	}
+	return true;
 }
 
 bool enet::Http::setServer(const std::string& _hostName) {
@@ -89,7 +99,7 @@ bool enet::Http::receiveData(void) {
 	std::string header;
 	// Get data
 	char data[1025];
-	len = 1;
+	int32_t len = 1;
 	bool headerEnded = false;
 	while (    m_connection.getConnectionStatus() == enet::Tcp::statusLink
 	        && len > 0) {
@@ -135,19 +145,29 @@ bool enet::Http::receiveData(void) {
 	// parse header :
 	std::vector<std::string> list = std::split(header, '\n');
 	headerEnded = false;
+	m_receiveHeader.clear();
 	for (auto element : list) {
 		if (headerEnded == false) {
 			header = element;
 			headerEnded = true;
 		} else {
-			//ENET_INFO("header : '" << element << "'");
 			size_t found = element.find(":");
 			if (found == std::string::npos) {
 				// nothing
 				continue;
 			}
-			//ENET_INFO("header : key='" << std::string(element, 0, found) << "' value='" << std::string(element, found+2) << "'");
+			ENET_VERBOSE("header : key='" << std::string(element, 0, found) << "' value='" << std::string(element, found+2) << "'");
 			m_receiveHeader.insert(make_pair(unEscapeChar(std::string(element, 0, found)), unEscapeChar(std::string(element, found+2))));
+		}
+	}
+	for (auto &it : m_receiveHeader) {
+		if (it.first == "Connection") {
+			if (it.second == "close") {
+				ENET_DEBUG("connection closed by remote :");
+				m_connection.unlink();
+			} else {
+				ENET_TODO("manage connection type : '" << it.second);
+			}
 		}
 	}
 	/*
@@ -204,7 +224,7 @@ bool enet::Http::get(const std::string& _address) {
 		req += _address;
 	}
 	req += " HTTP/1.0\n";
-	setSendHeaderProperties("Lenght", "0");
+	setSendHeaderProperties("Content-Length", "0");
 	// add header properties :
 	for (auto &it : m_sendHeader) {
 		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\n";
@@ -243,21 +263,30 @@ bool enet::Http::post(const std::string& _address, const std::map<std::string, s
 		}
 		body += escapeChar(it.first) + "=" + escapeChar(it.second);
 	}
-	
+	return post(_address, "application/x-www-form-urlencoded", body);
+}
+
+bool enet::Http::post(const std::string& _address, const std::string& _contentType, const std::string& _data) {
+	m_receiveData.clear();
+	m_receiveHeader.clear();
+	if (connect() == false) {
+		return false;
+	}
 	std::string req = "POST http://" + m_connection.getHostName();
 	if (_address != "") {
 		req += "/";
 		req += _address;
 	}
 	req += " HTTP/1.0\n";
-	setSendHeaderProperties("Lenght", std::to_string(body.size()));
+	setSendHeaderProperties("Content-Type", _contentType);
+	setSendHeaderProperties("Content-Length", std::to_string(_data.size()));
 	// add header properties :
 	for (auto &it : m_sendHeader) {
 		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\n";
 	}
 	// end of header
 	req += "\n";
-	req += body;
+	req += _data;
 	
 	int32_t len = m_connection.write(req, false);
 	ENET_VERBOSE("read write=" << len << " data: " << req);
@@ -267,6 +296,7 @@ bool enet::Http::post(const std::string& _address, const std::map<std::string, s
 	}
 	return receiveData();
 }
+
 
 std::string enet::Http::dataString(void) {
 	std::string data;

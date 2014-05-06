@@ -22,6 +22,15 @@ namespace enet {
 		private:
 			enet::Tcp m_connection;
 		private:
+			bool m_keepAlive;
+		public:
+			void setKeepAlive(bool _keepAlive) {
+				m_keepAlive = true;
+			}
+			bool getKeepAlive(void) {
+				return m_keepAlive;
+			}
+		private:
 			// key, val
 			std::map<std::string, std::string> m_sendHeader;
 			std::map<std::string, std::string> m_receiveHeader;
@@ -36,6 +45,7 @@ namespace enet {
 			bool setPort(uint16_t _port);
 			bool get(const std::string& _address);
 			bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
+			bool post(const std::string& _address, const std::string& _contentType, const std::string& _data);
 			
 			int32_t dataSize(void) {
 				return m_receiveData.size();
@@ -44,6 +54,9 @@ namespace enet {
 				return m_receiveData;
 			}
 			std::string dataString(void);
+			std::string escapeChar(const std::string& _value);
+			std::string unEscapeChar(const std::string& _value);
+			bool receiveData(void);
 	};
 };
 

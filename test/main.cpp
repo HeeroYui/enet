@@ -15,19 +15,39 @@
 #define __class__ "test"
 
 int main(int argc, const char *argv[]) {
-	etk::log::setLevel(etk::log::logLevelVerbose);
+	etk::log::setLevel(etk::log::logLevelDebug);
 	APPL_VERBOSE("plop");
 	if (argc > 2) {
 		// client mode ...
 		enet::Http connection;
-		connection.setServer("example.com");
-		
-		APPL_INFO("Get data : ");
+		connection.setServer("127.0.0.1");
+		connection.setKeepAlive(true);
+		APPL_INFO("----------------------------");
+		APPL_INFO("GET data : ");
 		if (connection.get("") == false) {
-			APPL_ERROR("can not Get data...");
+			APPL_ERROR("can not GET data...");
 			return -1;
 		}
 		APPL_INFO("data : " << connection.dataString());
+		
+		APPL_INFO("----------------------------");
+		APPL_INFO("POST data : ");
+		std::map<std::string, std::string> values;
+		values.insert(std::make_pair<std::string, std::string>("plop", "valuePlop"));
+		if (connection.post("", values) == false) {
+			APPL_ERROR("can not POST data...");
+			return -1;
+		}
+		APPL_INFO("data : " << connection.dataString());
+		
+		APPL_INFO("----------------------------");
+		APPL_INFO("POST xml : ");
+		if (connection.post("", /*"application/xml"*/ "text/xml; charset=utf-8", "<plop><string>value1</string></plop>") == false) {
+			APPL_ERROR("can not POST XML data...");
+			return -1;
+		}
+		APPL_INFO("data : " << connection.dataString());
+		
 	} else if (argc > 1) {
 		// client mode ...
 		enet::Tcp connection;
