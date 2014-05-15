@@ -8,7 +8,7 @@
 
 #include <enet/debug.h>
 
-int32_t enet::getLogId(void) {
+int32_t enet::getLogId() {
 	static int32_t g_val = etk::log::registerInstance("enet");
 	return g_val;
 }

@@ -20,7 +20,7 @@
 #endif
 #define __class__ ("Tcp")
 
-enet::Tcp::Tcp(void) :
+enet::Tcp::Tcp() :
   m_socketId(-1),
   m_socketIdClient(-1),
   m_host("127.0.0.1"),
@@ -30,7 +30,7 @@ enet::Tcp::Tcp(void) :
 	
 }
 
-enet::Tcp::~Tcp(void) {
+enet::Tcp::~Tcp() {
 	unlink();
 }
 
@@ -79,7 +79,7 @@ void enet::Tcp::setServer(bool _status) {
 	m_server = _status;
 }
 
-bool enet::Tcp::link(void) {
+bool enet::Tcp::link() {
 	if (m_status == statusLink) {
 		ENET_ERROR("Connection is already started");
 		return false;
@@ -177,7 +177,7 @@ bool enet::Tcp::link(void) {
 }
 
 
-bool enet::Tcp::unlink(void) {
+bool enet::Tcp::unlink() {
 	if (m_socketIdClient >= 0) {
 		ENET_INFO(" close client socket");
 		close(m_socketIdClient);

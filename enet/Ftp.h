@@ -12,8 +12,8 @@
 namespace enet {
 	class Ftp {
 		public:
-			Ftp(void) { };
-			virtual ~Ftp(void) { };
+			Ftp() { };
+			virtual ~Ftp() { };
 	};
 };
 

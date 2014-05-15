@@ -17,8 +17,8 @@
 namespace enet {
 	class Http {
 		public:
-			Http(void);
-			virtual ~Http(void);
+			Http();
+			virtual ~Http();
 		private:
 			enet::Tcp m_connection;
 		private:
@@ -27,7 +27,7 @@ namespace enet {
 			void setKeepAlive(bool _keepAlive) {
 				m_keepAlive = true;
 			}
-			bool getKeepAlive(void) {
+			bool getKeepAlive() {
 				return m_keepAlive;
 			}
 		private:
@@ -35,8 +35,8 @@ namespace enet {
 			std::map<std::string, std::string> m_sendHeader;
 			std::map<std::string, std::string> m_receiveHeader;
 			std::vector<uint8_t> m_receiveData;
-			bool connect(void);
-			bool reset(void);
+			bool connect();
+			bool reset();
 		public:
 			void setSendHeaderProperties(const std::string& _key, const std::string& _val);
 			std::string getSendHeaderProperties(const std::string& _key);
@@ -47,16 +47,16 @@ namespace enet {
 			bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
 			bool post(const std::string& _address, const std::string& _contentType, const std::string& _data);
 			
-			int32_t dataSize(void) {
+			int32_t dataSize() {
 				return m_receiveData.size();
 			}
-			const std::vector<uint8_t>& data(void) {
+			const std::vector<uint8_t>& data() {
 				return m_receiveData;
 			}
-			std::string dataString(void);
+			std::string dataString();
 			std::string escapeChar(const std::string& _value);
 			std::string unEscapeChar(const std::string& _value);
-			bool receiveData(void);
+			bool receiveData();
 	};
 };
 

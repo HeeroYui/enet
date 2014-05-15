@@ -16,22 +16,22 @@
 #endif
 #define __class__ ("Http")
 
-static std::map<int32_t, std::string> getErrorList(void) {
+static std::map<int32_t, std::string> getErrorList() {
 	static std::map<int32_t, std::string> g_list;
 	return g_list;
 }
 
-enet::Http::Http(void) :
+enet::Http::Http() :
   m_keepAlive(false) {
 	m_connection.setPort(80);
 	m_connection.setServer(false);
 }
 
-enet::Http::~Http(void) {
+enet::Http::~Http() {
 	reset();
 }
 
-bool enet::Http::connect(void) {
+bool enet::Http::connect() {
 	if (m_connection.getConnectionStatus() == enet::Tcp::statusLink) {
 		return true;
 	}
@@ -61,7 +61,7 @@ std::string enet::Http::getReceiveHeaderProperties(const std::string& _key) {
 	return "";
 }
 
-bool enet::Http::reset(void) {
+bool enet::Http::reset() {
 	if (m_connection.getConnectionStatus() != enet::Tcp::statusLink) {
 		m_connection.unlink();
 	}
@@ -95,7 +95,7 @@ bool enet::Http::setPort(uint16_t _port) {
 	return true;
 }
 
-bool enet::Http::receiveData(void) {
+bool enet::Http::receiveData() {
 	std::string header;
 	// Get data
 	char data[1025];
@@ -298,7 +298,7 @@ bool enet::Http::post(const std::string& _address, const std::string& _contentTy
 }
 
 
-std::string enet::Http::dataString(void) {
+std::string enet::Http::dataString() {
 	std::string data;
 	for (auto element : m_receiveData) {
 		if (element == '\0') {

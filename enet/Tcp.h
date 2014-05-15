@@ -15,8 +15,8 @@ namespace enet {
 			int32_t m_socketId; //!< socket linux interface generic
 			int32_t m_socketIdClient;
 		public:
-			Tcp(void);
-			virtual ~Tcp(void);
+			Tcp();
+			virtual ~Tcp();
 		private:
 			std::string m_host; //!< hostname/IP to connect with.
 		public:
@@ -37,7 +37,7 @@ namespace enet {
 			 * @brief Get the decriptive name hot the host
 			 * @return the string requested
 			 */
-			const std::string& getHostName(void) {
+			const std::string& getHostName() {
 				return m_host;
 			}
 		private:
@@ -52,7 +52,7 @@ namespace enet {
 			 * @brief Get the port number.
 			 * @return The requested port number.
 			 */
-			uint16_t getPort(void) {
+			uint16_t getPort() {
 				return m_port;
 			}
 		private:
@@ -67,7 +67,7 @@ namespace enet {
 			 * @brief Get the server mode status.
 			 * @return true: the tcp interface is configure as a server.
 			 */
-			int32_t getServer(void) {
+			int32_t getServer() {
 				return m_server;
 			}
 		public:
@@ -83,7 +83,7 @@ namespace enet {
 			 * @brief Get the current Status of the connection
 			 * @return The status.
 			 */
-			enum status getConnectionStatus(void) {
+			enum status getConnectionStatus() {
 				return m_status;
 			}
 		public:
@@ -92,13 +92,13 @@ namespace enet {
 			 * @return true if connection is done
 			 * @return false otherwise ...
 			 */
-			bool link(void);
+			bool link();
 			/**
 			 * @brief Unlink on a specific interface.
 			 * @return true if connection is removed
 			 * @return false otherwise ...
 			 */
-			bool unlink(void);
+			bool unlink();
 			/**
 			 * @brief Read a chunk of data on the socket
 			 * @param[in] _data pointer on the data might be write

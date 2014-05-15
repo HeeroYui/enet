@@ -12,8 +12,8 @@
 namespace enet {
 	class Udp {
 		public:
-			Udp(void) { };
-			virtual ~Udp(void) { };
+			Udp() { };
+			virtual ~Udp() { };
 	};
 };
 
