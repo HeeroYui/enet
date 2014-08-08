@@ -7,8 +7,8 @@ def get_desc():
 
 def get_licence():
 	return {
-		"assimilate":"BSD",
-		"type":"BSD-3-clauses"
+		"assimilate":"APACHE2",
+		"type":"APACHE-2.0"
 		}
 
 def create(target):

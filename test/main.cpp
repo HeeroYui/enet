@@ -3,7 +3,7 @@
  * 
  * @copyright 2014, Edouard DUPIN, all right reserved
  * 
- * @license BSD 3 clauses (see license file)
+ * @license APACHE v2.0 (see license file)
  */
 
 #include <test/debug.h>
