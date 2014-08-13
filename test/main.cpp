@@ -91,7 +91,7 @@ int main(int argc, const char *argv[]) {
 		}
 		int32_t iii = 0;
 		while (connection.getConnectionStatus() == enet::Tcp::statusLink) {
-			int32_t len = connection.write("plop" + std::to_string(iii));
+			int32_t len = connection.write("plop" + etk::to_string(iii));
 			APPL_INFO("write len=" << len);
 			iii++;
 		}

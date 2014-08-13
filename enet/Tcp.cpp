@@ -36,13 +36,13 @@ enet::Tcp::~Tcp() {
 
 void enet::Tcp::setIpV4(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro) {
 	std::string tmpname;
-	tmpname  = std::to_string(_fist);
+	tmpname  = etk::to_string(_fist);
 	tmpname += ".";
-	tmpname += std::to_string(_second);
+	tmpname += etk::to_string(_second);
 	tmpname += ".";
-	tmpname += std::to_string(_third);
+	tmpname += etk::to_string(_third);
 	tmpname += ".";
-	tmpname += std::to_string(_quatro);
+	tmpname += etk::to_string(_quatro);
 	setHostNane(tmpname);
 }
 

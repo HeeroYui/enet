@@ -143,7 +143,7 @@ bool enet::Http::receiveData() {
 		return false;
 	}
 	// parse header :
-	std::vector<std::string> list = std::split(header, '\n');
+	std::vector<std::string> list = etk::split(header, '\n');
 	headerEnded = false;
 	m_receiveHeader.clear();
 	for (auto element : list) {
@@ -177,12 +177,12 @@ bool enet::Http::receiveData() {
 	}
 	*/
 	// parse base answear:
-	list = std::split(header, ' ');
+	list = etk::split(header, ' ');
 	if (list.size() < 2) {
 		ENET_ERROR("can not parse answear : " << list);
 		return false;
 	}
-	int32_t ret = std::stoi(list[1]);
+	int32_t ret = etk::string_to_int32_t(list[1]);
 	switch (ret/100) {
 		case 1:
 			// information message
@@ -279,7 +279,7 @@ bool enet::Http::post(const std::string& _address, const std::string& _contentTy
 	}
 	req += " HTTP/1.0\n";
 	setSendHeaderProperties("Content-Type", _contentType);
-	setSendHeaderProperties("Content-Length", std::to_string(_data.size()));
+	setSendHeaderProperties("Content-Length", etk::to_string(_data.size()));
 	// add header properties :
 	for (auto &it : m_sendHeader) {
 		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\n";
