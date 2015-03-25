@@ -15,16 +15,7 @@ namespace enet {
 	int32_t getLogId();
 };
 
-// TODO : Review this problem of multiple intanciation of "std::stringbuf sb"
-#define ENET_BASE(info,data) \
-	do { \
-		if (info <= etk::log::getLevel(enet::getLogId())) { \
-			std::stringbuf sb; \
-			std::ostream tmpStream(&sb); \
-			tmpStream << data; \
-			etk::log::logStream(enet::getLogId(), info, __LINE__, __class__, __func__, tmpStream); \
-		} \
-	} while(0)
+#define ENET_BASE(info,data) TK_LOG_BASE(enet::getLogId(),info,data)
 
 #define ENET_CRITICAL(data)      ENET_BASE(1, data)
 #define ENET_ERROR(data)         ENET_BASE(2, data)
