@@ -3,6 +3,8 @@ enet
 
 `enet` is a network abstraction layer for ewol
 
+[![Build Status](https://travis-ci.org/atria-soft/enet.svg?branch=master)](https://travis-ci.org/atria-soft/enet)
+
 Instructions
 ============
 

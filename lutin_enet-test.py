@@ -12,9 +12,9 @@ def get_licence():
 		}
 
 def create(target):
-	myModule = module.Module(__file__, 'enettest', 'BINARY')
+	myModule = module.Module(__file__, 'enet-test', 'BINARY')
 	
-	myModule.add_module_depend(['enet'])
+	myModule.add_module_depend(['enet', 'gtest'])
 	
 	myModule.add_src_file([
 		'test/debug.cpp',
