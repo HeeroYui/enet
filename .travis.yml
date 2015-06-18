@@ -33,7 +33,7 @@ install:
 # build sequence with Lutin :
 script: 
   - lutin -C -P -c$BUILDER -mdebug -p enet-test
-  - ./out/Linux_x86_64/debug/staging/$BUILDER/enet-test/usr/bin/enet-test -l6
+  #- ./out/Linux_x86_64/debug/staging/$BUILDER/enet-test/usr/bin/enet-test -l6
 
 #send e-mail on compilation result:
 notifications:
