@@ -5,6 +5,12 @@ enet
 
 [![Build Status](https://travis-ci.org/atria-soft/enet.svg?branch=master)](https://travis-ci.org/atria-soft/enet)
 
+[![Coverage Status](http://atria-soft.com/ci/coverage/atria-soft/enet.svg?branch=master)](http://atria-soft.com/ci/atria-soft/enet)
+
+[![Test Status](http://atria-soft.com/ci/test/atria-soft/enet.svg?branch=master)](http://atria-soft.com/ci/atria-soft/enet)
+
+[![Warning Status](http://atria-soft.com/ci/warning/atria-soft/enet.svg?branch=master)](http://atria-soft.com/ci/atria-soft/enet)
+
 Instructions
 ============
 
