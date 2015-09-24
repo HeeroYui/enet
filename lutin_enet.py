@@ -12,11 +12,11 @@ def get_licence():
 		}
 
 def create(target):
-	myModule = module.Module(__file__, 'enet', 'LIBRARY')
+	my_module = module.Module(__file__, 'enet', 'LIBRARY')
 	
-	myModule.add_module_depend(['etk'])
+	my_module.add_module_depend(['etk'])
 	
-	myModule.add_src_file([
+	my_module.add_src_file([
 		'enet/debug.cpp',
 		'enet/Udp.cpp',
 		'enet/Tcp.cpp',
@@ -24,10 +24,10 @@ def create(target):
 		'enet/Ftp.cpp',
 		])
 	
-	myModule.add_export_path(tools.get_current_path(__file__))
+	my_module.add_export_path(tools.get_current_path(__file__))
 	
 	# add the currrent module at the 
-	return myModule
+	return my_module
 
 
 
