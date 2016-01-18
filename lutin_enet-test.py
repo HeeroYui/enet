@@ -26,12 +26,17 @@ def get_maintainer():
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
-	my_module.add_module_depend(['enet', 'gtest', 'test-debug'])
+	my_module.add_module_depend(['test-debug'])
 	my_module.add_src_file([
-		'test/debug.cpp',
-		'test/main.cpp'
-		])
+	    'test/debug.cpp'
+	    ])
 	my_module.add_export_path(tools.get_current_path(__file__))
+	if target.name == "Windows":
+	    return my_module
+	my_module.add_module_depend(['enet', 'gtest'])
+	my_module.add_src_file([
+	    'test/main.cpp'
+	    ])
 	return my_module
 
 

@@ -28,20 +28,24 @@ def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
 	my_module.add_module_depend(['etk'])
 	my_module.add_src_file([
-		'enet/debug.cpp',
-		'enet/Udp.cpp',
-		'enet/Tcp.cpp',
-		'enet/Http.cpp',
-		'enet/Ftp.cpp',
-		])
-	my_module.add_header_file([
-		'enet/debug.h',
-		'enet/Udp.h',
-		'enet/Tcp.h',
-		'enet/Http.h',
-		'enet/Ftp.h',
-		])
+	    'enet/debug.cpp'
+	    ])
 	my_module.add_path(tools.get_current_path(__file__))
+	if target.name == "Windows":
+		return my_module
+	my_module.add_src_file([
+	    'enet/Udp.cpp',
+	    'enet/Tcp.cpp',
+	    'enet/Http.cpp',
+	    'enet/Ftp.cpp',
+	    ])
+	my_module.add_header_file([
+	    'enet/debug.h',
+	    'enet/Udp.h',
+	    'enet/Tcp.h',
+	    'enet/Http.h',
+	    'enet/Ftp.h',
+	    ])
 	return my_module
 
 
