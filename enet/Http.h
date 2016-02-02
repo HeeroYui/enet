@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ENET_HTTP_H__
-#define __ENET_HTTP_H__
+#pragma once
 
 #include <enet/Tcp.h>
 #include <vector>
@@ -58,6 +56,5 @@ namespace enet {
 			std::string unEscapeChar(const std::string& _value);
 			bool receiveData();
 	};
-};
+}
 
-#endif

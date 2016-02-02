@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ENET_UDP_H__
-#define __ENET_UDP_H__
+#pragma once
 
 namespace enet {
 	class Udp {
@@ -15,6 +13,5 @@ namespace enet {
 			Udp() { };
 			virtual ~Udp() { };
 	};
-};
+}
 
-#endif

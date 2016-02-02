@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ENET_TCP_H__
-#define __ENET_TCP_H__
+#pragma once
 
 namespace enet {
 	class Tcp {
@@ -150,6 +148,5 @@ namespace enet {
 				return ret/sizeof(T);
 			}
 	};
-};
+}
 
-#endif

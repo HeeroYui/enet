@@ -5,9 +5,7 @@
  * 
  * @license APACHE v2.0 (see license file)
  */
-
-#ifndef __ENET_FTP_H__
-#define __ENET_FTP_H__
+#pragma once
 
 namespace enet {
 	class Ftp {
@@ -15,6 +13,5 @@ namespace enet {
 			Ftp() { };
 			virtual ~Ftp() { };
 	};
-};
+}
 
-#endif
