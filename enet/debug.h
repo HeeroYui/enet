@@ -7,13 +7,13 @@
  */
 #pragma once
 
-#include <etk/log.h>
+#include <elog/log.h>
 
 namespace enet {
 	int32_t getLogId();
 };
 
-#define ENET_BASE(info,data) TK_LOG_BASE(enet::getLogId(),info,data)
+#define ENET_BASE(info,data) ELOG_BASE(enet::getLogId(),info,data)
 
 #define ENET_CRITICAL(data)      ENET_BASE(1, data)
 #define ENET_ERROR(data)         ENET_BASE(2, data)

@@ -9,6 +9,6 @@
 #include <enet/debug.h>
 
 int32_t enet::getLogId() {
-	static int32_t g_val = etk::log::registerInstance("enet");
+	static int32_t g_val = elog::registerInstance("enet");
 	return g_val;
 }

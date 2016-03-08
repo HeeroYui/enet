@@ -9,6 +9,6 @@
 #include <test/debug.h>
 
 int32_t appl::getLogId() {
-	static int32_t g_val = etk::log::registerInstance("enettest");
+	static int32_t g_val = elog::registerInstance("enettest");
 	return g_val;
 }

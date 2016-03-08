@@ -15,7 +15,7 @@
 #define __class__ "test"
 
 int main(int argc, const char *argv[]) {
-	etk::log::setLevel(etk::log::logLevelDebug);
+	elog::setLevel(elog::logLevelDebug);
 	APPL_VERBOSE("plop");
 	if (argc > 2) {
 		// client mode ...
