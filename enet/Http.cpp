@@ -10,6 +10,7 @@
 #include <enet/Http.h>
 #include <map>
 #include <etk/stdTools.h>
+#include <string.h>
 
 #ifdef __class__
 	#undef  __class__

@@ -10,6 +10,7 @@
 #include <enet/Tcp.h>
 #include <enet/Http.h>
 
+#include <etk/stdTools.h>
 
 #undef __class__
 #define __class__ "test"

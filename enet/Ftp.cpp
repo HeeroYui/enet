@@ -8,7 +8,7 @@
 
 #include <enet/debug.h>
 #include <enet/Ftp.h>
-
+#include <string.h>
 
 #ifdef __class__
 	#undef  __class__

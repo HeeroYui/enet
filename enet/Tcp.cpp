@@ -14,6 +14,8 @@
 #include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
+#include <string.h>
+#include <etk/stdTools.h>
 
 #ifdef __class__
 	#undef  __class__
