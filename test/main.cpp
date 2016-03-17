@@ -16,6 +16,7 @@
 #define __class__ "test"
 
 int main(int argc, const char *argv[]) {
+#ifndef __TARGET_OS__Windows
 	elog::setLevel(elog::logLevelDebug);
 	APPL_VERBOSE("plop");
 	if (argc > 2) {
@@ -108,6 +109,8 @@ int main(int argc, const char *argv[]) {
 			return -1;
 		}
 	}
-	
+#else
+	APPL_CRITICAL("not implemented");
+#endif
 	return 0;
 }

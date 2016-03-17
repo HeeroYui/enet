@@ -31,8 +31,6 @@ def create(target, module_name):
 	    'test/debug.cpp'
 	    ])
 	my_module.add_export_path(tools.get_current_path(__file__))
-	if target.name == "Windows":
-	    return my_module
 	my_module.add_module_depend(['enet', 'gtest'])
 	my_module.add_src_file([
 	    'test/main.cpp'
