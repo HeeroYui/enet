@@ -9,6 +9,7 @@
 #include <test/debug.h>
 #include <enet/Tcp.h>
 #include <enet/Http.h>
+#include <etk/etk.h>
 
 #include <etk/stdTools.h>
 
@@ -16,8 +17,8 @@
 #define __class__ "test"
 
 int main(int argc, const char *argv[]) {
+	etk::init(argc, argv);
 #ifndef __TARGET_OS__Windows
-	elog::setLevel(elog::logLevelDebug);
 	APPL_VERBOSE("plop");
 	if (argc > 2) {
 		// client mode ...
