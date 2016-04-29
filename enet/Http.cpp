@@ -1,8 +1,6 @@
-/**
+/** @file
  * @author Edouard DUPIN
- * 
  * @copyright 2014, Edouard DUPIN, all right reserved
- * 
  * @license APACHE v2.0 (see license file)
  */
 
@@ -11,11 +9,6 @@
 #include <map>
 #include <etk/stdTools.h>
 #include <string.h>
-
-#ifdef __class__
-	#undef  __class__
-#endif
-#define __class__ ("Http")
 
 static std::map<int32_t, std::string> getErrorList() {
 	static std::map<int32_t, std::string> g_list;
