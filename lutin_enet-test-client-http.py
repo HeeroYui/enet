@@ -26,14 +26,10 @@ def get_maintainer():
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
-	my_module.add_module_depend(['test-debug'])
-	my_module.add_src_file([
-	    'test/debug.cpp'
-	    ])
 	my_module.add_export_path(tools.get_current_path(__file__))
-	my_module.add_module_depend(['enet', 'gtest'])
+	my_module.add_module_depend(['enet', 'gtest', 'test-debug'])
 	my_module.add_src_file([
-	    'test/main.cpp'
+	    'test/main-client-http.cpp'
 	    ])
 	return my_module
 
