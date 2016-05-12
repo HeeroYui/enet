@@ -22,7 +22,7 @@ enet::Tcp::Tcp() :
   m_host("127.0.0.1"),
   m_port(23191),
   m_server(false),
-  m_status(statusUnlink) {
+  m_status(status::unlink) {
 	
 }
 
@@ -46,7 +46,7 @@ void enet::Tcp::setHostNane(const std::string& _name) {
 	if (_name == m_host) {
 		return;
 	}
-	if (m_status == statusLink) {
+	if (m_status == status::link) {
 		ENET_ERROR("Can not change parameter while connection is started");
 		return;
 	}
@@ -57,7 +57,7 @@ void enet::Tcp::setPort(uint16_t _port) {
 	if (_port == m_port) {
 		return;
 	}
-	if (m_status == statusLink) {
+	if (m_status == status::link) {
 		ENET_ERROR("Can not change parameter while connection is started");
 		return;
 	}
@@ -68,7 +68,7 @@ void enet::Tcp::setServer(bool _status) {
 	if (_status == m_server) {
 		return;
 	}
-	if (m_status == statusLink) {
+	if (m_status == status::link) {
 		ENET_ERROR("Can not change parameter while connection is started");
 		return;
 	}
@@ -76,7 +76,7 @@ void enet::Tcp::setServer(bool _status) {
 }
 
 bool enet::Tcp::link() {
-	if (m_status == statusLink) {
+	if (m_status == status::link) {
 		ENET_ERROR("Connection is already started");
 		return false;
 	}
@@ -104,9 +104,11 @@ bool enet::Tcp::link() {
 			bcopy((char *)server->h_addr, (char *)&servAddr.sin_addr.s_addr, server->h_length);
 			servAddr.sin_port = htons(m_port);
 			ENET_INFO("Start connexion ...");
-			if (connect(m_socketIdClient,(struct sockaddr *) &servAddr,sizeof(servAddr)) != 0) {
+			if (connect(m_socketIdClient, (struct sockaddr *)&servAddr,sizeof(servAddr)) != 0) {
 				if(errno != EINPROGRESS) {
-					if(errno != ENOENT && errno != EAGAIN && errno != ECONNREFUSED) {
+					if(    errno != ENOENT
+					    && errno != EAGAIN
+					    && errno != ECONNREFUSED) {
 						ENET_ERROR("ERROR connecting on : errno=" << errno << "," << strerror(errno));
 					}
 					close(m_socketIdClient);
@@ -123,7 +125,7 @@ bool enet::Tcp::link() {
 			ENET_ERROR("ERROR connecting ... (after all try)");
 			return false;
 		} else {
-			m_status = statusLink;
+			m_status = status::link;
 			ENET_DEBUG("Connection done");
 		}
 	} else {
@@ -164,7 +166,7 @@ bool enet::Tcp::link() {
 			m_socketId = -1;
 			return false;
 		} else {
-			m_status = statusLink;
+			m_status = status::link;
 			ENET_DEBUG("Connection done");
 		}
 	}
@@ -184,28 +186,30 @@ bool enet::Tcp::unlink() {
 		close(m_socketId);
 		m_socketId = -1;
 	}
-	m_status = statusUnlink;
+	m_status = status::unlink;
 	return true;
 }
 
 
 int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
-	if (m_status != statusLink) {
+	if (m_status != status::link) {
 		ENET_ERROR("Can not read on unlink connection");
 		return -1;
 	}
 	int32_t size = ::read(m_socketIdClient, _data, _maxLen);
-	if (    size != _maxLen
-	     && errno != 0) {
+	if (    size != 0
+	     && errno == 2) {
+		// simply the socket en empty
+	} else if (errno != 0) {
 		ENET_ERROR("PB when reading data on the FD : request=" << _maxLen << " have=" << size << ", erno=" << errno << "," << strerror(errno));
-		m_status = statusError;
+		m_status = status::error;
 		return -1;
 	}
 	return size;
 }
 
 int32_t enet::Tcp::write(const void* _data, int32_t _len) {
-	if (m_status != statusLink) {
+	if (m_status != status::link) {
 		ENET_ERROR("Can not write on unlink connection");
 		return -1;
 	}
@@ -213,9 +217,8 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 	if (    size != _len
 	     && errno != 0) {
 		ENET_ERROR("PB when writing data on the FD : request=" << _len << " have=" << size << ", erno=" << errno << "," << strerror(errno));
-		m_status = statusError;
+		m_status = status::error;
 		return -1;
 	}
 	return size;
 }
-

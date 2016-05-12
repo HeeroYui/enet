@@ -26,7 +26,7 @@ enet::Http::~Http() {
 }
 
 bool enet::Http::connect() {
-	if (m_connection.getConnectionStatus() == enet::Tcp::statusLink) {
+	if (m_connection.getConnectionStatus() == enet::Tcp::status::link) {
 		return true;
 	}
 	if (m_connection.link() == false) {
@@ -56,7 +56,7 @@ std::string enet::Http::getReceiveHeaderProperties(const std::string& _key) {
 }
 
 bool enet::Http::reset() {
-	if (m_connection.getConnectionStatus() != enet::Tcp::statusLink) {
+	if (m_connection.getConnectionStatus() != enet::Tcp::status::link) {
 		m_connection.unlink();
 	}
 	m_receiveData.clear();
@@ -95,7 +95,7 @@ bool enet::Http::receiveData() {
 	char data[1025];
 	int32_t len = 1;
 	bool headerEnded = false;
-	while (    m_connection.getConnectionStatus() == enet::Tcp::statusLink
+	while (    m_connection.getConnectionStatus() == enet::Tcp::status::link
 	        && len > 0) {
 		len = m_connection.read(data, 1024);
 		// TODO : Parse header ...
@@ -132,7 +132,7 @@ bool enet::Http::receiveData() {
 			}
 		}
 	}
-	if (m_connection.getConnectionStatus() != enet::Tcp::statusLink) {
+	if (m_connection.getConnectionStatus() != enet::Tcp::status::link) {
 		ENET_WARNING("server disconnected");
 		return false;
 	}

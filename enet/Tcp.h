@@ -67,10 +67,10 @@ namespace enet {
 				return m_server;
 			}
 		public:
-			enum status {
-				statusUnlink,
-				statusLink,
-				statusError
+			enum class status {
+				unlink,
+				link,
+				error
 			};
 		private:
 			enum status m_status; //!< current connection status

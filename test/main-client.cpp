@@ -30,7 +30,7 @@ int main(int _argc, const char *_argv[]) {
 	// client mode ...
 	enet::Tcp connection;
 	connection.setHostNane("127.0.0.1");
-	connection.setPort(31234);
+	connection.setPort(31235);
 	connection.setServer(false);
 	TEST_INFO("CLIENT connect ...");
 	if (connection.link() == false) {
@@ -43,6 +43,10 @@ int main(int _argc, const char *_argv[]) {
 		char data[1024];
 		int32_t len = connection.read(data, 1024);
 		TEST_INFO("read len=" << len << " data='" << data << "'");
+		//if (data[len-1] == '2') {
+			int32_t lenWrite = connection.write("get pair value");
+			TEST_INFO("write len=" << lenWrite);
+		//}
 		iii++;
 	}
 	if (iii>=10000) {

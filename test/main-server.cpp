@@ -30,7 +30,7 @@ int main(int _argc, const char *_argv[]) {
 	// server mode ...
 	enet::Tcp connection;
 	connection.setHostNane("127.0.0.1");
-	connection.setPort(31234);
+	connection.setPort(31235);
 	connection.setServer(true);
 	TEST_INFO("SERVER connect ...");
 	if (connection.link() == false) {
@@ -41,6 +41,11 @@ int main(int _argc, const char *_argv[]) {
 	while (connection.getConnectionStatus() == enet::Tcp::statusLink) {
 		int32_t len = connection.write("plop" + etk::to_string(iii));
 		TEST_INFO("write len=" << len);
+		char data[1024];
+		len = connection.read(data, 1024);
+		if (len > 0) {
+			TEST_INFO("read len=" << len << " data='" << data << "'");
+		}
 		iii++;
 	}
 	if (iii>=1000000) {
