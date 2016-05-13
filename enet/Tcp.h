@@ -10,6 +10,7 @@ namespace enet {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
 			int32_t m_socketIdClient;
+			struct pollfd m_fds[1];
 		public:
 			Tcp();
 			virtual ~Tcp();
