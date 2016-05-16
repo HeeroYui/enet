@@ -170,6 +170,13 @@ bool enet::Tcp::link() {
 			ENET_DEBUG("Connection done");
 		}
 	}
+	#if 1
+		//Initialize the pollfd structure
+		memset(m_fds, 0 , sizeof(m_fds));
+		//Set up the initial listening socket
+		m_fds[0].fd = m_socketIdClient;
+		m_fds[0].events = POLLIN | POLLERR;
+	#endif
 	ENET_INFO("End configuring Socket ...");
 	return true;
 }
@@ -192,12 +199,14 @@ bool enet::Tcp::unlink() {
 
 
 int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
+	ENET_ERROR("read [START]");
 	if (m_status != status::link) {
 		ENET_ERROR("Can not read on unlink connection");
 		return -1;
 	}
-	#if 1
-		int32_t size = ::read(m_socketIdClient, _data, _maxLen);
+	int32_t size = -1;
+	#if 0
+		size = ::read(m_socketIdClient, _data, _maxLen);
 		if (    size != 0
 		     && errno == 2) {
 			// simply the socket en empty
@@ -206,8 +215,51 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 			m_status = status::error;
 			return -1;
 		}
-		return size;
 	#else
+		#ifndef SDFGSDFGSDFGSDFGSDFGSDFG
+			int nfds = 1;
+			// Initialize the timeout to 3 minutes. If no activity after 3 minutes this program will end. timeout value is based on milliseconds.
+			int timeout = (3 * 60 * 1000);
+			// Call poll() and wait 3 minutes for it to complete.
+			ENET_INFO("Waiting on poll()...");
+			int rc = poll(m_fds, nfds, timeout);
+			// Check to see if the poll call failed.
+			if (rc < 0) {
+				ENET_ERROR("	poll() failed");
+				return-1;
+			}
+			// Check to see if the 3 minute time out expired.
+			if (rc == 0) {
+				ENET_ERROR("	poll() timed out.	End program.\n");
+				return -1;
+			}
+			bool closeConn = false;
+			// Receive all incoming data on this socket before we loop back and call poll again.
+			// Receive data on this connection until the recv fails with EWOULDBLOCK.
+			// If any other failure occurs, we will close the connection.
+			rc = recv(m_fds[0].fd, _data, _maxLen, 0);
+			if (rc < 0) {
+				if (errno != EWOULDBLOCK) {
+					ENET_ERROR("	recv() failed");
+					closeConn = true;
+				}
+			}
+			// Check to see if the connection has been closed by the client
+			if (rc == 0) {
+				ENET_ERROR("	Connection closed");
+				closeConn = true;
+			}
+			if (closeConn == false) {
+				// Data was received
+				size = rc;
+				ENET_INFO("    " << size << " bytes received");
+			} else {
+				// If the close_conn flag was turned on, we need to clean up this active connection.
+				// This clean up process includes removing the descriptor.
+				ENET_ERROR("	Set status at remote close ...");
+				m_status = status::linkRemoteClose;
+			}
+		#else
 		//Initialize the pollfd structure
 		memset(m_fds, 0 , sizeof(m_fds));
 		//Set up the initial listening socket
@@ -328,7 +380,10 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 				close(m_fds[iii].fd);
 			}
 		}
+		#endif
 	#endif
+	ENET_ERROR("read [STOP]");
+	return size;
 }
 
 

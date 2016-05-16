@@ -5,12 +5,16 @@
  */
 #pragma once
 
+#include <poll.h>
+
 namespace enet {
 	class Tcp {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
 			int32_t m_socketIdClient;
-			struct pollfd m_fds[1];
+			#if 1
+				struct pollfd m_fds[1];
+			#endif
 		public:
 			Tcp();
 			virtual ~Tcp();
@@ -71,6 +75,7 @@ namespace enet {
 			enum class status {
 				unlink,
 				link,
+				linkRemoteClose,
 				error
 			};
 		private:
