@@ -199,7 +199,7 @@ bool enet::Tcp::unlink() {
 
 
 int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
-	ENET_ERROR("read [START]");
+	ENET_VERBOSE("read [START]");
 	if (m_status != status::link) {
 		ENET_ERROR("Can not read on unlink connection");
 		return -1;
@@ -221,7 +221,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 			// Initialize the timeout to 3 minutes. If no activity after 3 minutes this program will end. timeout value is based on milliseconds.
 			int timeout = (3 * 60 * 1000);
 			// Call poll() and wait 3 minutes for it to complete.
-			ENET_INFO("Waiting on poll()...");
+			ENET_VERBOSE("Waiting on poll()...");
 			int rc = poll(m_fds, nfds, timeout);
 			// Check to see if the poll call failed.
 			if (rc < 0) {
@@ -252,7 +252,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 			if (closeConn == false) {
 				// Data was received
 				size = rc;
-				ENET_INFO("    " << size << " bytes received");
+				ENET_VERBOSE("    " << size << " bytes received");
 			} else {
 				// If the close_conn flag was turned on, we need to clean up this active connection.
 				// This clean up process includes removing the descriptor.
@@ -382,7 +382,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 		}
 		#endif
 	#endif
-	ENET_ERROR("read [STOP]");
+	ENET_VERBOSE("read [STOP]");
 	return size;
 }
 
