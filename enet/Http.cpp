@@ -9,7 +9,7 @@
 #include <map>
 #include <etk/stdTools.h>
 #include <string.h>
-
+#if 0
 static std::map<int32_t, std::string> getErrorList() {
 	static std::map<int32_t, std::string> g_list;
 	return g_list;
@@ -302,3 +302,5 @@ std::string enet::Http::dataString() {
 	}
 	return data;
 }
+#endif
+

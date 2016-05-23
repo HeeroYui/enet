@@ -5,71 +5,35 @@
  */
 #pragma once
 
+#include <etk/types.h>
 #include <poll.h>
 
 namespace enet {
 	class Tcp {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
-			int32_t m_socketIdClient;
 			#if 1
 				struct pollfd m_fds[1];
 			#endif
 		public:
 			Tcp();
+			Tcp(int32_t _idSocket, const std::string& _name);
+			// move constructor
+			Tcp(Tcp&& _obj);
+			// Move operator;
+			Tcp& operator= (Tcp&& _obj);
+			// Remove copy operator ... ==> not valid ...
+			Tcp& operator= (Tcp& _obj) = delete;
 			virtual ~Tcp();
 		private:
-			std::string m_host; //!< hostname/IP to connect with.
+			std::string m_name; //!< hostname/IP:port.
 		public:
 			/**
-			 * @brief Set the connection IP id.
-			 * @param[in] _first Firt number of the IP v4.
-			 * @param[in] _second Second number of the IP v4.
-			 * @param[in] _third Third number of the IP v4.
-			 * @param[in] _quatro Quatro number of the IP v4.
-			 */
-			void setIpV4(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro);
-			/**
-			 * @brief set the Host name is the same things as set an Ip adress, but in test mode "127.0.0.1" or "localhost".
-			 * @param[in] _name Host name to connect.
-			 */
-			void setHostNane(const std::string& _name);
-			/**
-			 * @brief Get the decriptive name hot the host
+			 * @brief Get the decriptive name hot the host:port
 			 * @return the string requested
 			 */
-			const std::string& getHostName() {
-				return m_host;
-			}
-		private:
-			uint16_t m_port; //!< IP port to connect with.
-		public:
-			/**
-			 * @brief set the port number to connect or to spy
-			 * @param[in] _port Number of the port requested
-			 */
-			void setPort(uint16_t _port);
-			/**
-			 * @brief Get the port number.
-			 * @return The requested port number.
-			 */
-			uint16_t getPort() {
-				return m_port;
-			}
-		private:
-			bool m_server; //!< if at true, the server mode is requested
-		public:
-			/**
-			 * @brief Set the TCP interface in server mode
-			 * @param[in] _status if true, this enable the server mode
-			 */
-			void setServer(bool _status);
-			/**
-			 * @brief Get the server mode status.
-			 * @return true: the tcp interface is configure as a server.
-			 */
-			int32_t getServer() {
-				return m_server;
+			const std::string& getName() {
+				return m_name;
 			}
 		public:
 			enum class status {
@@ -89,12 +53,6 @@ namespace enet {
 				return m_status;
 			}
 		public:
-			/**
-			 * @brief Link on a specific interface.
-			 * @return true if connection is done
-			 * @return false otherwise ...
-			 */
-			bool link();
 			/**
 			 * @brief Unlink on a specific interface.
 			 * @return true if connection is removed

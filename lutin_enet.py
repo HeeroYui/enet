@@ -36,6 +36,8 @@ def create(target, module_name):
 	my_module.add_src_file([
 	    'enet/Udp.cpp',
 	    'enet/Tcp.cpp',
+	    'enet/TcpServer.cpp',
+	    'enet/TcpClient.cpp',
 	    'enet/Http.cpp',
 	    'enet/Ftp.cpp',
 	    ])
@@ -43,6 +45,8 @@ def create(target, module_name):
 	    'enet/debug.h',
 	    'enet/Udp.h',
 	    'enet/Tcp.h',
+	    'enet/TcpServer.h',
+	    'enet/TcpClient.h',
 	    'enet/Http.h',
 	    'enet/Ftp.h',
 	    ])

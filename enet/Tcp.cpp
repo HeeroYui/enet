@@ -18,178 +18,58 @@
 
 enet::Tcp::Tcp() :
   m_socketId(-1),
-  m_socketIdClient(-1),
-  m_host("127.0.0.1"),
-  m_port(23191),
-  m_server(false),
-  m_status(status::unlink) {
+  m_name(),
+  m_status(status::error) {
 	
 }
 
-enet::Tcp::~Tcp() {
-	unlink();
-}
-
-void enet::Tcp::setIpV4(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro) {
-	std::string tmpname;
-	tmpname  = etk::to_string(_fist);
-	tmpname += ".";
-	tmpname += etk::to_string(_second);
-	tmpname += ".";
-	tmpname += etk::to_string(_third);
-	tmpname += ".";
-	tmpname += etk::to_string(_quatro);
-	setHostNane(tmpname);
-}
-
-void enet::Tcp::setHostNane(const std::string& _name) {
-	if (_name == m_host) {
-		return;
-	}
-	if (m_status == status::link) {
-		ENET_ERROR("Can not change parameter while connection is started");
-		return;
-	}
-	m_host = _name;
-}
-
-void enet::Tcp::setPort(uint16_t _port) {
-	if (_port == m_port) {
-		return;
-	}
-	if (m_status == status::link) {
-		ENET_ERROR("Can not change parameter while connection is started");
-		return;
-	}
-	m_port = _port;
-}
-
-void enet::Tcp::setServer(bool _status) {
-	if (_status == m_server) {
-		return;
-	}
-	if (m_status == status::link) {
-		ENET_ERROR("Can not change parameter while connection is started");
-		return;
-	}
-	m_server = _status;
-}
-
-bool enet::Tcp::link() {
-	if (m_status == status::link) {
-		ENET_ERROR("Connection is already started");
-		return false;
-	}
-	ENET_INFO("Start connection on " << m_host << ":" << m_port);
-	if (m_server == false) {
-		#define MAX_TEST_TIME  (5)
-		for(int32_t iii=0; iii<MAX_TEST_TIME ;iii++) {
-			// open in Socket normal mode
-			m_socketIdClient = socket(AF_INET, SOCK_STREAM, 0);
-			if (m_socketIdClient < 0) {
-				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-				usleep(200000);
-				continue;
-			}
-			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << MAX_TEST_TIME << ")");
-			struct sockaddr_in servAddr;
-			struct hostent* server = gethostbyname(m_host.c_str());
-			if (server == NULL) {
-				ENET_ERROR("ERROR, no such host : " << m_host);
-				usleep(200000);
-				continue;
-			}
-			bzero((char *) &servAddr, sizeof(servAddr));
-			servAddr.sin_family = AF_INET;
-			bcopy((char *)server->h_addr, (char *)&servAddr.sin_addr.s_addr, server->h_length);
-			servAddr.sin_port = htons(m_port);
-			ENET_INFO("Start connexion ...");
-			if (connect(m_socketIdClient, (struct sockaddr *)&servAddr,sizeof(servAddr)) != 0) {
-				if(errno != EINPROGRESS) {
-					if(    errno != ENOENT
-					    && errno != EAGAIN
-					    && errno != ECONNREFUSED) {
-						ENET_ERROR("ERROR connecting on : errno=" << errno << "," << strerror(errno));
-					}
-					close(m_socketIdClient);
-					m_socketIdClient = -1;
-				}
-				ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));
-				usleep(500000);
-				continue;
-			}
-			// if we are here ==> then the connextion is done corectly ...
-			break;
-		}
-		if (m_socketIdClient<0) {
-			ENET_ERROR("ERROR connecting ... (after all try)");
-			return false;
-		} else {
-			m_status = status::link;
-			ENET_DEBUG("Connection done");
-		}
-	} else {
-		// open in Socket normal mode
-		m_socketId = socket(AF_INET, SOCK_STREAM, 0);
-		if (m_socketId < 0) {
-			ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-			return false;
-		}
-		// set the reuse of the socket if previously opened :
-		int sockOpt = 1;
-		if(setsockopt(m_socketId, SOL_SOCKET, SO_REUSEADDR, (const char*)&sockOpt, sizeof(int)) != 0) {
-			ENET_ERROR("ERROR while configuring socket re-use : errno=" << errno << "," << strerror(errno));
-			return false;
-		}
-		// clear all
-		struct sockaddr_in servAddr;
-		bzero((char *) &servAddr, sizeof(servAddr));
-		servAddr.sin_family = AF_INET;
-		servAddr.sin_addr.s_addr = INADDR_ANY;
-		servAddr.sin_port = htons(m_port);
-		ENET_INFO("Start binding Socket ... (can take some time ...)");
-		if (bind(m_socketId, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0) {
-			ENET_ERROR("ERROR on binding errno=" << errno << "," << strerror(errno));
-			close(m_socketId);
-			m_socketId = -1;
-			return false;
-		}
-		ENET_INFO("End binding Socket ... (start listen)");
-		listen(m_socketId,1); // 1 is for the number of connection at the same time ...
-		ENET_INFO("End listen Socket ... (start accept)");
-		struct sockaddr_in clientAddr;
-		socklen_t clilen = sizeof(clientAddr);
-		m_socketIdClient = accept(m_socketId, (struct sockaddr *) &clientAddr, &clilen);
-		if (m_socketIdClient < 0) {
-			ENET_ERROR("ERROR on accept errno=" << errno << "," << strerror(errno));
-			close(m_socketId);
-			m_socketId = -1;
-			return false;
-		} else {
-			m_status = status::link;
-			ENET_DEBUG("Connection done");
-		}
-	}
+enet::Tcp::Tcp(int32_t _idSocket, const std::string& _name) :
+  m_socketId(_idSocket),
+  m_name(_name),
+  m_status(status::link) {
 	#if 1
 		//Initialize the pollfd structure
 		memset(m_fds, 0 , sizeof(m_fds));
 		//Set up the initial listening socket
-		m_fds[0].fd = m_socketIdClient;
+		m_fds[0].fd = _idSocket;
 		m_fds[0].events = POLLIN | POLLERR;
 	#endif
-	ENET_INFO("End configuring Socket ...");
-	return true;
 }
 
+enet::Tcp::Tcp(Tcp&& _obj) :
+  m_socketId(_obj.m_socketId),
+  m_name(_obj.m_name),
+  m_status(_obj.m_status) {
+	_obj.m_socketId = -1;
+	_obj.m_name = "";
+	_obj.m_status = status::error;
+	m_fds[0] = _obj.m_fds[0];
+	#if 1
+		memset(_obj.m_fds, 0 , sizeof(_obj.m_fds));
+	#endif
+}
+enet::Tcp::~Tcp() {
+	unlink();
+}
+
+enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
+	unlink();
+	m_socketId = _obj.m_socketId;
+	_obj.m_socketId = -1;
+	m_name = _obj.m_name;
+	_obj.m_name = "";
+	m_status = _obj.m_status;
+	_obj.m_status = status::error;
+	m_fds[0] = _obj.m_fds[0];
+	#if 1
+		memset(_obj.m_fds, 0 , sizeof(_obj.m_fds));
+	#endif
+	return *this;
+}
 
 bool enet::Tcp::unlink() {
-	if (m_socketIdClient >= 0) {
-		ENET_INFO(" close client socket");
-		close(m_socketIdClient);
-		m_socketIdClient = -1;
-	}
 	if (m_socketId >= 0) {
-		ENET_INFO(" close server socket");
+		ENET_INFO("Close socket");
 		close(m_socketId);
 		m_socketId = -1;
 	}
@@ -206,7 +86,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	}
 	int32_t size = -1;
 	#if 0
-		size = ::read(m_socketIdClient, _data, _maxLen);
+		size = ::read(m_socketId, _data, _maxLen);
 		if (    size != 0
 		     && errno == 2) {
 			// simply the socket en empty
@@ -307,7 +187,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 						if (new_sd < 0) {
 							if (errno != EWOULDBLOCK) {
 								ENET_ERROR("	accept() failed");
-								end_server = TRUE;
+								end_server = true;
 							}
 							break;
 						}
@@ -321,7 +201,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 				} else {
 					// This is not the listening socket, therefore an existing connection must be readable
 					ENET_INFO("	Descriptor %d is readable", fds[iii].fd);
-					close_conn = FALSE;
+					close_conn = false;
 					// Receive all incoming data on this socket before we loop back and call poll again.
 					do {
 						// Receive data on this connection until the recv fails with EWOULDBLOCK.
@@ -330,14 +210,14 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 						if (rc < 0) {
 							if (errno != EWOULDBLOCK) {
 								perror("	recv() failed");
-								close_conn = TRUE;
+								close_conn = true;
 							}
 							break;
 						}
 						// Check to see if the connection has been closed by the client
 						if (rc == 0) {
 							ENET_ERROR("	Connection closed");
-							close_conn = TRUE;
+							close_conn = true;
 							break;
 						}
 						// Data was received
@@ -347,23 +227,23 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 						rc = send(m_fds[i].fd, buffer, len, 0);
 						if (rc < 0) {
 							ENET_ERRO("	send() failed");
-							close_conn = TRUE;
+							close_conn = true;
 							break;
 						}
-					} while(TRUE);
+					} while(true);
 					// If the close_conn flag was turned on, we need to clean up this active connection.
 					// This clean up process includes removing the descriptor.
 					if (close_conn) {
 						close(m_fds[i].fd);
 						m_fds[i].fd = -1;
-						compress_array = TRUE;
+						compress_array = true;
 					}
 				}
 			}
 			// If the compress_array flag was turned on, we need to squeeze together the array and decrement the number of file descriptors.
 			// We do not need to move back the events and revents fields because the events will always be POLLIN in this case, and revents is output.
 			if (compress_array) {
-				compress_array = FALSE;
+				compress_array = false;
 				for (int32_t iii=0; iii<nfds; ++iii) {
 					if (m_fds[i].fd == -1) {
 						for(int32_t jjj = iii; jjj < nfds; ++jjj) {
@@ -373,7 +253,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 					}
 				}
 			}
-		} while (end_server == FALSE);
+		} while (end_server == false);
 		// Clean up all of the sockets that are open
 		for (int32_t iii=0; iii<nfds; ++iii) {
 			if(m_fds[iii].fd >= 0) {
@@ -392,7 +272,7 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 		ENET_ERROR("Can not write on unlink connection");
 		return -1;
 	}
-	int32_t size = ::write(m_socketIdClient, _data, _len);
+	int32_t size = ::write(m_socketId, _data, _len);
 	if (    size != _len
 	     && errno != 0) {
 		ENET_ERROR("PB when writing data on the FD : request=" << _len << " have=" << size << ", erno=" << errno << "," << strerror(errno));

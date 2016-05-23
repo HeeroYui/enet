@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 
-
+#if 0
 namespace enet {
 	class Http {
 		public:
@@ -55,4 +55,4 @@ namespace enet {
 			bool receiveData();
 	};
 }
-
+#endif
