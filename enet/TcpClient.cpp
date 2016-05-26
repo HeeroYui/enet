@@ -16,7 +16,7 @@
 #include <string.h>
 #include <etk/stdTools.h>
 
-enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port) {
+enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry) {
 	std::string tmpname;
 	tmpname  = etk::to_string(_ip1);
 	tmpname += ".";
@@ -25,13 +25,12 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 	tmpname += etk::to_string(_ip3);
 	tmpname += ".";
 	tmpname += etk::to_string(_ip4);
-	return std::move(enet::connectTcpClient(tmpname, _port));
+	return std::move(enet::connectTcpClient(tmpname, _port, _numberRetry));
 }
-#define MAX_TEST_TIME (50)
-enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port) {
+enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
 	int32_t socketId = -1;
 	ENET_INFO("Start connection on " << _hostname << ":" << _port);
-	for(int32_t iii=0; iii<MAX_TEST_TIME ;iii++) {
+	for(int32_t iii=0; iii<_numberRetry ;iii++) {
 		// open in Socket normal mode
 		socketId = socket(AF_INET, SOCK_STREAM, 0);
 		if (socketId < 0) {
@@ -39,7 +38,7 @@ enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port) {
 			usleep(200000);
 			continue;
 		}
-		ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << MAX_TEST_TIME << ")");
+		ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
 		struct sockaddr_in servAddr;
 		struct hostent* server = gethostbyname(_hostname.c_str());
 		if (server == nullptr) {
