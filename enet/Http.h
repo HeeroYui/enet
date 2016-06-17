@@ -13,6 +13,7 @@
 
 namespace enet {
 	enum class HTTPAnswerCode {
+		c000_unknow = 0,
 		//1xx: Information
 		c100_continue = 100, //!< The server has received the request headers, and the client should proceed to send the request body
 		c101_switchingProtocols, //!< The requester has asked the server to switch protocols
@@ -62,40 +63,97 @@ namespace enet {
 		c505_httpVersionNotSupported, //!< The server does not support the HTTP protocol version used in the request
 		c511_networkAuthenticationRequired, //!< The client needs to authenticate to gain network access
 	};
+	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPAnswerCode _obj);
 	
 	enum class HTTPProtocol {
+		http_0_1,
+		http_0_2,
+		http_0_3,
+		http_0_4,
+		http_0_5,
+		http_0_6,
+		http_0_7,
+		http_0_8,
+		http_0_9,
+		http_0_10,
 		http_1_0,
 		http_1_1,
+		http_1_2,
+		http_1_3,
+		http_1_4,
+		http_1_5,
+		http_1_6,
+		http_1_7,
+		http_1_8,
+		http_1_9,
+		http_1_10,
+		http_2_0,
+		http_2_1,
+		http_2_2,
+		http_2_3,
+		http_2_4,
+		http_2_5,
+		http_2_6,
+		http_2_7,
+		http_2_8,
+		http_2_9,
+		http_2_10,
+		http_3_0,
+		http_3_1,
+		http_3_2,
+		http_3_3,
+		http_3_4,
+		http_3_5,
+		http_3_6,
+		http_3_7,
+		http_3_8,
+		http_3_9,
+		http_3_10,
 	};
+	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPProtocol _obj);
 	class HttpHeader {
-		private:
+		protected:
 			// key, val
 			std::map<std::string, std::string> m_map;
 			enum HTTPProtocol m_protocol;
 		public:
-			void addKey(const std::string& _key, const std::string& _value);
+			void setKey(const std::string& _key, const std::string& _value);
 			void rmKey(const std::string& _key);
-			std::string getKey(const std::string& _key);
-			enum HTTPProtocol getProtocol() {
+			std::string getKey(const std::string& _key) const;
+		protected:
+			std::string generateKeys() const;
+		public:
+			enum HTTPProtocol getProtocol() const {
 				return m_protocol;
 			}
 			void setProtocol(enum HTTPProtocol _protocol) {
 				m_protocol = _protocol;
 			}
+			HttpHeader();
 			virtual ~HttpHeader() = default;
+			virtual std::string generate() const = 0;
 	};
+	
 	class HttpAnswer : public HttpHeader {
 		private:
-			
 			enet::HTTPAnswerCode m_what;
-			int64_t m_messageSize; // parameter 
+			std::string m_helpMessage;
 		public:
-			HttpAnswer();
-			HttpAnswer(const std::string& _value);
-			get(const std::string& _uri);
-			setSize(int64_t _messageSize=-1);
+			HttpAnswer(enum HTTPAnswerCode _code = enet::HTTPAnswerCode::c400_badRequest, const std::string& _help="");
 			void display() const;
-			std::string generate();
+			std::string generate() const;
+			void setErrorCode(enum HTTPAnswerCode _value) {
+				m_what = _value;
+			}
+			enum HTTPAnswerCode getErrorCode() {
+				return m_what;
+			}
+			void setHelp(const std::string& _value) {
+				m_helpMessage = _value;
+			}
+			const std::string& getHelp() {
+				return m_helpMessage;
+			}
 	};
 	enum class HTTPReqType {
 		GET,
@@ -104,19 +162,28 @@ namespace enet {
 		PUT,
 		DELETE,
 	};
-	class HttpRequest : public HttpHeader{
+	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPReqType _obj);
+	class HttpRequest : public HttpHeader {
 		private:
 			// key, val
-			std::map<std::string, std::string> m_parameters;
 			enum HTTPReqType m_req;
 			std::string m_uri;
-			enum HTTPProtocol m_protocol;
-			bool m_keepAlive;
 		public:
-			HttpRequest(enum HTTPReqType _type, 
+			HttpRequest(enum enet::HTTPReqType _type=enet::HTTPReqType::GET);
 			void display() const;
-			std::string generate();
-			
+			std::string generate() const;
+			void setType(enum enet::HTTPReqType _value) {
+				m_req = _value;
+			}
+			enum enet::HTTPReqType getType() const{
+				return m_req;
+			}
+			void setUri(const std::string& _value) {
+				m_uri = _value;
+			}
+			const std::string& getUri() const {
+				return m_uri;
+			}
 	};
 	class Http {
 		public:
@@ -128,26 +195,32 @@ namespace enet {
 			bool getServerState() {
 				return m_isServer;
 			}
-		private:
+			bool isServer() {
+				return m_isServer;
+			}
+		protected:
+			enet::HttpRequest m_requestHeader;
+			void setRequestHeader(const enet::HttpRequest& _req);
+		public:
+			const enet::HttpRequest& getRequestHeader() {
+				return m_requestHeader;
+			}
+		protected:
+			enet::HttpAnswer m_answerHeader;
+			void setAnswerHeader(const enet::HttpAnswer& _req);
+		public:
+			const enet::HttpAnswer& getAnswerHeader() {
+				return m_answerHeader;
+			}
+		protected:
 			enet::Tcp m_connection;
 			bool m_headerIsSend;
 			std::thread* m_thread;
 			bool m_threadRunning;
 			std::vector<uint8_t> m_temporaryBuffer;
 		private:
-			bool m_keepAlive;
 			void threadCallback();
-		public:
-			void setKeepAlive(bool _keepAlive) {
-				m_keepAlive = true;
-			}
-			bool getKeepAlive() {
-				return m_keepAlive;
-			}
 		private:
-			
-			HttpHeader m_header;
-			std::vector<uint8_t> m_receiveData;
 			void getHeader();
 		public:
 			void start();
@@ -155,18 +228,8 @@ namespace enet {
 			bool isAlive() {
 				return m_connection.getConnectionStatus() == enet::Tcp::status::link;
 			}
-			void setSendHeaderProperties(const std::string& _key, const std::string& _val);
-			std::string getSendHeaderProperties(const std::string& _key);
-			std::string getReceiveHeaderProperties(const std::string& _key);
-			bool get(const std::string& _address);
-			bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
-			bool post(const std::string& _address, const std::string& _contentType, const std::string& _data);
-			std::string dataString();
-			void writeAnswerHeader(enum enet::HTTPAnswerCode _value);
-			std::string escapeChar(const std::string& _value);
-			std::string unEscapeChar(const std::string& _value);
 		public:
-			using Observer = std::function<void(enet::Http& _interface, std::vector<uint8_t>&)>; //!< Define an Observer: function pointer
+			using Observer = std::function<void(std::vector<uint8_t>&)>; //!< Define an Observer: function pointer
 			Observer m_observer;
 			/**
 			 * @brief Connect an function member on the signal with the shared_ptr object.
@@ -175,32 +238,23 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(enet::Http& _interface, std::vector<uint8_t>&)) {
-				m_observer = [=](enet::Http& _interface, std::vector<uint8_t>& _value){
-					(*_class.*_func)(_interface,_value);
+			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(std::vector<uint8_t>&)) {
+				m_observer = [=](std::vector<uint8_t>& _value){
+					(*_class.*_func)(_value);
 				};
 			}
 			void connect(Observer _func) {
 				m_observer = _func;
 			}
 		public:
-			using ObserverRequest = std::function<void(enet::Http& _interface, const enet::HttpHeader&)>; //!< Define an Observer: function pointer
+			using ObserverRequest = std::function<void(const enet::HttpRequest&)>; //!< Define an Observer: function pointer
+		protected:
 			ObserverRequest m_observerRequest;
-			/**
-			 * @brief Connect an function member on the signal with the shared_ptr object.
-			 * @param[in] _class shared_ptr Object on whe we need to call ==> the object is get in keeped in weak_ptr.
-			 * @param[in] _func Function to call.
-			 * @param[in] _args Argument optinnal the user want to add.
-			 */
-			template<class CLASS_TYPE>
-			void connectHeader(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(enet::Http& _interface, const enet::HttpHeader&)) {
-				m_observerRequest = [=](enet::Http& _interface, std::vector<uint8_t>& _value){
-					(*_class.*_func)(_value);
-				};
-			}
-			void connectHeader(ObserverRequest _func) {
-				m_observerRequest = _func;
-			}
+		public:
+			using ObserverAnswer = std::function<void(const enet::HttpAnswer&)>; //!< Define an Observer: function pointer
+		protected:
+			ObserverAnswer m_observerAnswer;
+		public:
 			/**
 			 * @brief Write a chunk of data on the socket
 			 * @param[in] _data pointer on the data might be write
@@ -242,6 +296,60 @@ namespace enet {
 					return ret;
 				}
 				return ret/sizeof(T);
+			}
+	};
+	
+	class HttpClient : public Http {
+		public:
+			HttpClient(enet::Tcp _connection);
+		public:
+			void setHeader(const enet::HttpRequest& _header) {
+				setRequestHeader(_header);
+			}
+		public:
+			//bool get(const std::string& _address);
+			//bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
+			//bool post(const std::string& _address, const std::string& _contentType, const std::string& _data);
+		public:
+			/**
+			 * @brief Connect an function member on the signal with the shared_ptr object.
+			 * @param[in] _class shared_ptr Object on whe we need to call ==> the object is get in keeped in weak_ptr.
+			 * @param[in] _func Function to call.
+			 * @param[in] _args Argument optinnal the user want to add.
+			 */
+			template<class CLASS_TYPE>
+			void connectHeader(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(const enet::HttpAnswer&)) {
+				m_observerAnswer = [=](const enet::HttpAnswer& _value){
+					(*_class.*_func)(_value);
+				};
+			}
+			void connectHeader(Http::ObserverAnswer _func) {
+				m_observerAnswer = _func;
+			}
+	};
+	
+	class HttpServer : public Http {
+		public:
+			HttpServer(enet::Tcp _connection);
+		public:
+			void setHeader(const enet::HttpAnswer& _header) {
+				setAnswerHeader(_header);
+			}
+		public:
+			/**
+			 * @brief Connect an function member on the signal with the shared_ptr object.
+			 * @param[in] _class shared_ptr Object on whe we need to call ==> the object is get in keeped in weak_ptr.
+			 * @param[in] _func Function to call.
+			 * @param[in] _args Argument optinnal the user want to add.
+			 */
+			template<class CLASS_TYPE>
+			void connectHeader(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(const enet::HttpRequest&)) {
+				m_observerRequest = [=](const enet::HttpRequest& _value){
+					(*_class.*_func)(_value);
+				};
+			}
+			void connectHeader(Http::ObserverRequest _func) {
+				m_observerRequest = _func;
 			}
 	};
 }

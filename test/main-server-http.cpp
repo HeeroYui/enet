@@ -13,23 +13,27 @@
 #include <unistd.h>
 #include <etk/stdTools.h>
 namespace appl {
-	void onReceiveData(enet::Http& _interface, std::vector<uint8_t>& _data) {
+	void onReceiveData(enet::HttpServer* _interface, std::vector<uint8_t>& _data) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");
 	}
-	void onReceiveHeader(enet::Http& _interface, const enet::HttpHeader& _data) {
+	void onReceiveHeader(enet::HttpServer* _interface, const enet::HttpRequest& _data) {
 		TEST_INFO("Receive Header data:");
 		_data.display();
-		if (_data.m_req == "GET") {
-			if (_data.m_what == "http://127.0.0.1:12345/plop.txt") {
-				_interface.writeAnswerHeader(enet::HTTPAnswerCode::c200_ok);
+		if (_data.getType() == enet::HTTPReqType::GET) {
+			if (_data.getUri() == "http://127.0.0.1:12345/plop.txt") {
+				enet::HttpAnswer answer(enet::HTTPAnswerCode::c200_ok);
 				std::string data = "<html><head></head></body>coucou</body></html>";
-				_interface.write(data);
-				_interface.stop();
+				answer.setKey("Content-Length", etk::to_string(data.size()));
+				_interface->setHeader(answer);
+				_interface->write(data);
+				_interface->stop();
 				return;
 			}
 		}
-		_interface.writeAnswerHeader(enet::HTTPAnswerCode::c200_ok);
-		_interface.stop();
+		enet::HttpAnswer answer(enet::HTTPAnswerCode::c404_notFound);
+		answer.setKey("Connection", "close");
+		_interface->setHeader(answer);
+		_interface->stop();
 	}
 }
 
@@ -63,11 +67,15 @@ int main(int _argc, const char *_argv[]) {
 	// TODO : Check if connection is valid ...
 	
 	// Create a HTTP connection in Server mode
-	enet::Http connection(std::move(tcpConnection), true);
-	connection.setKeepAlive(true);
+	enet::HttpServer connection(std::move(tcpConnection));
+	enet::HttpServer* tmp = &connection;
 	// Set callbacks:
-	connection.connect(appl::onReceiveData);
-	connection.connectHeader(appl::onReceiveHeader);
+	connection.connect([=](std::vector<uint8_t>& _value){
+					appl::onReceiveData(tmp, _value);
+				});
+	connection.connectHeader([=](const enet::HttpRequest& _value){
+					appl::onReceiveHeader(tmp, _value);
+				});
 	
 	// start http connection (the actual state is just TCP start ...)
 	connection.start();

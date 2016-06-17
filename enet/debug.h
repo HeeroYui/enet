@@ -13,6 +13,7 @@ namespace enet {
 
 #define ENET_BASE(info,data) ELOG_BASE(enet::getLogId(),info,data)
 
+#define ENET_PRINT(data)         ENET_BASE(-1, data)
 #define ENET_CRITICAL(data)      ENET_BASE(1, data)
 #define ENET_ERROR(data)         ENET_BASE(2, data)
 #define ENET_WARNING(data)       ENET_BASE(3, data)

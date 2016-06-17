@@ -11,6 +11,13 @@
 #include <string.h>
 #include <unistd.h>
 
+static std::string escapeChar(const std::string& _value) {
+	return _value;
+}
+static std::string unEscapeChar(const std::string& _value) {
+	return _value;
+}
+
 static std::map<enet::HTTPAnswerCode, std::string> protocolName = {
 	{enet::HTTPAnswerCode::c100_continue, "Continue"},
 	{enet::HTTPAnswerCode::c101_switchingProtocols, "Switching Protocols"},
@@ -69,12 +76,13 @@ enet::Http::Http(enet::Tcp _connection, bool _isServer) :
   m_connection(std::move(_connection)),
   m_headerIsSend(false),
   m_thread(nullptr),
-  m_threadRunning(false),
-  m_keepAlive(false) {
-	setSendHeaderProperties("User-Agent", "e-net (ewol network interface)");
+  m_threadRunning(false) {
+	//setSendHeaderProperties("User-Agent", "e-net (ewol network interface)");
+	/*
 	if (m_keepAlive == true) {
 		setSendHeaderProperties("Connection", "Keep-Alive");
 	}
+	*/
 }
 
 enet::Http::~Http() {
@@ -97,7 +105,7 @@ void enet::Http::threadCallback() {
 		if (len > 0) {
 			ENET_INFO("Call client with datas ...");
 			if (m_observer != nullptr) {
-				m_observer(*this, m_temporaryBuffer);
+				m_observer(m_temporaryBuffer);
 			}
 		}
 	}
@@ -144,25 +152,7 @@ void enet::Http::stop(bool _inThreadStop){
 	}
 	ENET_DEBUG("disconnect [STOP]");
 }
-
-void enet::Http::setSendHeaderProperties(const std::string& _key, const std::string& _val) {
-	auto it = m_header.m_map.find(_key);
-	if (it == m_header.m_map.end()) {
-		m_header.m_map.insert(make_pair(_key, _val));
-	} else {
-		it->second = _val;
-	}
-}
-
-std::string enet::Http::getSendHeaderProperties(const std::string& _key) {
-	ENET_TODO("get header key=" << _key);
-	return "";
-}
-
-std::string enet::Http::getReceiveHeaderProperties(const std::string& _key) {
-	ENET_TODO("get header key=" << _key);
-	return "";
-}
+/*
 void enet::Http::writeAnswerHeader(enum enet::HTTPAnswerCode _value) {
 	std::string out;
 	out = "HTTP/1.1 ";
@@ -176,6 +166,172 @@ void enet::Http::writeAnswerHeader(enum enet::HTTPAnswerCode _value) {
 	out += "\r\n\r\n";
 	ENET_WARNING("Write header :" << out);
 	write(out, false);
+}
+*/
+namespace etk {
+	template <>
+	bool from_string<enum enet::HTTPAnswerCode>(enum enet::HTTPAnswerCode& _variableRet, const std::string& _value) {
+		_variableRet = enet::HTTPAnswerCode::c000_unknow;
+		for (auto &it : protocolName) {
+			if (etk::to_string(int32_t(it.first)) == _value) {
+				_variableRet = it.first;
+				return true;
+			}
+		}
+		return false;
+	}
+	template <>
+	std::string to_string<enum enet::HTTPAnswerCode>(const enum enet::HTTPAnswerCode& _value) {
+		return etk::to_string(int32_t(_value));
+	}
+	template <>
+	bool from_string<enum enet::HTTPReqType>(enum enet::HTTPReqType& _variableRet, const std::string& _value) {
+		_variableRet = enet::HTTPReqType::GET;
+		if (_value == "GET") {
+			_variableRet = enet::HTTPReqType::GET;
+			return true;
+		} else if (_value == "HEAD") {
+			_variableRet = enet::HTTPReqType::HEAD;
+			return true;
+		} else if (_value == "POST") {
+			_variableRet = enet::HTTPReqType::POST;
+			return true;
+		} else if (_value == "PUT") {
+			_variableRet = enet::HTTPReqType::PUT;
+			return true;
+		} else if (_value == "DELETE") {
+			_variableRet = enet::HTTPReqType::DELETE;
+			return true;
+		}
+		return false;
+	}
+	template <>
+	std::string to_string<enum enet::HTTPReqType>(const enum enet::HTTPReqType& _value) {
+		switch (_value) {
+			case enet::HTTPReqType::GET: return "GET";
+			case enet::HTTPReqType::HEAD: return "HEAD";
+			case enet::HTTPReqType::POST: return "POST";
+			case enet::HTTPReqType::PUT: return "PUT";
+			case enet::HTTPReqType::DELETE: return "DELETE";
+		}
+		return "UNKNOW";
+	}
+	template <>
+	bool from_string<enum enet::HTTPProtocol>(enum enet::HTTPProtocol& _variableRet, const std::string& _value) {
+		_variableRet = enet::HTTPProtocol::http_0_1;
+		if (_value == "HTTP/0.1") { _variableRet = enet::HTTPProtocol::http_0_1; return true; }
+		if (_value == "HTTP/0.2") { _variableRet = enet::HTTPProtocol::http_0_2; return true; }
+		if (_value == "HTTP/0.3") { _variableRet = enet::HTTPProtocol::http_0_3; return true; }
+		if (_value == "HTTP/0.4") { _variableRet = enet::HTTPProtocol::http_0_4; return true; }
+		if (_value == "HTTP/0.5") { _variableRet = enet::HTTPProtocol::http_0_5; return true; }
+		if (_value == "HTTP/0.6") { _variableRet = enet::HTTPProtocol::http_0_6; return true; }
+		if (_value == "HTTP/0.7") { _variableRet = enet::HTTPProtocol::http_0_7; return true; }
+		if (_value == "HTTP/0.8") { _variableRet = enet::HTTPProtocol::http_0_8; return true; }
+		if (_value == "HTTP/0.9") { _variableRet = enet::HTTPProtocol::http_0_9; return true; }
+		if (_value == "HTTP/0.10") { _variableRet = enet::HTTPProtocol::http_0_10; return true; }
+		if (_value == "HTTP/1.0") { _variableRet = enet::HTTPProtocol::http_1_0; return true; }
+		if (_value == "HTTP/1.1") { _variableRet = enet::HTTPProtocol::http_1_1; return true; }
+		if (_value == "HTTP/1.2") { _variableRet = enet::HTTPProtocol::http_1_2; return true; }
+		if (_value == "HTTP/1.3") { _variableRet = enet::HTTPProtocol::http_1_3; return true; }
+		if (_value == "HTTP/1.4") { _variableRet = enet::HTTPProtocol::http_1_4; return true; }
+		if (_value == "HTTP/1.5") { _variableRet = enet::HTTPProtocol::http_1_5; return true; }
+		if (_value == "HTTP/1.6") { _variableRet = enet::HTTPProtocol::http_1_6; return true; }
+		if (_value == "HTTP/1.7") { _variableRet = enet::HTTPProtocol::http_1_7; return true; }
+		if (_value == "HTTP/1.8") { _variableRet = enet::HTTPProtocol::http_1_8; return true; }
+		if (_value == "HTTP/1.9") { _variableRet = enet::HTTPProtocol::http_1_9; return true; }
+		if (_value == "HTTP/1.10") { _variableRet = enet::HTTPProtocol::http_1_10; return true; }
+		if (_value == "HTTP/2.0") { _variableRet = enet::HTTPProtocol::http_2_0; return true; }
+		if (_value == "HTTP/2.1") { _variableRet = enet::HTTPProtocol::http_2_1; return true; }
+		if (_value == "HTTP/2.2") { _variableRet = enet::HTTPProtocol::http_2_2; return true; }
+		if (_value == "HTTP/2.3") { _variableRet = enet::HTTPProtocol::http_2_3; return true; }
+		if (_value == "HTTP/2.4") { _variableRet = enet::HTTPProtocol::http_2_4; return true; }
+		if (_value == "HTTP/2.5") { _variableRet = enet::HTTPProtocol::http_2_5; return true; }
+		if (_value == "HTTP/2.6") { _variableRet = enet::HTTPProtocol::http_2_6; return true; }
+		if (_value == "HTTP/2.7") { _variableRet = enet::HTTPProtocol::http_2_7; return true; }
+		if (_value == "HTTP/2.8") { _variableRet = enet::HTTPProtocol::http_2_8; return true; }
+		if (_value == "HTTP/2.9") { _variableRet = enet::HTTPProtocol::http_2_9; return true; }
+		if (_value == "HTTP/2.10") { _variableRet = enet::HTTPProtocol::http_2_10; return true; }
+		if (_value == "HTTP/3.0") { _variableRet = enet::HTTPProtocol::http_3_0; return true; }
+		if (_value == "HTTP/3.1") { _variableRet = enet::HTTPProtocol::http_3_1; return true; }
+		if (_value == "HTTP/3.2") { _variableRet = enet::HTTPProtocol::http_3_2; return true; }
+		if (_value == "HTTP/3.3") { _variableRet = enet::HTTPProtocol::http_3_3; return true; }
+		if (_value == "HTTP/3.4") { _variableRet = enet::HTTPProtocol::http_3_4; return true; }
+		if (_value == "HTTP/3.5") { _variableRet = enet::HTTPProtocol::http_3_5; return true; }
+		if (_value == "HTTP/3.6") { _variableRet = enet::HTTPProtocol::http_3_6; return true; }
+		if (_value == "HTTP/3.7") { _variableRet = enet::HTTPProtocol::http_3_7; return true; }
+		if (_value == "HTTP/3.8") { _variableRet = enet::HTTPProtocol::http_3_8; return true; }
+		if (_value == "HTTP/3.9") { _variableRet = enet::HTTPProtocol::http_3_9; return true; }
+		if (_value == "HTTP/3.10") { _variableRet = enet::HTTPProtocol::http_3_10; return true; }
+		return false;
+	}
+	template <>
+	std::string to_string<enum enet::HTTPProtocol>(const enum enet::HTTPProtocol& _value) {
+		switch (_value) {
+			case enet::HTTPProtocol::http_0_1:  return "HTTP/0.1";
+			case enet::HTTPProtocol::http_0_2:  return "HTTP/0.2";
+			case enet::HTTPProtocol::http_0_3:  return "HTTP/0.3";
+			case enet::HTTPProtocol::http_0_4:  return "HTTP/0.4";
+			case enet::HTTPProtocol::http_0_5:  return "HTTP/0.5";
+			case enet::HTTPProtocol::http_0_6:  return "HTTP/0.6";
+			case enet::HTTPProtocol::http_0_7:  return "HTTP/0.7";
+			case enet::HTTPProtocol::http_0_8:  return "HTTP/0.8";
+			case enet::HTTPProtocol::http_0_9:  return "HTTP/0.9";
+			case enet::HTTPProtocol::http_0_10: return "HTTP/0.10";
+			case enet::HTTPProtocol::http_1_0:  return "HTTP/1.0";
+			case enet::HTTPProtocol::http_1_1:  return "HTTP/1.1";
+			case enet::HTTPProtocol::http_1_2:  return "HTTP/1.2";
+			case enet::HTTPProtocol::http_1_3:  return "HTTP/1.3";
+			case enet::HTTPProtocol::http_1_4:  return "HTTP/1.4";
+			case enet::HTTPProtocol::http_1_5:  return "HTTP/1.5";
+			case enet::HTTPProtocol::http_1_6:  return "HTTP/1.6";
+			case enet::HTTPProtocol::http_1_7:  return "HTTP/1.7";
+			case enet::HTTPProtocol::http_1_8:  return "HTTP/1.8";
+			case enet::HTTPProtocol::http_1_9:  return "HTTP/1.9";
+			case enet::HTTPProtocol::http_1_10: return "HTTP/1.10";
+			case enet::HTTPProtocol::http_2_0:  return "HTTP/2.0";
+			case enet::HTTPProtocol::http_2_1:  return "HTTP/2.1";
+			case enet::HTTPProtocol::http_2_2:  return "HTTP/2.2";
+			case enet::HTTPProtocol::http_2_3:  return "HTTP/2.3";
+			case enet::HTTPProtocol::http_2_4:  return "HTTP/2.4";
+			case enet::HTTPProtocol::http_2_5:  return "HTTP/2.5";
+			case enet::HTTPProtocol::http_2_6:  return "HTTP/2.6";
+			case enet::HTTPProtocol::http_2_7:  return "HTTP/2.7";
+			case enet::HTTPProtocol::http_2_8:  return "HTTP/2.8";
+			case enet::HTTPProtocol::http_2_9:  return "HTTP/2.9";
+			case enet::HTTPProtocol::http_2_10: return "HTTP/2.10";
+			case enet::HTTPProtocol::http_3_0:  return "HTTP/3.0";
+			case enet::HTTPProtocol::http_3_1:  return "HTTP/3.1";
+			case enet::HTTPProtocol::http_3_2:  return "HTTP/3.2";
+			case enet::HTTPProtocol::http_3_3:  return "HTTP/3.3";
+			case enet::HTTPProtocol::http_3_4:  return "HTTP/3.4";
+			case enet::HTTPProtocol::http_3_5:  return "HTTP/3.5";
+			case enet::HTTPProtocol::http_3_6:  return "HTTP/3.6";
+			case enet::HTTPProtocol::http_3_7:  return "HTTP/3.7";
+			case enet::HTTPProtocol::http_3_8:  return "HTTP/3.8";
+			case enet::HTTPProtocol::http_3_9:  return "HTTP/3.9";
+			case enet::HTTPProtocol::http_3_10: return "HTTP/3.10";
+		}
+		return "HTTP/0.1";
+	}
+}
+
+
+void enet::Http::setRequestHeader(const enet::HttpRequest& _req) {
+	m_requestHeader = _req;
+	if (m_requestHeader.getKey("User-Agent") == "") {
+		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+	}
+	std::string value = m_requestHeader.generate();
+	write(value, false);
+}
+
+void enet::Http::setAnswerHeader(const enet::HttpAnswer& _req) {
+	m_answerHeader = _req;
+	if (m_requestHeader.getKey("User-Agent") == "") {
+		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+	}
+	std::string value = m_answerHeader.generate();
+	write(value, false);
 }
 
 void enet::Http::getHeader() {
@@ -219,41 +375,113 @@ void enet::Http::getHeader() {
 			it.resize(it.size()-1);
 		}
 	}
-	headerEnded = false;
-	m_header.m_map.clear();
-	for (auto element : list) {
-		if (headerEnded == false) {
-			headerEnded = true;
-			m_header.setReq(element);
+	//parse first element:
+	std::vector<std::string> listLineOne = etk::split(list[0], ' ');
+	if (listLineOne.size() < 2) {
+		ENET_ERROR("can not parse answear : " << listLineOne);
+		// answer bad request and close connection ...
+		
+		return;
+	}
+	if (    listLineOne.size() >= 3
+	     && (    listLineOne[0] == "GET"
+	          || listLineOne[0] == "POST"
+	          || listLineOne[0] == "HEAD"
+	          || listLineOne[0] == "DELETE"
+	          || listLineOne[0] == "PUT" ) ) {
+		// HTTP CALL
+		if (m_isServer == false) {
+			// can not have call in client mode
+			ENET_ERROR("can not parse call in client mode ..." << listLineOne);
+			m_answerHeader.setErrorCode(enet::HTTPAnswerCode::c400_badRequest);
+			m_answerHeader.setHelp("Call a client with a request from server ...");
+			setAnswerHeader(m_answerHeader);
+			stop(true);
+			return;
+		}
+		// get type call:
+		enum enet::HTTPReqType valueType;
+		etk::from_string(valueType, listLineOne[0]);
+		m_requestHeader.setType(valueType);
+		// get URI:
+		m_requestHeader.setUri(listLineOne[1]);
+		// Get http version:
+		enum enet::HTTPProtocol valueProtocol;
+		etk::from_string(valueProtocol, listLineOne[2]);
+		m_requestHeader.setProtocol(valueProtocol);
+	} else if (    listLineOne.size() >= 3
+	            && etk::start_with(listLineOne[0],"HTTP/") == true) {
+		// HTTP answer
+		if (m_isServer == true) {
+			// can not have anser ==> need to be a get ot something like this ...
+			ENET_ERROR("can not parse answer in server mode ..." << listLineOne);
+			m_answerHeader.setErrorCode(enet::HTTPAnswerCode::c400_badRequest);
+			m_answerHeader.setHelp("Call a client with a request from server ...");
+			setAnswerHeader(m_answerHeader);
+			stop(true);
+			return;
+		}
+		// Get http version:
+		enum enet::HTTPProtocol valueProtocol;
+		etk::from_string(valueProtocol, listLineOne[0]);
+		m_answerHeader.setProtocol(valueProtocol);
+		
+		enum HTTPAnswerCode valueErrorCode;
+		etk::from_string(valueErrorCode, listLineOne[1]);
+		m_answerHeader.setErrorCode(valueErrorCode);
+		
+		// get comment:
+		std::string comment;
+		for (size_t iii=2; iii<listLineOne.size(); ++iii) {
+			if (comment.size() != 0) {
+				comment += " ";
+			}
+			comment += listLineOne[iii];
+		}
+		m_answerHeader.setHelp(comment);
+	} else {
+		// can not have anser ==> need to be a get ot something like this ...
+		ENET_ERROR("Un understand message ..." << listLineOne);
+		m_answerHeader.setErrorCode(enet::HTTPAnswerCode::c400_badRequest);
+		m_answerHeader.setHelp("Un understand message ...");
+		setAnswerHeader(m_answerHeader);
+		stop(true);
+		return;
+	}
+	for (size_t iii=1; iii<list.size(); ++iii) {
+		size_t found = list[iii].find(":");
+		if (found == std::string::npos) {
+			// nothing
+			continue;
+		}
+		std::string key = unEscapeChar(std::string(list[iii], 0, found));
+		std::string value = unEscapeChar(std::string(list[iii], found+2));
+		ENET_VERBOSE("header : key='" << key << "' value='" << value << "'");
+		if (m_isServer == false) {
+			m_answerHeader.setKey(key,value);
 		} else {
-			size_t found = element.find(":");
-			if (found == std::string::npos) {
-				// nothing
-				continue;
-			}
-			ENET_VERBOSE("header : key='" << std::string(element, 0, found) << "' value='" << std::string(element, found+2) << "'");
-			m_header.m_map.insert(make_pair(unEscapeChar(std::string(element, 0, found)), unEscapeChar(std::string(element, found+2))));
+			m_requestHeader.setKey(key,value);
+		}
+		if (    key == "Connection"
+		     && value == "close") {
+			ENET_DEBUG("connection closed by remote :");
+			m_connection.unlink();
 		}
 	}
-	for (auto &it : m_header.m_map) {
-		if (it.first == "Connection") {
-			if (it.second == "close") {
-				ENET_DEBUG("connection closed by remote :");
-				m_connection.unlink();
-			} else {
-				ENET_TODO("manage connection type : '" << it.second);
-			}
+	if (m_isServer == false) {
+		if (m_observerAnswer != nullptr) {
+			m_observerAnswer(m_answerHeader);
 		}
-	}
-	m_header.display();
-	if (m_observerRequest != nullptr) {
-		m_observerRequest(*this, m_header);
+	} else {
+		if (m_observerRequest != nullptr) {
+			m_observerRequest(m_requestHeader);
+		}
 	}
 }
 
 
+/*
 bool enet::Http::get(const std::string& _address) {
-	m_receiveData.clear();
 	m_header.m_map.clear();
 	std::string req = "GET http://" + m_connection.getName();
 	if (_address != "") {
@@ -280,15 +508,7 @@ bool enet::Http::get(const std::string& _address) {
 	return false;
 }
 
-std::string enet::Http::escapeChar(const std::string& _value) {
-	return _value;
-}
-std::string enet::Http::unEscapeChar(const std::string& _value) {
-	return _value;
-}
-
 bool enet::Http::post(const std::string& _address, const std::map<std::string, std::string>& _values) {
-	m_receiveData.clear();
 	m_header.m_map.clear();
 	// First create body :
 	std::string body;
@@ -302,7 +522,6 @@ bool enet::Http::post(const std::string& _address, const std::map<std::string, s
 }
 
 bool enet::Http::post(const std::string& _address, const std::string& _contentType, const std::string& _data) {
-	m_receiveData.clear();
 	m_header.m_map.clear();
 	std::string req = "POST http://" + m_connection.getName();
 	if (_address != "") {
@@ -329,68 +548,154 @@ bool enet::Http::post(const std::string& _address, const std::string& _contentTy
 	//return receiveData();
 	return false;
 }
-
-
-std::string enet::Http::dataString() {
-	std::string data;
-	for (auto element : m_receiveData) {
-		if (element == '\0') {
-			return data;
-		}
-		data += element;
-	}
-	return data;
-}
+*/
 
 int32_t enet::Http::write(const void* _data, int32_t _len) {
 	return m_connection.write(_data, _len);
 }
 
-void enet::HttpHeader::setReq(const std::string& _req) {
-	// parse base answear:
-	std::vector<std::string> list = etk::split(_req, ' ');
-	if (list.size() < 2) {
-		ENET_ERROR("can not parse answear : " << list);
-		return;
+
+void enet::HttpHeader::setKey(const std::string& _key, const std::string& _value) {
+	auto it = m_map.find(_key);
+	if (it == m_map.end()) {
+		m_map.insert(make_pair(_key, _value));
+	} else {
+		it->second = _value;
 	}
-	m_req = list[0];
-	m_what = list[1];
-	if (    m_req == "GET"
-	     || m_req == "POST") {
-		// HTTP CALL
-		
-	} else if (etk::start_with(m_req,"HTTP/")==true) {
-		// HTTP answer
-		int32_t ret = etk::string_to_int32_t(m_what);
-		switch (ret/100) {
-			case 1:
-				// information message
-				break;
-			case 2:
-				// OK
-				break;
-			case 3:
-				// Redirect
-				ENET_WARNING("Rediret request");
-				break;
-			case 4:
-				// client Error
-				ENET_WARNING("Client error");
-				break;
-			case 5:
-				// server error
-				ENET_WARNING("Server error");
-				break;
+}
+
+void enet::HttpHeader::rmKey(const std::string& _key) {
+	auto it = m_map.find(_key);
+	if (it != m_map.end()) {
+		m_map.erase(it);
+	}
+}
+
+std::string enet::HttpHeader::getKey(const std::string& _key) const {
+	auto it = m_map.find(_key);
+	if (it != m_map.end()) {
+		return it->second;
+	}
+	return "";
+}
+
+std::string enet::HttpHeader::generateKeys() const {
+	std::string out;
+	for (auto &it : m_map) {
+		if (    it.first != ""
+		     && it.second != "") {
+			out += escapeChar(it.first) + " : " + escapeChar(it.second) + "\r\n";
+		}
+	}
+	return out;
+}
+
+enet::HttpHeader::HttpHeader():
+  m_protocol(enet::HTTPProtocol::http_1_0) {
+	
+}
+
+
+// -----------------------------------------------------------------------------------------
+
+
+enet::HttpAnswer::HttpAnswer(enum HTTPAnswerCode _code, const std::string& _help):
+  m_what(_code),
+  m_helpMessage(_help) {
+	
+}
+
+void enet::HttpAnswer::display() const {
+	ENET_PRINT("display header 'Answer' ");
+	ENET_PRINT("    protocol=" << m_protocol);
+	ENET_PRINT("    Code=" << int32_t(m_what));
+	ENET_PRINT("    message=" << m_helpMessage);
+	ENET_PRINT("    Options:");
+	for (auto &it : m_map) {
+		if (    it.first != ""
+		     && it.second != "") {
+			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
 		}
 	}
 }
 
+std::string enet::HttpAnswer::generate() const {
+	std::string out;
+	out += etk::to_string(m_protocol);
+	out += " ";
+	out += etk::to_string(int32_t(m_what));
+	out += " ";
+	if (m_helpMessage != "") {
+		out += escapeChar(m_helpMessage);
+	} else {
+		auto it = protocolName.find(m_what);
+		if (it != protocolName.end()) {
+			out += escapeChar(it->second);
+		} else {
+			out += "???";
+		}
+	}
+	out += "\r\n";
+	out += generateKeys();
+	out += "\r\n\r\n";
+	return out;
+}
+enet::HttpServer::HttpServer(enet::Tcp _connection) :
+  enet::Http(std::move(_connection), true) {
+	
+}
 
-void enet::HttpHeader::display() const {
-	ENET_INFO("header :");
+enet::HttpClient::HttpClient(enet::Tcp _connection) :
+  enet::Http(std::move(_connection), false) {
+	
+}
+// -----------------------------------------------------------------------------------------
+
+enet::HttpRequest::HttpRequest(enum enet::HTTPReqType _type):
+  m_req(_type),
+  m_uri() {
+	
+}
+
+void enet::HttpRequest::display() const {
+	ENET_PRINT("display header 'Request' ");
+	ENET_PRINT("    type=" << m_req);
+	ENET_PRINT("    protocol=" << m_protocol);
+	ENET_PRINT("    uri=" << m_uri);
+	ENET_PRINT("    Options:");
 	for (auto &it : m_map) {
-		ENET_INFO("    key='" << it.first << "' value='" << it.second << "'");
+		if (    it.first != ""
+		     && it.second != "") {
+			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
+		}
 	}
 }
 
+std::string enet::HttpRequest::generate() const {
+	std::string out;
+	out += etk::to_string(m_req);
+	out += " ";
+	out += m_uri;
+	out += " ";
+	out += etk::to_string(m_protocol);
+	out += "\r\n";
+	out += generateKeys();
+	out += "\r\n\r\n";
+	return out;
+}
 
+
+std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPProtocol _obj) {
+	_os << "enet::HTTPProtocol::" <<etk::to_string(_obj);
+	return _os;
+}
+
+std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPAnswerCode _obj) {
+	_os << "enet::HTTPAnswerCode::" << etk::to_string(_obj);
+	return _os;
+}
+
+std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPReqType _obj) {
+	_os << "enet::HTTPReqType::" << etk::to_string(_obj);
+	return _os;
+}

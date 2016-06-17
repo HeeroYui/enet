@@ -26,7 +26,7 @@ def get_version():
 
 def create(target, module_name):
 	my_module = module.Module(__file__, module_name, get_type())
-	my_module.add_module_depend(['etk'])
+	my_module.add_module_depend(['etk', 'ememory'])
 	my_module.add_src_file([
 	    'enet/debug.cpp'
 	    ])
@@ -40,6 +40,7 @@ def create(target, module_name):
 	    'enet/TcpClient.cpp',
 	    'enet/Http.cpp',
 	    'enet/Ftp.cpp',
+	    'enet/WebSocket.cpp',
 	    ])
 	my_module.add_header_file([
 	    'enet/debug.h',
@@ -49,6 +50,7 @@ def create(target, module_name):
 	    'enet/TcpClient.h',
 	    'enet/Http.h',
 	    'enet/Ftp.h',
+	    'enet/WebSocket.h',
 	    ])
 	return my_module
 

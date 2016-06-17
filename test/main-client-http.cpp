@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 namespace appl {
-	void onReceiveData(enet::Http& _interface, std::vector<uint8_t>& _data) {
+	void onReceiveData(std::vector<uint8_t>& _data) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");
 		TEST_INFO("data:" << (char*)&_data[0] << "");
 	}
@@ -41,15 +41,15 @@ int main(int _argc, const char *_argv[]) {
 	// TODO : Check if connection is valid ...
 	
 	// Create a HTTP connection in Client mode
-	enet::Http connection(std::move(tcpConnection), false);
-	connection.setKeepAlive(true);
+	enet::HttpClient connection(std::move(tcpConnection));
 	// Set callbacks:
 	connection.connect(appl::onReceiveData);
 	
 	// start http connection (the actual state is just TCP start ...)
 	connection.start();
-	connection.get("plop.txt");
-	
+	enet::HttpRequest req(enet::HTTPReqType::GET);
+	req.setUri("plop.txt");
+	connection.setHeader(req);
 	
 	while (connection.isAlive() == true) {
 		usleep(100000);
