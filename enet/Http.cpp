@@ -17,6 +17,24 @@ static std::string escapeChar(const std::string& _value) {
 static std::string unEscapeChar(const std::string& _value) {
 	return _value;
 }
+static std::string removeStartAndStopSpace(const std::string& _value) {
+	std::string out;
+	out.reserve(_value.size());
+	bool findSpace = false;
+	for (auto &it : _value) {
+		if (it != ' ') {
+			if (    findSpace == true
+			     && out.size() != 0) {
+				out += ' ';
+			}
+			out += it;
+			findSpace = false;
+		} else {
+			findSpace = true;
+		}
+	}
+	return out;
+}
 
 static std::map<enet::HTTPAnswerCode, std::string> protocolName = {
 	{enet::HTTPAnswerCode::c100_continue, "Continue"},
@@ -100,12 +118,16 @@ void enet::Http::threadCallback() {
 			getHeader();
 			m_headerIsSend = true;
 		}
-		m_temporaryBuffer.resize(67000);
-		int32_t len = m_connection.read(&m_temporaryBuffer[0], m_temporaryBuffer.size());
-		if (len > 0) {
-			ENET_INFO("Call client with datas ...");
-			if (m_observer != nullptr) {
-				m_observer(m_temporaryBuffer);
+		if (m_observerRaw != nullptr) {
+			m_observerRaw(m_connection);
+		} else {
+			m_temporaryBuffer.resize(67000);
+			int32_t len = m_connection.read(&m_temporaryBuffer[0], m_temporaryBuffer.size());
+			if (len > 0) {
+				ENET_INFO("Call client with datas ...");
+				if (m_observer != nullptr) {
+					m_observer(m_temporaryBuffer);
+				}
 			}
 		}
 	}
@@ -346,21 +368,25 @@ void enet::Http::getHeader() {
 			continue;
 		}
 		header += type;
-		if (    header.size() > 4
+		if (    header.size() > 6
 		     && header[header.size()-1] == '\n'
 		     && header[header.size()-2] == '\r'
 		     && header[header.size()-3] == '\n'
-		     && header[header.size()-4] == '\r') {
+		     && header[header.size()-4] == '\r'
+		     && header[header.size()-5] == '\n'
+		     && header[header.size()-6] == '\r') {
 			// Normal end case ...
 			break;
-		} else if (    header.size() > 2
+		} else if (    header.size() > 3
 		           && header[header.size()-1] == '\n'
-		           && header[header.size()-2] == '\n') {
+		           && header[header.size()-2] == '\n'
+		           && header[header.size()-3] == '\n') {
 			// linux end case
 			break;
-		} else if (    header.size() > 2
+		} else if (    header.size() > 3
 		           && header[header.size()-1] == '\r'
-		           && header[header.size()-2] == '\r') {
+		           && header[header.size()-2] == '\r'
+		           && header[header.size()-3] == '\r') {
 			// Mac end case
 			break;
 		}
@@ -455,7 +481,9 @@ void enet::Http::getHeader() {
 			continue;
 		}
 		std::string key = unEscapeChar(std::string(list[iii], 0, found));
+		key = removeStartAndStopSpace(key);
 		std::string value = unEscapeChar(std::string(list[iii], found+2));
+		value = removeStartAndStopSpace(value);
 		ENET_VERBOSE("header : key='" << key << "' value='" << value << "'");
 		if (m_isServer == false) {
 			m_answerHeader.setKey(key,value);
@@ -572,6 +600,13 @@ void enet::HttpHeader::rmKey(const std::string& _key) {
 }
 
 std::string enet::HttpHeader::getKey(const std::string& _key) const {
+	ENET_WARNING("search key: " << _key << " in:");
+	for (auto &it : m_map) {
+		ENET_WARNING("    '" << it.first << "' : '" << it.second << "'");
+		if (it.first == _key) {
+			ENET_WARNING("        ==> Find");
+		}
+	}
 	auto it = m_map.find(_key);
 	if (it != m_map.end()) {
 		return it->second;

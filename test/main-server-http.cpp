@@ -20,20 +20,20 @@ namespace appl {
 		TEST_INFO("Receive Header data:");
 		_data.display();
 		if (_data.getType() == enet::HTTPReqType::GET) {
-			if (_data.getUri() == "http://127.0.0.1:12345/plop.txt") {
+			if (_data.getUri() == "plop.txt") {
 				enet::HttpAnswer answer(enet::HTTPAnswerCode::c200_ok);
 				std::string data = "<html><head></head></body>coucou</body></html>";
 				answer.setKey("Content-Length", etk::to_string(data.size()));
 				_interface->setHeader(answer);
 				_interface->write(data);
-				_interface->stop();
+				_interface->stop(true);
 				return;
 			}
 		}
 		enet::HttpAnswer answer(enet::HTTPAnswerCode::c404_notFound);
 		answer.setKey("Connection", "close");
 		_interface->setHeader(answer);
-		_interface->stop();
+		_interface->stop(true);
 	}
 }
 

@@ -145,13 +145,13 @@ namespace enet {
 			void setErrorCode(enum HTTPAnswerCode _value) {
 				m_what = _value;
 			}
-			enum HTTPAnswerCode getErrorCode() {
+			enum HTTPAnswerCode getErrorCode() const {
 				return m_what;
 			}
 			void setHelp(const std::string& _value) {
 				m_helpMessage = _value;
 			}
-			const std::string& getHelp() {
+			const std::string& getHelp() const {
 				return m_helpMessage;
 			}
 	};
@@ -245,6 +245,24 @@ namespace enet {
 			}
 			void connect(Observer _func) {
 				m_observer = _func;
+			}
+		public:
+			using ObserverRaw = std::function<void(enet::Tcp&)>; //!< Define an Observer: function pointer
+			ObserverRaw m_observerRaw;
+			/**
+			 * @brief Connect an function member on the signal with the shared_ptr object.
+			 * @param[in] _class shared_ptr Object on whe we need to call ==> the object is get in keeped in weak_ptr.
+			 * @param[in] _func Function to call.
+			 * @param[in] _args Argument optinnal the user want to add.
+			 */
+			template<class CLASS_TYPE>
+			void connectRaw(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(enet::Tcp&)) {
+				m_observerRaw = [=](enet::Tcp& _connection){
+					(*_class.*_func)(_connection);
+				};
+			}
+			void connectRaw(ObserverRaw _func) {
+				m_observerRaw = _func;
 			}
 		public:
 			using ObserverRequest = std::function<void(const enet::HttpRequest&)>; //!< Define an Observer: function pointer
