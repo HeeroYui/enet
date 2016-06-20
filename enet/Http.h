@@ -225,7 +225,7 @@ namespace enet {
 		public:
 			void start();
 			void stop(bool _inThread=false);
-			bool isAlive() {
+			bool isAlive() const {
 				return m_connection.getConnectionStatus() == enet::Tcp::status::link;
 			}
 		public:

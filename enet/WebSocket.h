@@ -16,12 +16,26 @@ namespace enet {
 			ememory::SharedPtr<enet::Http> m_interface;
 			std::vector<uint8_t> m_buffer;
 			std::string m_checkKey;
+			std::chrono::steady_clock::time_point m_lastReceive;
+			std::chrono::steady_clock::time_point m_lastSend;
 		public:
+			const std::chrono::steady_clock::time_point& getLastTimeReceive() {
+				return m_lastReceive;
+			}
+			const std::chrono::steady_clock::time_point& getLastTimeSend() {
+				return m_lastSend;
+			}
+		public:
+			WebSocket();
 			WebSocket(enet::Tcp _connection, bool _isServer=false);
+			void setInterface(enet::Tcp _connection, bool _isServer=false);
 			virtual ~WebSocket();
 			void start(const std::string& _uri="");
 			void stop(bool _inThread=false);
-			bool isAlive() {
+			bool isAlive() const {
+				if (m_interface == nullptr) {
+					return false;
+				}
 				return m_interface->isAlive();
 			}
 			void onReceiveData(enet::Tcp& _data);
@@ -62,13 +76,18 @@ namespace enet {
 			template<class CLASS_TYPE>
 			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const std::string&)) {
 				m_observerUriCheck = [=](const std::string& _value){
-					(*_class.*_func)(_value);
+					return (*_class.*_func)(_value);
 				};
 			}
 			void connectUri(ObserverUriCheck _func) {
 				m_observerUriCheck = _func;
 			}
+		private:
+			bool m_haveMask;
+			uint8_t m_dataMask[4];
 		public:
+			bool writeHeader(int32_t _len, bool _isString=false, bool _mask= false);
+			int32_t writeData(uint8_t* _data, int32_t _len);
 			/**
 			 * @brief Write a chunk of data on the socket
 			 * @param[in] _data pointer on the data might be write
@@ -112,9 +131,9 @@ namespace enet {
 				}
 				return ret/sizeof(T);
 			}
-		protected:
+		public:
 			void controlPing();
 			void controlPong();
-			void contolClose();
+			void controlClose();
 	};
 }

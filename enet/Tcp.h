@@ -47,7 +47,7 @@ namespace enet {
 			 * @brief Get the current Status of the connection
 			 * @return The status.
 			 */
-			enum status getConnectionStatus() {
+			enum status getConnectionStatus() const {
 				return m_status;
 			}
 		public:
