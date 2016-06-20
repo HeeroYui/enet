@@ -53,7 +53,7 @@ int main(int _argc, const char *_argv[]) {
 	connection.connect(appl::onReceiveData);
 	
 	// start http connection (the actual state is just TCP start ...)
-	connection.start("plop.txt");
+	connection.start("/plop.txt");
 	
 	// send some data to play ...
 	connection.write("coucou comment ca vas ???");

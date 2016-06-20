@@ -368,25 +368,21 @@ void enet::Http::getHeader() {
 			continue;
 		}
 		header += type;
-		if (    header.size() > 6
+		if (    header.size() > 4
 		     && header[header.size()-1] == '\n'
 		     && header[header.size()-2] == '\r'
 		     && header[header.size()-3] == '\n'
-		     && header[header.size()-4] == '\r'
-		     && header[header.size()-5] == '\n'
-		     && header[header.size()-6] == '\r') {
+		     && header[header.size()-4] == '\r') {
 			// Normal end case ...
 			break;
-		} else if (    header.size() > 3
+		} else if (    header.size() > 2
 		           && header[header.size()-1] == '\n'
-		           && header[header.size()-2] == '\n'
-		           && header[header.size()-3] == '\n') {
+		           && header[header.size()-2] == '\n') {
 			// linux end case
 			break;
-		} else if (    header.size() > 3
+		} else if (    header.size() > 2
 		           && header[header.size()-1] == '\r'
-		           && header[header.size()-2] == '\r'
-		           && header[header.size()-3] == '\r') {
+		           && header[header.size()-2] == '\r') {
 			// Mac end case
 			break;
 		}
@@ -600,13 +596,6 @@ void enet::HttpHeader::rmKey(const std::string& _key) {
 }
 
 std::string enet::HttpHeader::getKey(const std::string& _key) const {
-	ENET_WARNING("search key: " << _key << " in:");
-	for (auto &it : m_map) {
-		ENET_WARNING("    '" << it.first << "' : '" << it.second << "'");
-		if (it.first == _key) {
-			ENET_WARNING("        ==> Find");
-		}
-	}
 	auto it = m_map.find(_key);
 	if (it != m_map.end()) {
 		return it->second;
@@ -672,7 +661,7 @@ std::string enet::HttpAnswer::generate() const {
 	}
 	out += "\r\n";
 	out += generateKeys();
-	out += "\r\n\r\n";
+	out += "\r\n";
 	return out;
 }
 enet::HttpServer::HttpServer(enet::Tcp _connection) :
@@ -715,7 +704,7 @@ std::string enet::HttpRequest::generate() const {
 	out += etk::to_string(m_protocol);
 	out += "\r\n";
 	out += generateKeys();
-	out += "\r\n\r\n";
+	out += "\r\n";
 	return out;
 }
 

@@ -10,6 +10,8 @@
 #include <etk/stdTools.h>
 #include <string.h>
 #include <random>
+#include <algue/base64.h>
+#include <algue/sha1.h>
 
 
 namespace enet {
@@ -47,6 +49,23 @@ enet::WebSocket::~WebSocket() {
 	stop(true);
 }
 
+static std::string generateKey() {
+	// create dynamic key:
+	std::random_device rd;
+	std::mt19937 e2(rd());
+	std::uniform_real_distribution<> dist(0, 0xFF);
+	uint8_t dataKey[16];
+	for (size_t iii=0; iii<16; ++iii) {
+		dataKey[iii] = uint8_t(dist(e2));
+	}
+	return algue::base64::encode(dataKey, 16);
+}
+
+static std::string generateCheckKey(const std::string& _key) {
+	std::string out = _key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+	std::vector<uint8_t> keyData = algue::sha1::encode(out);
+	return algue::base64::encode(keyData);
+}
 
 void enet::WebSocket::start(const std::string& _uri) {
 	if (m_interface == nullptr) {
@@ -59,8 +78,12 @@ void enet::WebSocket::start(const std::string& _uri) {
 		req.setUri(_uri);
 		req.setKey("Upgrade", "websocket");
 		req.setKey("Connection", "Upgrade");
-		req.setKey("Sec-WebSocket-Key", "dGhlIHNhbXBsZSBub25jZQ=="); // this is an example key ...
+		m_checkKey = generateKey();
+		req.setKey("Sec-WebSocket-Key", m_checkKey); // this is an example key ...
+		m_checkKey = generateCheckKey(m_checkKey);
 		req.setKey("Sec-WebSocket-Version", "13");
+		req.setKey("Pragma", "no-cache");
+		req.setKey("Cache-Control", "no-cache");
 		ememory::SharedPtr<enet::HttpClient> interface = std::dynamic_pointer_cast<enet::HttpClient>(m_interface);
 		if (interface!=nullptr) {
 			interface->setHeader(req);
@@ -83,7 +106,9 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	int32_t len = _connection.read(&opcode, sizeof(uint8_t));
 	if (len <= 0) {
 		if (len < 0) {
-			ENET_ERROR("Protocol error occured ...");
+			if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
+				ENET_ERROR("Protocol error occured ...");
+			}
 			ENET_VERBOSE("ReadRaw 1 [STOP]");
 			m_interface->stop(true);
 			return;
@@ -103,7 +128,9 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	ENET_VERBOSE("Read payload : " << uint32_t(size1));
 	if (len <= 0) {
 		if (len < 0) {
-			ENET_ERROR("Protocol error occured ...");
+			if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
+				ENET_ERROR("Protocol error occured ...");
+			}
 			ENET_VERBOSE("ReadRaw 1 [STOP]");
 			m_interface->stop(true);
 			return;
@@ -118,7 +145,9 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		len = _connection.read(&tmpSize, sizeof(uint16_t));
 		if (len <= 1) {
 			if (len < 0) {
-				ENET_ERROR("Protocol error occured ...");
+				if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
+					ENET_ERROR("Protocol error occured ...");
+				}
 				ENET_VERBOSE("ReadRaw 1 [STOP]");
 				m_interface->stop(true);
 				return;
@@ -132,7 +161,9 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		len = _connection.read(&totalSize, sizeof(uint64_t));
 		if (len <= 7) {
 			if (len < 0) {
-				ENET_ERROR("Protocol error occured ...");
+				if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
+					ENET_ERROR("Protocol error occured ...");
+				}
 				ENET_VERBOSE("ReadRaw 1 [STOP]");
 				m_interface->stop(true);
 				return;
@@ -148,7 +179,9 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		len = _connection.read(&dataMask, sizeof(uint32_t));
 		if (len <= 3) {
 			if (len < 0) {
-				ENET_ERROR("Protocol error occured ...");
+				if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
+					ENET_ERROR("Protocol error occured ...");
+				}
 				ENET_VERBOSE("ReadRaw 1 [STOP]");
 				m_interface->stop(true);
 				return;
@@ -265,8 +298,8 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 	enet::HttpAnswer answer(enet::HTTPAnswerCode::c101_switchingProtocols);
 	answer.setKey("Upgrade", "websocket");
 	answer.setKey("Connection", "Upgrade");
-	// TODO: Do it better:
-	answer.setKey("Sec-WebSocket-Accept", "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="); //base64::encode());
+	std::string answerKey = generateCheckKey(_data.getKey("Sec-WebSocket-Key"));
+	answer.setKey("Sec-WebSocket-Accept", answerKey);
 	interface->setHeader(answer);
 }
 
@@ -292,7 +325,7 @@ void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
 		return;
 	}
 	// NOTE : This is a temporary magic check ...
-	if (_data.getKey("Sec-WebSocket-Accept") != "s3pPLMBiTxaQ9kYGzzhZRbK+xOo=") {
+	if (_data.getKey("Sec-WebSocket-Accept") != m_checkKey) {
 		ENET_ERROR("Wrong key : 'Sec-WebSocket-Accept : xxx' get '" << _data.getKey("Sec-WebSocket-Accept") << "'");
 		m_interface->stop(true);
 		return;

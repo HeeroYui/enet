@@ -27,7 +27,7 @@ namespace appl {
 	}
 	bool onReceiveUri(enet::WebSocket* _interface, const std::string& _uri) {
 		TEST_INFO("Receive Header uri: " << _uri);
-		if (_uri == "plop.txt") {
+		if (_uri == "/plop.txt") {
 			return true;
 		}
 		return false;

@@ -15,6 +15,7 @@ namespace enet {
 		protected:
 			ememory::SharedPtr<enet::Http> m_interface;
 			std::vector<uint8_t> m_buffer;
+			std::string m_checkKey;
 		public:
 			WebSocket(enet::Tcp _connection, bool _isServer=false);
 			virtual ~WebSocket();
