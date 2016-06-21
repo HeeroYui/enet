@@ -53,7 +53,11 @@ int main(int _argc, const char *_argv[]) {
 	connection.connect(appl::onReceiveData);
 	
 	// start http connection (the actual state is just TCP start ...)
-	connection.start("/plop.txt");
+	std::vector<std::string> protocols;
+	protocols.push_back("test1526/1.0");
+	protocols.push_back("test1526/1.5");
+	protocols.push_back("Hello");
+	connection.start("/plop.txt", protocols);
 	
 	// send some data to play ...
 	connection.write("coucou comment ca vas ???");

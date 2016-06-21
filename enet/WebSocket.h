@@ -30,7 +30,7 @@ namespace enet {
 			WebSocket(enet::Tcp _connection, bool _isServer=false);
 			void setInterface(enet::Tcp _connection, bool _isServer=false);
 			virtual ~WebSocket();
-			void start(const std::string& _uri="");
+			void start(const std::string& _uri="", const std::vector<std::string>& _listProtocols=std::vector<std::string>());
 			void stop(bool _inThread=false);
 			bool isAlive() const {
 				if (m_interface == nullptr) {
@@ -41,6 +41,12 @@ namespace enet {
 			void onReceiveData(enet::Tcp& _data);
 			void onReceiveRequest(const enet::HttpRequest& _data);
 			void onReceiveAnswer(const enet::HttpAnswer& _data);
+		protected:
+			std::string m_protocol;
+		public:
+			void setProtocol(const std::string& _protocol) {
+				m_protocol = _protocol;
+			}
 		public:
 			using Observer = std::function<void(std::vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
 		protected:
@@ -63,7 +69,7 @@ namespace enet {
 			}
 		// Only server:
 		public:
-			using ObserverUriCheck = std::function<bool(const std::string&)>; //!< Define an Observer: function pointer
+			using ObserverUriCheck = std::function<bool(const std::string&, const std::vector<std::string>&)>; //!< Define an Observer: function pointer
 		protected:
 			ObserverUriCheck m_observerUriCheck;
 		public:
@@ -74,9 +80,9 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const std::string&)) {
-				m_observerUriCheck = [=](const std::string& _value){
-					return (*_class.*_func)(_value);
+			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const std::string&, const std::vector<std::string>&)) {
+				m_observerUriCheck = [=](const std::string& _value, const std::vector<std::string>& _protocols){
+					return (*_class.*_func)(_value, _protocols);
 				};
 			}
 			void connectUri(ObserverUriCheck _func) {

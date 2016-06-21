@@ -87,7 +87,7 @@ static std::string generateCheckKey(const std::string& _key) {
 	return algue::base64::encode(keyData);
 }
 
-void enet::WebSocket::start(const std::string& _uri) {
+void enet::WebSocket::start(const std::string& _uri, const std::vector<std::string>& _listProtocols) {
 	if (m_interface == nullptr) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
@@ -105,6 +105,19 @@ void enet::WebSocket::start(const std::string& _uri) {
 		req.setKey("Sec-WebSocket-Version", "13");
 		req.setKey("Pragma", "no-cache");
 		req.setKey("Cache-Control", "no-cache");
+		std::string protocolList;
+		for (auto &it : _listProtocols) {
+			if (it == "") {
+				continue;
+			}
+			if (protocolList != "") {
+				protocolList += ", ";
+			}
+			protocolList += it;
+		}
+		if (protocolList != "") {
+			req.setKey("Sec-WebSocket-Protocol", protocolList);
+		}
 		ememory::SharedPtr<enet::HttpClient> interface = std::dynamic_pointer_cast<enet::HttpClient>(m_interface);
 		if (interface!=nullptr) {
 			interface->setHeader(req);
@@ -118,11 +131,10 @@ void enet::WebSocket::stop(bool _inThread) {
 		return;
 	}
 	m_interface->stop(_inThread);
-	m_interface.reset();
+	// deadlock ... m_interface.reset();
 }
 
 void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
-	ENET_VERBOSE("Read Binary [START]");
 	uint8_t opcode = 0;
 	int32_t len = _connection.read(&opcode, sizeof(uint8_t));
 	if (len <= 0) {
@@ -139,7 +151,6 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		return;
 	}
 	m_lastReceive = std::chrono::steady_clock::now();
-	ENET_VERBOSE("Read opcode : " << uint32_t(opcode));
 	if ((opcode & 0x80) == 0) {
 		ENET_ERROR("Multiple frames ... NOT managed ...");
 		m_interface->stop(true);
@@ -147,7 +158,6 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	}
 	int8_t size1 = 0;
 	len = _connection.read(&size1, sizeof(uint8_t));
-	ENET_VERBOSE("Read payload : " << uint32_t(size1));
 	if (len <= 0) {
 		if (len < 0) {
 			if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
@@ -244,13 +254,13 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_PING) {
 		// Close the conection by remote:
-		ENET_INFO("Receive a ping (send a pong)");
+		ENET_DEBUG("Receive a ping (send a pong)");
 		controlPong();
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_PONG) {
 		// Close the conection by remote:
-		ENET_INFO("Receive a pong");
+		ENET_DEBUG("Receive a pong");
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_TEXT) {
@@ -263,14 +273,31 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_BINARY) {
 		// Close the conection by remote:
-		ENET_DEBUG("Receive a binary data " << m_buffer.size() << " Bytes");
 		if (m_observer != nullptr) {
 			m_observer(m_buffer, false);
 		}
 		return;
 	}
 	ENET_ERROR("ReadRaw [STOP] (no opcode manage ... " << int32_t(opcode & 0x0F));
-	
+}
+
+static std::string removeStartAndStopSpace(const std::string& _value) {
+	std::string out;
+	out.reserve(_value.size());
+	bool findSpace = false;
+	for (auto &it : _value) {
+		if (it != ' ') {
+			if (    findSpace == true
+			     && out.size() != 0) {
+				out += ' ';
+			}
+			out += it;
+			findSpace = false;
+		} else {
+			findSpace = true;
+		}
+	}
+	return out;
 }
 
 void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
@@ -312,8 +339,17 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 		interface->stop(true);
 		return;
 	}
+	// parse all protocols:
+	std::vector<std::string> listProtocol;
+	if (_data.getKey("Sec-WebSocket-Protocol") != "") {
+		listProtocol = etk::split(_data.getKey("Sec-WebSocket-Protocol"),',');
+		for (size_t iii=0; iii<listProtocol.size(); ++iii) {
+			listProtocol[iii] = removeStartAndStopSpace(listProtocol[iii]);
+		}
+	}
+	
 	if (m_observerUriCheck != nullptr) {
-		if (m_observerUriCheck(_data.getUri()) == false) {
+		if (m_observerUriCheck(_data.getUri(), listProtocol) == false) {
 			enet::HttpAnswer answer(enet::HTTPAnswerCode::c404_notFound);
 			answer.setProtocol(enet::HTTPProtocol::http_1_1);
 			answer.setKey("Connection", "close");
@@ -328,6 +364,9 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 	answer.setKey("Connection", "Upgrade");
 	std::string answerKey = generateCheckKey(_data.getKey("Sec-WebSocket-Key"));
 	answer.setKey("Sec-WebSocket-Accept", answerKey);
+	if (m_protocol != "") {
+		answer.setKey("Sec-WebSocket-Protocol", m_protocol);
+	}
 	interface->setHeader(answer);
 }
 
@@ -358,7 +397,8 @@ void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
 		m_interface->stop(true);
 		return;
 	}
-	
+	setProtocol(_data.getKey("Sec-WebSocket-Protocol"));
+	// TODO : Create a methode to check the current protocol ...
 }
 
 bool enet::WebSocket::writeHeader(int32_t _len, bool _isString, bool _mask) {
@@ -378,24 +418,18 @@ bool enet::WebSocket::writeHeader(int32_t _len, bool _isString, bool _mask) {
 	}
 	m_lastSend = std::chrono::steady_clock::now();
 	m_interface->write(&header, sizeof(uint8_t));
-	ENET_VERBOSE("write opcode : " << int32_t(header));
 	if (_len < 126) {
 		uint8_t size = _len | mask;
-		ENET_VERBOSE("write payload : " << int32_t(size));
 		m_interface->write(&size, sizeof(uint8_t));
 	} else if (_len < 65338) {
 		uint8_t payload = 126 | mask;
-		ENET_VERBOSE("write payload : " << int32_t(payload));
 		m_interface->write(&payload, sizeof(uint8_t));
 		uint16_t size = _len;
-		ENET_VERBOSE("write size : " << int32_t(size));
 		m_interface->write(&size, sizeof(uint16_t));
 	} else {
 		uint8_t payload = 127 | mask;
-		ENET_VERBOSE("write payload : " << int32_t(payload));
 		m_interface->write(&payload, sizeof(uint8_t));
 		uint64_t size = _len;
-		ENET_VERBOSE("write size : " << size);
 		m_interface->write(&size, sizeof(uint64_t));
 	}
 	if (mask != 0 ) {

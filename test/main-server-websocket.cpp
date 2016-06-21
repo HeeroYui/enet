@@ -25,8 +25,14 @@ namespace appl {
 			TEST_INFO("binary data: ... ");
 		}
 	}
-	bool onReceiveUri(enet::WebSocket* _interface, const std::string& _uri) {
+	bool onReceiveUri(enet::WebSocket* _interface, const std::string& _uri, const std::vector<std::string>& _protocols) {
 		TEST_INFO("Receive Header uri: " << _uri);
+		for (auto &it : _protocols) {
+			if (it == "test1526/1.5") {
+				_interface->setProtocol(it);
+				break;
+			}
+		}
 		if (_uri == "/plop.txt") {
 			return true;
 		}
@@ -70,8 +76,8 @@ int main(int _argc, const char *_argv[]) {
 	connection.connect([=](std::vector<uint8_t>& _value, bool _isString){
 					appl::onReceiveData(tmp, _value, _isString);
 				});
-	connection.connectUri([=](const std::string& _value){
-					return appl::onReceiveUri(tmp, _value);
+	connection.connectUri([=](const std::string& _value, const std::vector<std::string>& _protocols){
+					return appl::onReceiveUri(tmp, _value, _protocols);
 				});
 	
 	// start http connection (the actual state is just TCP start ...)
