@@ -37,6 +37,7 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
   m_interface(),
   m_observer(nullptr),
   m_observerUriCheck(nullptr) {
+	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
 		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
 		interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
@@ -50,6 +51,7 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
 }
 
 void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
+	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
 		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
 		interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);

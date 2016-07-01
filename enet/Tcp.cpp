@@ -14,6 +14,18 @@
 #include <unistd.h>
 #include <string.h>
 #include <etk/stdTools.h>
+#include <netinet/tcp.h>
+
+bool enet::Tcp::setTCPNoDelay(bool _enabled) {
+	if (m_socketId >= 0) {
+		int flag = _enabled==true?1:0;
+		if(setsockopt(m_socketId, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(flag)) == -1) {
+			return false;
+		}
+		return true;
+	}
+	return false;
+}
 
 
 enet::Tcp::Tcp() :

@@ -107,6 +107,8 @@ namespace enet {
 				}
 				return ret/sizeof(T);
 			}
+			
+			bool setTCPNoDelay(bool _enabled);
 	};
 }
 

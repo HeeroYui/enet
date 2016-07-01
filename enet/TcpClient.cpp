@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <etk/stdTools.h>
+#include <sys/socket.h>
 
 enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry) {
 	std::string tmpname;
