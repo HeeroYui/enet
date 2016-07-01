@@ -7,12 +7,14 @@
 
 #include <etk/types.h>
 #include <poll.h>
+#include <mutex>
 
 namespace enet {
 	class Tcp {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
 			struct pollfd m_fds[1];
+			std::mutex m_mutex;
 		public:
 			Tcp();
 			Tcp(int32_t _idSocket, const std::string& _name);

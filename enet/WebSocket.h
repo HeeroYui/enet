@@ -13,6 +13,7 @@
 namespace enet {
 	class WebSocket {
 		protected:
+			bool m_connectionValidate;
 			ememory::SharedPtr<enet::Http> m_interface;
 			std::vector<uint8_t> m_buffer;
 			std::string m_checkKey;

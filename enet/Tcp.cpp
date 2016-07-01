@@ -117,7 +117,11 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	// Receive all incoming data on this socket before we loop back and call poll again.
 	// Receive data on this connection until the recv fails with EWOULDBLOCK.
 	// If any other failure occurs, we will close the connection.
-	rc = recv(m_fds[0].fd, _data, _maxLen, 0);
+	{
+		std::unique_lock<std::mutex> lock(m_mutex);
+		//ENET_DEBUG("Read on socketid = " << m_fds[0].fd );
+		rc = recv(m_fds[0].fd, _data, _maxLen, 0);
+	}
 	if (rc < 0) {
 		if (errno != EWOULDBLOCK) {
 			ENET_ERROR("	recv() failed");
@@ -126,7 +130,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	}
 	// Check to see if the connection has been closed by the client
 	if (rc == 0) {
-		ENET_INFO("	Connection closed");
+		ENET_INFO("Connection closed");
 		closeConn = true;
 	}
 	if (closeConn == false) {
@@ -147,7 +151,12 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 		ENET_ERROR("Can not write on unlink connection");
 		return -1;
 	}
-	int32_t size = ::write(m_socketId, _data, _len);
+	//ENET_DEBUG("write on socketid = " << m_socketId << " data@=" << int64_t(_data) << " size=" << _len );
+	int32_t size;
+	{
+		std::unique_lock<std::mutex> lock(m_mutex);
+		size = ::write(m_socketId, _data, _len);
+	}
 	if (    size != _len
 	     && errno != 0) {
 		ENET_ERROR("PB when writing data on the FD : request=" << _len << " have=" << size << ", erno=" << errno << "," << strerror(errno));

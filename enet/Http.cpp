@@ -387,6 +387,10 @@ void enet::Http::getHeader() {
 			break;
 		}
 	}
+	if (m_connection.getConnectionStatus() != enet::Tcp::status::link) {
+		ENET_ERROR("Read HTTP Header [STOP] : '" << header << "' ==> status move in unlink ...");
+		return;
+	}
 	ENET_VERBOSE("Read HTTP Header [STOP] : '" << header << "'");
 	m_headerIsSend = true;
 	// parse header :

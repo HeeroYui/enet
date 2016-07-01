@@ -12,6 +12,7 @@
 #include <random>
 #include <algue/base64.h>
 #include <algue/sha1.h>
+#include <unistd.h>
 
 
 namespace enet {
@@ -27,25 +28,35 @@ namespace enet {
 }
 
 enet::WebSocket::WebSocket() :
-  m_interface(),
+  m_connectionValidate(false),
+  m_interface(nullptr),
   m_observer(nullptr),
   m_observerUriCheck(nullptr) {
 	
 }
 
 enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
-  m_interface(),
+  m_connectionValidate(false),
+  m_interface(nullptr),
   m_observer(nullptr),
   m_observerUriCheck(nullptr) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
 		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
-		interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		m_interface = interface;
+		if (interface != nullptr) {
+			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
+		}
 	} else {
 		ememory::SharedPtr<enet::HttpClient> interface = std::make_shared<enet::HttpClient>(std::move(_connection));
-		interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
 		m_interface = interface;
+		if (interface != nullptr) {
+			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
+		}
+	}
+	if (m_interface == nullptr) {
+		ENET_ERROR("can not create interface for the websocket");
+		return;
 	}
 	m_interface->connectRaw(this, &enet::WebSocket::onReceiveData);
 }
@@ -54,12 +65,20 @@ void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
 		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
-		interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		m_interface = interface;
+		if (interface != nullptr) {
+			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
+		}
 	} else {
 		ememory::SharedPtr<enet::HttpClient> interface = std::make_shared<enet::HttpClient>(std::move(_connection));
-		interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
 		m_interface = interface;
+		if (interface != nullptr) {
+			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
+		}
+	}
+	if (m_interface == nullptr) {
+		ENET_ERROR("can not create interface for the websocket");
+		return;
 	}
 	m_interface->connectRaw(this, &enet::WebSocket::onReceiveData);
 }
@@ -121,13 +140,27 @@ void enet::WebSocket::start(const std::string& _uri, const std::vector<std::stri
 			req.setKey("Sec-WebSocket-Protocol", protocolList);
 		}
 		ememory::SharedPtr<enet::HttpClient> interface = std::dynamic_pointer_cast<enet::HttpClient>(m_interface);
-		if (interface!=nullptr) {
+		if (interface != nullptr) {
 			interface->setHeader(req);
+			int32_t timeout = 500000; // 5 second
+			while (timeout>=0) {
+				if (    m_connectionValidate == true
+				     || m_interface->isAlive() == false) {
+					break;
+				}
+				usleep(10000);
+				timeout--;
+			}
+			if (    m_connectionValidate == false
+			     || m_interface->isAlive() == false) {
+				ENET_ERROR("Connection refused by SERVER ...");
+			}
 		}
 	}
 }
 
 void enet::WebSocket::stop(bool _inThread) {
+	ENET_DEBUG("Stop interface ...");
 	if (m_interface == nullptr) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
@@ -401,6 +434,8 @@ void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
 	}
 	setProtocol(_data.getKey("Sec-WebSocket-Protocol"));
 	// TODO : Create a methode to check the current protocol ...
+	// now we can release the client call connection ...
+	m_connectionValidate = true;
 }
 
 bool enet::WebSocket::writeHeader(int32_t _len, bool _isString, bool _mask) {
