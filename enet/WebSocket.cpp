@@ -437,73 +437,88 @@ void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
 	// now we can release the client call connection ...
 	m_connectionValidate = true;
 }
-
-bool enet::WebSocket::writeHeader(int32_t _len, bool _isString, bool _mask) {
-	if (m_interface == nullptr) {
-		ENET_ERROR("Nullptr interface ...");
-		return false;
-	}
-	uint8_t mask = 0;
+#define ZEUS_BASE_OFFSET_HEADER (15)
+bool enet::WebSocket::configHeader(bool _isString, bool _mask) {
+	m_isString = _isString;
+	m_haveMask = _mask;
+	m_sendBuffer.clear();
+	m_sendBuffer.resize(ZEUS_BASE_OFFSET_HEADER, 0);
 	if (_mask == true) {
-		mask = enet::websocket::FLAG_MASK;
-	}
-	uint8_t header = enet::websocket::FLAG_FIN;
-	if (_isString == false) {
-		header |= enet::websocket::OPCODE_FRAME_BINARY;
-	} else {
-		header |= enet::websocket::OPCODE_FRAME_TEXT;
-	}
-	m_lastSend = std::chrono::steady_clock::now();
-	m_interface->write(&header, sizeof(uint8_t));
-	if (_len < 126) {
-		uint8_t size = _len | mask;
-		m_interface->write(&size, sizeof(uint8_t));
-	} else if (_len < 65338) {
-		uint8_t payload = 126 | mask;
-		m_interface->write(&payload, sizeof(uint8_t));
-		uint16_t size = _len;
-		m_interface->write(&size, sizeof(uint16_t));
-	} else {
-		uint8_t payload = 127 | mask;
-		m_interface->write(&payload, sizeof(uint8_t));
-		uint64_t size = _len;
-		m_interface->write(&size, sizeof(uint64_t));
-	}
-	if (mask != 0 ) {
 		std::random_device rd;
 		// Engine
 		std::mt19937 e2(rd());
 		// Distribtuions
 		std::uniform_real_distribution<> dist(0, 0xFF);
-		m_haveMask = true;
 		m_dataMask[0] = uint8_t(dist(e2));
 		m_dataMask[1] = uint8_t(dist(e2));
 		m_dataMask[2] = uint8_t(dist(e2));
 		m_dataMask[3] = uint8_t(dist(e2));
-	} else {
-		m_haveMask = false;
 	}
 	return true;
 }
 
 int32_t enet::WebSocket::writeData(uint8_t* _data, int32_t _len) {
+	size_t offset = m_sendBuffer.size();
+	m_sendBuffer.resize(offset + _len);
+	memcpy(&m_sendBuffer[offset], _data, _len);
+	return _len;
+}
+
+int32_t enet::WebSocket::send() {
 	if (m_interface == nullptr) {
 		ENET_ERROR("Nullptr interface ...");
 		return -1;
 	}
 	if (m_haveMask == true) {
-		for (size_t iii= 0; iii<_len; ++iii) {
-			_data[iii] ^= m_dataMask[iii%4];
+		for (size_t iii=ZEUS_BASE_OFFSET_HEADER; iii<m_sendBuffer.size(); ++iii) {
+			m_sendBuffer[iii] ^= m_dataMask[iii%4];
 		}
 	}
-	return m_interface->write(_data, _len);
+	uint8_t mask = 0;
+	if (m_haveMask == true) {
+		mask = enet::websocket::FLAG_MASK;
+	}
+	int32_t offsetStart = ZEUS_BASE_OFFSET_HEADER-1;
+	if (m_haveMask == true ) {
+		m_sendBuffer[offsetStart--] = m_dataMask[3];
+		m_sendBuffer[offsetStart--] = m_dataMask[2];
+		m_sendBuffer[offsetStart--] = m_dataMask[1];
+		m_sendBuffer[offsetStart--] = m_dataMask[0];
+	}
+	int32_t messageSize = m_sendBuffer.size()-ZEUS_BASE_OFFSET_HEADER;
+	if (messageSize < 126) {
+		m_sendBuffer[offsetStart--] = messageSize | mask;
+	} else if (messageSize < 65338) {
+		offsetStart -= sizeof(uint16_t);
+		uint16_t* size = (uint16_t*)(&m_sendBuffer[offsetStart+1]);
+		*size = messageSize;
+		m_sendBuffer[offsetStart--] = 126 | mask;
+	} else {
+		offsetStart -= sizeof(uint64_t);
+		uint64_t* size = (uint64_t*)(&m_sendBuffer[offsetStart+1]);
+		*size = messageSize;
+		m_sendBuffer[offsetStart--] = 127 | mask;
+	}
+	uint8_t header = enet::websocket::FLAG_FIN;
+	if (m_isString == false) {
+		header |= enet::websocket::OPCODE_FRAME_BINARY;
+	} else {
+		header |= enet::websocket::OPCODE_FRAME_TEXT;
+	}
+	m_sendBuffer[offsetStart] = header;
+	//ENET_VERBOSE("buffersize=" << messageSize << " + " << ZEUS_BASE_OFFSET_HEADER-offsetStart);
+	int32_t val = m_interface->write(&m_sendBuffer[offsetStart], m_sendBuffer.size()-offsetStart);
+	m_sendBuffer.clear();
+	m_sendBuffer.resize(ZEUS_BASE_OFFSET_HEADER, 0);
+	return val;
 }
 
 int32_t enet::WebSocket::write(const void* _data, int32_t _len, bool _isString, bool _mask) {
-	if (writeHeader( _len, _isString, _mask) == false) {
+	if (configHeader(_isString, _mask) == false) {
 		return -1;
 	}
-	return writeData((uint8_t*)_data, _len);
+	writeData((uint8_t*)_data, _len);
+	return send();
 }
 
 void enet::WebSocket::controlPing() {

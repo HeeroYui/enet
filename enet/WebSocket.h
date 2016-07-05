@@ -13,6 +13,7 @@
 namespace enet {
 	class WebSocket {
 		protected:
+			std::vector<uint8_t> m_sendBuffer;
 			bool m_connectionValidate;
 			ememory::SharedPtr<enet::Http> m_interface;
 			std::vector<uint8_t> m_buffer;
@@ -90,11 +91,13 @@ namespace enet {
 				m_observerUriCheck = _func;
 			}
 		private:
+			bool m_isString;
 			bool m_haveMask;
 			uint8_t m_dataMask[4];
 		public:
-			bool writeHeader(int32_t _len, bool _isString=false, bool _mask= false);
+			bool configHeader(bool _isString=false, bool _mask= false);
 			int32_t writeData(uint8_t* _data, int32_t _len);
+			int32_t send();
 			/**
 			 * @brief Write a chunk of data on the socket
 			 * @param[in] _data pointer on the data might be write
