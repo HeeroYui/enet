@@ -42,13 +42,13 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
   m_observerUriCheck(nullptr) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
-		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(std::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		}
 	} else {
-		ememory::SharedPtr<enet::HttpClient> interface = std::make_shared<enet::HttpClient>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(std::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
@@ -64,13 +64,13 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
 void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
-		ememory::SharedPtr<enet::HttpServer> interface = std::make_shared<enet::HttpServer>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(std::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		}
 	} else {
-		ememory::SharedPtr<enet::HttpClient> interface = std::make_shared<enet::HttpClient>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(std::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
@@ -139,7 +139,7 @@ void enet::WebSocket::start(const std::string& _uri, const std::vector<std::stri
 		if (protocolList != "") {
 			req.setKey("Sec-WebSocket-Protocol", protocolList);
 		}
-		ememory::SharedPtr<enet::HttpClient> interface = std::dynamic_pointer_cast<enet::HttpClient>(m_interface);
+		ememory::SharedPtr<enet::HttpClient> interface = ememory::dynamicPointerCast<enet::HttpClient>(m_interface);
 		if (interface != nullptr) {
 			interface->setHeader(req);
 			int32_t timeout = 500000; // 5 second
@@ -336,7 +336,7 @@ static std::string removeStartAndStopSpace(const std::string& _value) {
 }
 
 void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
-	ememory::SharedPtr<enet::HttpServer> interface = std::dynamic_pointer_cast<enet::HttpServer>(m_interface);
+	ememory::SharedPtr<enet::HttpServer> interface = ememory::dynamicPointerCast<enet::HttpServer>(m_interface);
 	if (interface == nullptr) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
