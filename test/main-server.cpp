@@ -41,7 +41,7 @@ int main(int _argc, const char *_argv[]) {
 	interface.unlink();
 	
 	int32_t iii = 0;
-	while (tcpConnection.isAlive() == true) {
+	while (tcpConnection.getConnectionStatus() == enet::Tcp::status::link) {
 		int32_t len = tcpConnection.write("plop" + etk::to_string(iii));
 		TEST_INFO("write len=" << len);
 		char data[1024];
@@ -53,7 +53,7 @@ int main(int _argc, const char *_argv[]) {
 	}
 	if (iii>=1000000) {
 		TEST_INFO("auto disconnected");
-	} else if (tcpConnection.isAlive() != true) {
+	} else if (tcpConnection.getConnectionStatus() != enet::Tcp::status::link) {
 		TEST_INFO("server disconnected");
 	} else {
 		TEST_INFO("ERROR disconnected");

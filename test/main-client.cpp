@@ -6,6 +6,7 @@
 
 #include <test-debug/debug.h>
 #include <enet/Tcp.h>
+#include <enet/TcpClient.h>
 #include <enet/Http.h>
 #include <etk/etk.h>
 
@@ -28,17 +29,15 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 #ifndef __TARGET_OS__Windows
 	// client mode ...
-	enet::Tcp connection;
-	connection.setHostNane("127.0.0.1");
-	connection.setPort(31235);
-	connection.setServer(false);
+	// connect on TCP server:
+	enet::Tcp connection = std::move(enet::connectTcpClient("127.0.0.1", 12345));
 	TEST_INFO("CLIENT connect ...");
-	if (connection.link() == false) {
+	if (connection.getConnectionStatus() != enet::Tcp::status::link) {
 		TEST_ERROR("can not link to the socket...");
 		return -1;
 	}
 	int32_t iii = 0;
-	while (    connection.getConnectionStatus() == enet::Tcp::statusLink
+	while (    connection.getConnectionStatus() == enet::Tcp::status::link
 	        && iii<10000) {
 		char data[1024];
 		int32_t len = connection.read(data, 1024);
@@ -51,7 +50,7 @@ int main(int _argc, const char *_argv[]) {
 	}
 	if (iii>=10000) {
 		TEST_INFO("auto disconnected");
-	} else if (connection.getConnectionStatus() != enet::Tcp::statusLink) {
+	} else if (connection.getConnectionStatus() != enet::Tcp::status::link) {
 		TEST_INFO("server disconnected");
 	} else {
 		TEST_INFO("ERROR disconnected");
