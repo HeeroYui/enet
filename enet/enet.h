@@ -10,3 +10,11 @@
 #include <enet/Http.h>
 #include <enet/Ftp.h>
 
+
+/**
+ * @brief Main esvg namespace
+ */
+namespace enet {
+	
+}
+
