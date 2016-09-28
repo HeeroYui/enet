@@ -6,14 +6,18 @@
 #pragma once
 
 #include <etk/types.h>
-#include <poll.h>
 #include <mutex>
+#ifndef __TARGET_OS__Windows
+#include <poll.h>
+#endif
 
 namespace enet {
 	class Tcp {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
+			#ifndef __TARGET_OS__Windows
 			struct pollfd m_fds[1];
+			#endif
 			std::mutex m_mutex;
 		public:
 			Tcp();

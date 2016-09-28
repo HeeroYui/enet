@@ -8,14 +8,20 @@
 #include <enet/Tcp.h>
 #include <enet/TcpServer.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <etk/stdTools.h>
 
+#ifdef __TARGET_OS__Windows
+	#include <winsock2.h>
+	//https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms737889(v=vs.85).aspx
+#else
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <netinet/tcp.h>
+	#include <netdb.h>
+#endif
 
 enet::TcpServer::TcpServer() :
   m_socketId(-1),

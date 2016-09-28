@@ -7,14 +7,17 @@
 #include <enet/debug.h>
 #include <enet/Tcp.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <etk/stdTools.h>
+
+#ifndef __TARGET_OS__Windows
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <netinet/tcp.h>
+#endif
 
 bool enet::Tcp::setTCPNoDelay(bool _enabled) {
 	if (m_socketId >= 0) {

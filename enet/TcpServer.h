@@ -4,15 +4,18 @@
  * @license APACHE v2.0 (see license file)
  */
 #pragma once
-
-#include <poll.h>
 #include <enet/Tcp.h>
+#ifdef __TARGET_OS__Windows
+	
+#else
+	#include <poll.h>
+#endif
 
 namespace enet {
 	class TcpServer {
 		private:
 			int32_t m_socketId; //!< socket linux interface generic
-			#if 1
+			#ifndef __TARGET_OS__Windows
 				struct pollfd m_fds[1];
 			#endif
 		public:

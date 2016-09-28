@@ -31,13 +31,9 @@ def create(target, module_name):
 	    'ememory',
 	    'algue'
 	    ])
-	my_module.add_src_file([
-	    'enet/debug.cpp'
-	    ])
 	my_module.add_path(tools.get_current_path(__file__))
-	if "Windows" in target.get_type():
-		return my_module
 	my_module.add_src_file([
+	    'enet/debug.cpp',
 	    'enet/Udp.cpp',
 	    'enet/Tcp.cpp',
 	    'enet/TcpServer.cpp',
