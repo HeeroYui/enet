@@ -4,10 +4,10 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Http.h>
+#include <enet/debug.hpp>
+#include <enet/Http.hpp>
 #include <map>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 #include <string.h>
 #include <unistd.h>
 

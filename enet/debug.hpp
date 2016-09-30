@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include <elog/log.h>
+#include <elog/log.hpp>
 
 namespace enet {
 	int32_t getLogId();

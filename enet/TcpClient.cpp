@@ -4,18 +4,22 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Tcp.h>
-#include <enet/TcpClient.h>
+#include <enet/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/TcpClient.hpp>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 
-#include <sys/socket.h>
+#ifdef __TARGET_OS__Windows
+
+#else
+	#include <sys/socket.h>
+#endif
 
 enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry) {
 	std::string tmpname;
@@ -59,7 +63,11 @@ enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, u
 				    && errno != ECONNREFUSED) {
 					ENET_ERROR("ERROR connecting on : errno=" << errno << "," << strerror(errno));
 				}
-				close(socketId);
+				#ifdef __TARGET_OS__Windows
+					closesocket(socketId);
+				#else
+					close(socketId);
+				#endif
 				socketId = -1;
 			}
 			ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));

@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include <enet/Http.h>
-#include <ememory/memory.h>
+#include <enet/Http.hpp>
+#include <ememory/memory.hpp>
 #include <vector>
 #include <map>
 

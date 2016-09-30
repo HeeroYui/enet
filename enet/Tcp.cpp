@@ -4,19 +4,22 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Tcp.h>
-#include <sys/types.h>
+#include <enet/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <sys/types.hpp>
 #include <netdb.h>
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 
-#ifndef __TARGET_OS__Windows
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
+#ifdef __TARGET_OS__Windows
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <netinet/tcp.h>
 #endif
 
 bool enet::Tcp::setTCPNoDelay(bool _enabled) {
@@ -42,13 +45,11 @@ enet::Tcp::Tcp(int32_t _idSocket, const std::string& _name) :
   m_socketId(_idSocket),
   m_name(_name),
   m_status(status::link) {
-	#if 1
-		//Initialize the pollfd structure
-		memset(m_fds, 0 , sizeof(m_fds));
-		//Set up the initial listening socket
-		m_fds[0].fd = _idSocket;
-		m_fds[0].events = POLLIN | POLLERR;
-	#endif
+	//Initialize the pollfd structure
+	memset(m_fds[0], 0 , sizeof(m_fds));
+	//Set up the initial listening socket
+	m_fds[0].fd = _idSocket;
+	m_fds[0].events = POLLIN | POLLERR;
 }
 
 enet::Tcp::Tcp(Tcp&& _obj) :
@@ -59,10 +60,9 @@ enet::Tcp::Tcp(Tcp&& _obj) :
 	_obj.m_name = "";
 	_obj.m_status = status::error;
 	m_fds[0] = _obj.m_fds[0];
-	#if 1
-		memset(_obj.m_fds, 0 , sizeof(_obj.m_fds));
-	#endif
+	memset(m_fds[0], 0 , sizeof(m_fds));
 }
+
 enet::Tcp::~Tcp() {
 	unlink();
 }
@@ -76,9 +76,7 @@ enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 	m_status = _obj.m_status;
 	_obj.m_status = status::error;
 	m_fds[0] = _obj.m_fds[0];
-	#if 1
-		memset(_obj.m_fds, 0 , sizeof(_obj.m_fds));
-	#endif
+	memset(m_fds[0], 0 , sizeof(m_fds));
 	return *this;
 }
 
@@ -86,7 +84,11 @@ bool enet::Tcp::unlink() {
 	if (m_socketId >= 0) {
 		ENET_INFO("Close socket (start)");
 		shutdown(m_socketId, SHUT_RDWR);
-		close(m_socketId);
+		#ifdef __TARGET_OS__Windows
+			closesocket(m_socketId);
+		#else
+			close(m_socketId);
+		#endif
 		ENET_INFO("Close socket (done)");
 		m_socketId = -1;
 	}

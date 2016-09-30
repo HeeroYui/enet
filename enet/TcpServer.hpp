@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 #pragma once
-#include <enet/Tcp.h>
+#include <enet/Tcp.hpp>
 #ifdef __TARGET_OS__Windows
 	
 #else
@@ -14,7 +14,11 @@
 namespace enet {
 	class TcpServer {
 		private:
-			int32_t m_socketId; //!< socket linux interface generic
+			#ifdef __TARGET_OS__Windows
+				SOCKET m_socketId; //!< socket Windows interface generic
+			#else
+				int32_t m_socketId; //!< socket linux interface generic
+			#endif
 			#ifndef __TARGET_OS__Windows
 				struct pollfd m_fds[1];
 			#endif

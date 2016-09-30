@@ -4,15 +4,15 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
-#include <enet/Tcp.h>
-#include <enet/Http.h>
-#include <enet/WebSocket.h>
-#include <enet/TcpServer.h>
-#include <etk/etk.h>
+#include <test-debug/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/Http.hpp>
+#include <enet/WebSocket.hpp>
+#include <enet/TcpServer.hpp>
+#include <etk/etk.hpp>
 
 #include <unistd.h>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 namespace appl {
 	void onReceiveData(enet::WebSocket* _interface, std::vector<uint8_t>& _data, bool _isString) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");

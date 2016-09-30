@@ -43,14 +43,14 @@ def create(target, module_name):
 	    'enet/WebSocket.cpp',
 	    ])
 	my_module.add_header_file([
-	    'enet/debug.h',
-	    'enet/Udp.h',
-	    'enet/Tcp.h',
-	    'enet/TcpServer.h',
-	    'enet/TcpClient.h',
-	    'enet/Http.h',
-	    'enet/Ftp.h',
-	    'enet/WebSocket.h',
+	    'enet/debug.hpp',
+	    'enet/Udp.hpp',
+	    'enet/Tcp.hpp',
+	    'enet/TcpServer.hpp',
+	    'enet/TcpClient.hpp',
+	    'enet/Http.hpp',
+	    'enet/Ftp.hpp',
+	    'enet/WebSocket.hpp',
 	    ])
 	return my_module
 

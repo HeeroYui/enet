@@ -5,11 +5,11 @@
  */
 #pragma once
 
-#include <enet/Tcp.h>
+#include <enet/Tcp.hpp>
 #include <vector>
 #include <map>
 #include <thread>
-#include <ethread/tools.h>
+#include <ethread/tools.hpp>
 
 namespace enet {
 	enum class HTTPAnswerCode {

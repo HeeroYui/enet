@@ -4,7 +4,7 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
+#include <enet/debug.hpp>
 
 int32_t enet::getLogId() {
 	static int32_t g_val = elog::registerInstance("enet");

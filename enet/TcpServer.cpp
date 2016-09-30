@@ -4,17 +4,18 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Tcp.h>
-#include <enet/TcpServer.h>
+#include <enet/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/TcpServer.hpp>
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 
 #ifdef __TARGET_OS__Windows
 	#include <winsock2.h>
+	#include <ws2tcpip.h>
 	//https://msdn.microsoft.com/fr-fr/library/windows/desktop/ms737889(v=vs.85).aspx
 #else
 	#include <sys/socket.h>
@@ -83,7 +84,11 @@ bool enet::TcpServer::link() {
 	ENET_INFO("Start binding Socket ... (can take some time ...)");
 	if (bind(m_socketId, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0) {
 		ENET_ERROR("ERROR on binding errno=" << errno << "," << strerror(errno));
-		close(m_socketId);
+		#ifdef __TARGET_OS__Windows
+			closesocket(m_socketId);
+		#else
+			close(m_socketId);
+		#endif
 		m_socketId = -1;
 		return false;
 	}
@@ -99,7 +104,11 @@ enet::Tcp enet::TcpServer::waitNext() {
 	int32_t socketIdClient = accept(m_socketId, (struct sockaddr *) &clientAddr, &clilen);
 	if (socketIdClient < 0) {
 		ENET_ERROR("ERROR on accept errno=" << errno << "," << strerror(errno));
-		close(m_socketId);
+		#ifdef __TARGET_OS__Windows
+			closesocket(m_socketId);
+		#else
+			close(m_socketId);
+		#endif
 		m_socketId = -1;
 		return enet::Tcp();
 	}
@@ -111,7 +120,11 @@ enet::Tcp enet::TcpServer::waitNext() {
 bool enet::TcpServer::unlink() {
 	if (m_socketId >= 0) {
 		ENET_INFO(" close server socket");
-		close(m_socketId);
+		#ifdef __TARGET_OS__Windows
+			closesocket(m_socketId);
+		#else
+			close(m_socketId);
+		#endif
 		m_socketId = -1;
 	}
 	return true;

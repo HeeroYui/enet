@@ -5,18 +5,27 @@
  */
 #pragma once
 
-#include <etk/types.h>
+#include <etk/types.hpp>
 #include <mutex>
-#ifndef __TARGET_OS__Windows
-#include <poll.h>
+#ifdef __TARGET_OS__Windows
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <poll.h>
 #endif
 
 namespace enet {
 	class Tcp {
 		private:
-			int32_t m_socketId; //!< socket linux interface generic
+			#ifdef __TARGET_OS__Windows
+				SOCKET m_socketId; //!< socket Windows interface generic
+			#else
+				int32_t m_socketId; //!< socket linux interface generic
+			#endif
 			#ifndef __TARGET_OS__Windows
-			struct pollfd m_fds[1];
+				int32_t m_fds[1];
+			#else
+				struct pollfd m_fds[1];
 			#endif
 			std::mutex m_mutex;
 		public:

@@ -4,6 +4,6 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Ftp.h>
+#include <enet/debug.hpp>
+#include <enet/Ftp.hpp>
 #include <string.h>

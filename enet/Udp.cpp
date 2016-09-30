@@ -4,6 +4,6 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/Udp.h>
+#include <enet/debug.hpp>
+#include <enet/Udp.hpp>
 

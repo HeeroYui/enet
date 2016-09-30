@@ -5,10 +5,10 @@
  */
 #pragma once
 
-#include <enet/Udp.h>
-#include <enet/Tcp.h>
-#include <enet/Http.h>
-#include <enet/Ftp.h>
+#include <enet/Udp.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/Http.hpp>
+#include <enet/Ftp.hpp>
 
 
 /**

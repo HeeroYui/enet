@@ -4,13 +4,13 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
-#include <enet/Tcp.h>
-#include <enet/Http.h>
-#include <etk/etk.h>
-#include <enet/TcpServer.h>
+#include <test-debug/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/Http.hpp>
+#include <etk/etk.hpp>
+#include <enet/TcpServer.hpp>
 
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);

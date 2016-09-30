@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <enet/debug.h>
-#include <enet/WebSocket.h>
+#include <enet/debug.hpp>
+#include <enet/WebSocket.hpp>
 #include <map>
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 #include <string.h>
 #include <random>
-#include <algue/base64.h>
-#include <algue/sha1.h>
+#include <algue/base64.hpp>
+#include <algue/sha1.hpp>
 #include <unistd.h>
 
 

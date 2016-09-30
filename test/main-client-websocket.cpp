@@ -4,14 +4,14 @@
  * @license APACHE v2.0 (see license file)
  */
 
-#include <test-debug/debug.h>
-#include <enet/Tcp.h>
-#include <enet/TcpClient.h>
-#include <enet/Http.h>
-#include <enet/WebSocket.h>
-#include <etk/etk.h>
+#include <test-debug/debug.hpp>
+#include <enet/Tcp.hpp>
+#include <enet/TcpClient.hpp>
+#include <enet/Http.hpp>
+#include <enet/WebSocket.hpp>
+#include <etk/etk.hpp>
 
-#include <etk/stdTools.h>
+#include <etk/stdTools.hpp>
 #include <unistd.h>
 
 namespace appl {
