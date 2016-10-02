@@ -8,7 +8,7 @@
 #include <enet/WebSocket.hpp>
 #include <map>
 #include <etk/stdTools.hpp>
-#include <string.h>
+#include <cstring>
 #include <random>
 #include <algue/base64.hpp>
 #include <algue/sha1.hpp>

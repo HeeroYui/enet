@@ -22,7 +22,7 @@ namespace enet {
 			#else
 				int32_t m_socketId; //!< socket linux interface generic
 			#endif
-			#ifndef __TARGET_OS__Windows
+			#ifdef __TARGET_OS__Windows
 				int32_t m_fds[1];
 			#else
 				struct pollfd m_fds[1];

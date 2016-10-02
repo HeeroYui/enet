@@ -8,7 +8,7 @@
 #include <enet/Http.hpp>
 #include <map>
 #include <etk/stdTools.hpp>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 
 static std::string escapeChar(const std::string& _value) {

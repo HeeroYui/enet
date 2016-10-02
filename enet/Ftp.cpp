@@ -6,4 +6,4 @@
 
 #include <enet/debug.hpp>
 #include <enet/Ftp.hpp>
-#include <string.h>
+#include <cstring>

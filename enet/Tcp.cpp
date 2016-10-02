@@ -6,11 +6,11 @@
 
 #include <enet/debug.hpp>
 #include <enet/Tcp.hpp>
-#include <sys/types.hpp>
+#include <sys/types.h>
 #include <netdb.h>
-#include <errno.h>
+#include <cerrno>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <etk/stdTools.hpp>
 
 #ifdef __TARGET_OS__Windows
@@ -46,7 +46,7 @@ enet::Tcp::Tcp(int32_t _idSocket, const std::string& _name) :
   m_name(_name),
   m_status(status::link) {
 	//Initialize the pollfd structure
-	memset(m_fds[0], 0 , sizeof(m_fds));
+	memset(&m_fds[0], 0 , sizeof(m_fds));
 	//Set up the initial listening socket
 	m_fds[0].fd = _idSocket;
 	m_fds[0].events = POLLIN | POLLERR;
@@ -60,7 +60,7 @@ enet::Tcp::Tcp(Tcp&& _obj) :
 	_obj.m_name = "";
 	_obj.m_status = status::error;
 	m_fds[0] = _obj.m_fds[0];
-	memset(m_fds[0], 0 , sizeof(m_fds));
+	memset(&m_fds[0], 0 , sizeof(m_fds));
 }
 
 enet::Tcp::~Tcp() {
@@ -76,7 +76,7 @@ enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 	m_status = _obj.m_status;
 	_obj.m_status = status::error;
 	m_fds[0] = _obj.m_fds[0];
-	memset(m_fds[0], 0 , sizeof(m_fds));
+	memset(&m_fds[0], 0 , sizeof(m_fds));
 	return *this;
 }
 

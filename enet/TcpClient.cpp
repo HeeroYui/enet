@@ -10,9 +10,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <errno.h>
+#include <cerrno>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <etk/stdTools.hpp>
 
 #ifdef __TARGET_OS__Windows
