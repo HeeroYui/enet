@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import lutin.module as module
+import lutin.debug as debug
 import lutin.tools as tools
 
 
@@ -24,14 +24,13 @@ def get_maintainer():
 def get_version():
 	return "version.txt"
 
-def create(target, module_name):
-	my_module = module.Module(__file__, module_name, get_type())
+def configure(target, my_module):
 	my_module.add_depend([
 	    'etk',
 	    'ememory',
 	    'algue'
 	    ])
-	my_module.add_path(tools.get_current_path(__file__))
+	my_module.add_path(".")
 	my_module.add_src_file([
 	    'enet/debug.cpp',
 	    'enet/Udp.cpp',
@@ -52,7 +51,7 @@ def create(target, module_name):
 	    'enet/Ftp.hpp',
 	    'enet/WebSocket.hpp',
 	    ])
-	return my_module
+	return True
 
 
 
