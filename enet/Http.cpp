@@ -208,21 +208,21 @@ namespace etk {
 	}
 	template <>
 	bool from_string<enum enet::HTTPReqType>(enum enet::HTTPReqType& _variableRet, const std::string& _value) {
-		_variableRet = enet::HTTPReqType::GET;
+		_variableRet = enet::HTTPReqType::HTTP_GET;
 		if (_value == "GET") {
-			_variableRet = enet::HTTPReqType::GET;
+			_variableRet = enet::HTTPReqType::HTTP_GET;
 			return true;
 		} else if (_value == "HEAD") {
-			_variableRet = enet::HTTPReqType::HEAD;
+			_variableRet = enet::HTTPReqType::HTTP_HEAD;
 			return true;
 		} else if (_value == "POST") {
-			_variableRet = enet::HTTPReqType::POST;
+			_variableRet = enet::HTTPReqType::HTTP_POST;
 			return true;
 		} else if (_value == "PUT") {
-			_variableRet = enet::HTTPReqType::PUT;
+			_variableRet = enet::HTTPReqType::HTTP_PUT;
 			return true;
 		} else if (_value == "DELETE") {
-			_variableRet = enet::HTTPReqType::DELETE;
+			_variableRet = enet::HTTPReqType::HTTP_DELETE;
 			return true;
 		}
 		return false;
@@ -230,11 +230,11 @@ namespace etk {
 	template <>
 	std::string to_string<enum enet::HTTPReqType>(const enum enet::HTTPReqType& _value) {
 		switch (_value) {
-			case enet::HTTPReqType::GET: return "GET";
-			case enet::HTTPReqType::HEAD: return "HEAD";
-			case enet::HTTPReqType::POST: return "POST";
-			case enet::HTTPReqType::PUT: return "PUT";
-			case enet::HTTPReqType::DELETE: return "DELETE";
+			case enet::HTTPReqType::HTTP_GET: return "GET";
+			case enet::HTTPReqType::HTTP_HEAD: return "HEAD";
+			case enet::HTTPReqType::HTTP_POST: return "POST";
+			case enet::HTTPReqType::HTTP_PUT: return "PUT";
+			case enet::HTTPReqType::HTTP_DELETE: return "DELETE";
 		}
 		return "UNKNOW";
 	}

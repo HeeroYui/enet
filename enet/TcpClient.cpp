@@ -7,9 +7,8 @@
 #include <enet/debug.hpp>
 #include <enet/Tcp.hpp>
 #include <enet/TcpClient.hpp>
+#include <enet/enet.hpp>
 #include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <cerrno>
 #include <unistd.h>
 #include <cstring>
@@ -18,7 +17,8 @@
 #ifdef __TARGET_OS__Windows
 
 #else
-	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <netdb.h>
 #endif
 
 enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry) {
@@ -32,56 +32,133 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 	tmpname += etk::to_string(_ip4);
 	return std::move(enet::connectTcpClient(tmpname, _port, _numberRetry));
 }
-enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
-	int32_t socketId = -1;
-	ENET_INFO("Start connection on " << _hostname << ":" << _port);
-	for(int32_t iii=0; iii<_numberRetry ;iii++) {
-		// open in Socket normal mode
-		socketId = socket(AF_INET, SOCK_STREAM, 0);
-		if (socketId < 0) {
-			ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-			usleep(200000);
-			continue;
+
+#ifdef __TARGET_OS__Windows
+	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
+		if (enet::isInit() == false) {
+			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
+			return std::move(enet::Tcp());
 		}
-		ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
-		struct sockaddr_in servAddr;
-		struct hostent* server = gethostbyname(_hostname.c_str());
-		if (server == nullptr) {
-			ENET_ERROR("ERROR, no such host : " << _hostname);
-			usleep(200000);
-			continue;
-		}
-		bzero((char *) &servAddr, sizeof(servAddr));
-		servAddr.sin_family = AF_INET;
-		bcopy((char *)server->h_addr, (char *)&servAddr.sin_addr.s_addr, server->h_length);
-		servAddr.sin_port = htons(_port);
-		ENET_INFO("Start connexion ...");
-		if (connect(socketId, (struct sockaddr *)&servAddr,sizeof(servAddr)) != 0) {
-			if(errno != EINPROGRESS) {
-				if(    errno != ENOENT
-				    && errno != EAGAIN
-				    && errno != ECONNREFUSED) {
-					ENET_ERROR("ERROR connecting on : errno=" << errno << "," << strerror(errno));
-				}
-				#ifdef __TARGET_OS__Windows
-					closesocket(socketId);
-				#else
-					close(socketId);
-				#endif
-				socketId = -1;
+		SOCKET socketId = INVALID_SOCKET;
+		ENET_INFO("Start connection on " << _hostname << ":" << _port);
+		for(int32_t iii=0; iii<_numberRetry ;iii++) {
+			// open in Socket normal mode
+			socketId = socket(AF_INET, SOCK_STREAM, 0);
+			if (socketId < 0) {
+				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
+				usleep(200000);
+				continue;
 			}
-			ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));
-			usleep(500000);
-			continue;
+			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
+			
+			struct addrinfo hints;
+			memset(&hints, 0, sizeof(hints));
+			hints.ai_family = AF_UNSPEC;
+			hints.ai_socktype = SOCK_STREAM;
+			hints.ai_protocol = IPPROTO_TCP;
+			
+			// Resolve the server address and port
+			struct addrinfo* result = nullptr;
+			std::string portValue = etk::to_string(_port);
+			int iResult = getaddrinfo(_hostname.c_str(), portValue.c_str(), &hints, &result);
+			if (iResult != 0) {
+				ENET_ERROR("getaddrinfo failed with error: " << iResult);
+				usleep(200000);
+				continue;
+			}
+			
+			// Attempt to connect to an address until one succeeds
+			for(struct addrinfo* ptr=result;
+			    ptr != nullptr;
+			    ptr=ptr->ai_next) {
+				// Create a SOCKET for connecting to server
+				socketId = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+				if (socketId == INVALID_SOCKET) {
+					ENET_ERROR("socket failed with error: " << WSAGetLastError());
+					break;
+				}
+				// Connect to server.
+				iResult = connect(socketId, ptr->ai_addr, (int)ptr->ai_addrlen);
+				if (iResult == SOCKET_ERROR) {
+					closesocket(socketId);
+					socketId = INVALID_SOCKET;
+					continue;
+				}
+				break;
+			}
+			freeaddrinfo(result);
+			
+			if (socketId == INVALID_SOCKET) {
+				ENET_ERROR("Unable to connect to server!");
+				WSACleanup();
+				usleep(200000);
+				continue;
+			}
 		}
-		// if we are here ==> then the connextion is done corectly ...
-		break;
+		if (socketId == INVALID_SOCKET) {
+			ENET_ERROR("ERROR connecting ... (after all try)");
+			return std::move(enet::Tcp());
+		}
+		ENET_DEBUG("Connection done");
+		return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
 	}
-	if (socketId<0) {
-		ENET_ERROR("ERROR connecting ... (after all try)");
-		return std::move(enet::Tcp());
+#else
+	#include <sys/socket.h>
+	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
+		if (enet::isInit() == false) {
+			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
+			return std::move(enet::Tcp());
+		}
+		int32_t socketId = -1;
+		ENET_INFO("Start connection on " << _hostname << ":" << _port);
+		for(int32_t iii=0; iii<_numberRetry ;iii++) {
+			// open in Socket normal mode
+			socketId = socket(AF_INET, SOCK_STREAM, 0);
+			if (socketId < 0) {
+				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
+				usleep(200000);
+				continue;
+			}
+			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
+			struct sockaddr_in servAddr;
+			struct hostent* server = gethostbyname(_hostname.c_str());
+			if (server == nullptr) {
+				ENET_ERROR("ERROR, no such host : " << _hostname);
+				usleep(200000);
+				continue;
+			}
+			bzero((char *) &servAddr, sizeof(servAddr));
+			servAddr.sin_family = AF_INET;
+			bcopy((char *)server->h_addr, (char *)&servAddr.sin_addr.s_addr, server->h_length);
+			servAddr.sin_port = htons(_port);
+			ENET_INFO("Start connexion ...");
+			if (connect(socketId, (struct sockaddr *)&servAddr,sizeof(servAddr)) != 0) {
+				if(errno != EINPROGRESS) {
+					if(    errno != ENOENT
+					    && errno != EAGAIN
+					    && errno != ECONNREFUSED) {
+						ENET_ERROR("ERROR connecting on : errno=" << errno << "," << strerror(errno));
+					}
+					#ifdef __TARGET_OS__Windows
+						closesocket(socketId);
+					#else
+						close(socketId);
+					#endif
+					socketId = -1;
+				}
+				ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));
+				usleep(500000);
+				continue;
+			}
+			// if we are here ==> then the connextion is done corectly ...
+			break;
+		}
+		if (socketId<0) {
+			ENET_ERROR("ERROR connecting ... (after all try)");
+			return std::move(enet::Tcp());
+		}
+		ENET_DEBUG("Connection done");
+		return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
 	}
-	ENET_DEBUG("Connection done");
-	return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
-}
+#endif
 

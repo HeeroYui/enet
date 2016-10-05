@@ -115,7 +115,7 @@ void enet::WebSocket::start(const std::string& _uri, const std::vector<std::stri
 	}
 	m_interface->start();
 	if (m_interface->isServer() == false) {
-		enet::HttpRequest req(enet::HTTPReqType::GET);
+		enet::HttpRequest req(enet::HTTPReqType::HTTP_GET);
 		req.setProtocol(enet::HTTPProtocol::http_1_1);
 		req.setUri(_uri);
 		req.setKey("Upgrade", "websocket");
@@ -342,7 +342,7 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 		return;
 	}
 	_data.display();
-	if (_data.getType() != enet::HTTPReqType::GET) {
+	if (_data.getType() != enet::HTTPReqType::HTTP_GET) {
 		enet::HttpAnswer answer(enet::HTTPAnswerCode::c400_badRequest, "support only GET");
 		answer.setProtocol(enet::HTTPProtocol::http_1_1);
 		answer.setKey("Connection", "close");

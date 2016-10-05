@@ -33,6 +33,7 @@ def configure(target, my_module):
 	my_module.add_path(".")
 	my_module.add_src_file([
 	    'enet/debug.cpp',
+	    'enet/enet.cpp',
 	    'enet/Udp.cpp',
 	    'enet/Tcp.cpp',
 	    'enet/TcpServer.cpp',
@@ -51,6 +52,8 @@ def configure(target, my_module):
 	    'enet/Ftp.hpp',
 	    'enet/WebSocket.hpp',
 	    ])
+	if "Windows" in target.get_type():
+		my_module.add_depend("ws2");
 	return True
 
 

@@ -156,11 +156,11 @@ namespace enet {
 			}
 	};
 	enum class HTTPReqType {
-		GET,
-		HEAD,
-		POST,
-		PUT,
-		DELETE,
+		HTTP_GET,
+		HTTP_HEAD,
+		HTTP_POST,
+		HTTP_PUT,
+		HTTP_DELETE,
 	};
 	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPReqType _obj);
 	class HttpRequest : public HttpHeader {
@@ -169,7 +169,7 @@ namespace enet {
 			enum HTTPReqType m_req;
 			std::string m_uri;
 		public:
-			HttpRequest(enum enet::HTTPReqType _type=enet::HTTPReqType::GET);
+			HttpRequest(enum enet::HTTPReqType _type=enet::HTTPReqType::HTTP_GET);
 			void display() const;
 			std::string generate() const;
 			void setType(enum enet::HTTPReqType _value) {

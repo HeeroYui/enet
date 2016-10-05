@@ -19,7 +19,7 @@ namespace appl {
 	void onReceiveHeader(enet::HttpServer* _interface, const enet::HttpRequest& _data) {
 		TEST_INFO("Receive Header data:");
 		_data.display();
-		if (_data.getType() == enet::HTTPReqType::GET) {
+		if (_data.getType() == enet::HTTPReqType::HTTP_GET) {
 			if (_data.getUri() == "plop.txt") {
 				enet::HttpAnswer answer(enet::HTTPAnswerCode::c200_ok);
 				std::string data = "<html><head></head></body>coucou</body></html>";

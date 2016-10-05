@@ -30,7 +30,11 @@ namespace enet {
 			std::mutex m_mutex;
 		public:
 			Tcp();
-			Tcp(int32_t _idSocket, const std::string& _name);
+			#ifdef __TARGET_OS__Windows
+				Tcp(SOCKET _idSocket, const std::string& _name);
+			#else
+				Tcp(int32_t _idSocket, const std::string& _name);
+			#endif
 			// move constructor
 			Tcp(Tcp&& _obj);
 			// Move operator;
