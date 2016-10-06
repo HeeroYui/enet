@@ -5,6 +5,7 @@
  */
 
 #include <test-debug/debug.hpp>
+#include <enet/enet.hpp>
 #include <enet/Tcp.hpp>
 #include <enet/Http.hpp>
 #include <enet/WebSocket.hpp>
@@ -42,6 +43,7 @@ namespace appl {
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
+	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
 		std::string data = _argv[iii];
 		if (    data == "-h"
@@ -55,7 +57,6 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 	TEST_INFO("== Test WebSocket server        ==");
 	TEST_INFO("==================================");
-#ifndef __TARGET_OS__Windows
 	//Wait on TCP connection:
 	enet::TcpServer interface;
 	// Configure server interface:
@@ -86,8 +87,5 @@ int main(int _argc, const char *_argv[]) {
 	while (connection.isAlive() == true) {
 		usleep(100000);
 	}
-#else
-	TEST_CRITICAL("not implemented");
-#endif
 	return 0;
 }

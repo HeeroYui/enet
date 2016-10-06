@@ -5,6 +5,7 @@
  */
 
 #include <test-debug/debug.hpp>
+#include <enet/enet.hpp>
 #include <enet/Tcp.hpp>
 #include <enet/TcpClient.hpp>
 #include <enet/Http.hpp>
@@ -22,6 +23,7 @@ namespace appl {
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
+	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
 		std::string data = _argv[iii];
 		if (    data == "-h"
@@ -35,7 +37,6 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 	TEST_INFO("== Test HTTP client             ==");
 	TEST_INFO("==================================");
-#ifndef __TARGET_OS__Windows
 	// connect on TCP server:
 	enet::Tcp tcpConnection = std::move(enet::connectTcpClient("127.0.0.1", 12345));
 	// TODO : Check if connection is valid ...
@@ -47,16 +48,12 @@ int main(int _argc, const char *_argv[]) {
 	
 	// start http connection (the actual state is just TCP start ...)
 	connection.start();
-	enet::HttpRequest req(enet::HTTPReqType::GET);
+	enet::HttpRequest req(enet::HTTPReqType::HTTP_GET);
 	req.setUri("plop.txt");
 	connection.setHeader(req);
 	
 	while (connection.isAlive() == true) {
 		usleep(100000);
 	}
-	
-#else
-	TEST_CRITICAL("not implemented");
-#endif
 	return 0;
 }

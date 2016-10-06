@@ -53,13 +53,7 @@ enet::Tcp::Tcp() :
   m_socketId(_idSocket),
   m_name(_name),
   m_status(status::link) {
-	//Initialize the pollfd structure
-	memset(&m_fds[0], 0 , sizeof(m_fds));
-	//Set up the initial listening socket
-	#ifndef __TARGET_OS__Windows
-		m_fds[0].fd = _idSocket;
-		m_fds[0].events = POLLIN | POLLERR;
-	#endif
+	
 }
 
 enet::Tcp::Tcp(Tcp&& _obj) :
@@ -73,10 +67,6 @@ enet::Tcp::Tcp(Tcp&& _obj) :
 	#endif
 	_obj.m_name = "";
 	_obj.m_status = status::error;
-	#ifndef __TARGET_OS__Windows
-		m_fds[0] = _obj.m_fds[0];
-		memset(&m_fds[0], 0 , sizeof(m_fds));
-	#endif
 }
 
 enet::Tcp::~Tcp() {
@@ -95,10 +85,6 @@ enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 	_obj.m_name = "";
 	m_status = _obj.m_status;
 	_obj.m_status = status::error;
-	#ifndef __TARGET_OS__Windows
-		m_fds[0] = _obj.m_fds[0];
-		memset(&m_fds[0], 0 , sizeof(m_fds));
-	#endif
 	return *this;
 }
 
@@ -107,16 +93,14 @@ bool enet::Tcp::unlink() {
 		ENET_INFO("Close socket (start)");
 		#ifdef __TARGET_OS__Windows
 			shutdown(m_socketId, SD_BOTH);
+			closesocket(m_socketId);
+			m_socketId = INVALID_SOCKET;
 		#else
 			shutdown(m_socketId, SHUT_RDWR);
-		#endif
-		#ifdef __TARGET_OS__Windows
-			closesocket(m_socketId);
-		#else
 			close(m_socketId);
+			m_socketId = -1;
 		#endif
 		ENET_INFO("Close socket (done)");
-		m_socketId = -1;
 	}
 	m_status = status::unlink;
 	return true;
@@ -129,54 +113,58 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 		return -1;
 	}
 	int32_t size = -1;
+	
+	fd_set sock;
 	// Initialize the timeout to 3 minutes. If no activity after 3 minutes this program will end. timeout value is based on milliseconds.
-	int timeout = (3 * 60 * 1000);
-	#ifdef __TARGET_OS__Windows
-		
-	#else
-		int nfds = 1;
-		// Call poll() and wait 3 minutes for it to complete.
-		int rc = poll(m_fds, nfds, timeout);
-		// Check to see if the poll call failed.
-		if (rc < 0) {
-			ENET_ERROR("	poll() failed");
-			return-1;
-		}
-		// Check to see if the 3 minute time out expired.
-		if (rc == 0) {
-			ENET_ERROR("	poll() timed out.\n");
-			return -2;
-		}
-		bool closeConn = false;
-		// Receive all incoming data on this socket before we loop back and call poll again.
-		// Receive data on this connection until the recv fails with EWOULDBLOCK.
-		// If any other failure occurs, we will close the connection.
-		{
-			std::unique_lock<std::mutex> lock(m_mutex);
-			//ENET_DEBUG("Read on socketid = " << m_fds[0].fd );
-			rc = recv(m_fds[0].fd, _data, _maxLen, 0);
-		}
-		if (rc < 0) {
-			if (errno != EWOULDBLOCK) {
-				ENET_ERROR("	recv() failed");
-				closeConn = true;
-			}
-		}
-		// Check to see if the connection has been closed by the client
-		if (rc == 0) {
-			ENET_INFO("Connection closed");
+	struct timeval timeOutStruct;
+	timeOutStruct.tv_sec = (3 * 60 * 1000);
+	timeOutStruct.tv_usec = 0;
+	FD_ZERO(&sock);
+	FD_SET(m_socketId,&sock);
+	int rc = select(m_socketId+1, &sock, NULL, NULL, &timeOutStruct);
+	// Check to see if the poll call failed.
+	if (rc < 0) {
+		ENET_ERROR("	select() failed");
+		return -1;
+	}
+	// Check to see if the 3 minute time out expired.
+	if (rc == 0) {
+		ENET_ERROR("	select() timed out.");
+		return -2;
+	}
+	if (!FD_ISSET(m_socketId, &sock)) {
+		ENET_ERROR("	select() id is not set...");
+		return -1;
+	}
+	bool closeConn = false;
+	// Receive all incoming data on this socket before we loop back and call poll again.
+	// Receive data on this connection until the recv fails with EWOULDBLOCK.
+	// If any other failure occurs, we will close the connection.
+	{
+		std::unique_lock<std::mutex> lock(m_mutex);
+		rc = recv(m_socketId, (char *)_data, _maxLen, 0);
+	}
+	if (rc < 0) {
+		if (errno != EWOULDBLOCK) {
+			ENET_ERROR("	recv() failed");
 			closeConn = true;
 		}
-		if (closeConn == false) {
-			// Data was received
-			size = rc;
-		} else {
-			// If the close_conn flag was turned on, we need to clean up this active connection.
-			// This clean up process includes removing the descriptor.
-			ENET_DEBUG("	Set status at remote close ...");
-			m_status = status::linkRemoteClose;
-		}
-	#endif
+	}
+	// Check to see if the connection has been closed by the client
+	if (rc == 0) {
+		ENET_INFO("Connection closed");
+		closeConn = true;
+	}
+	if (closeConn == false) {
+		// Data was received
+		size = rc;
+	} else {
+		// If the close_conn flag was turned on, we need to clean up this active connection.
+		// This clean up process includes removing the descriptor.
+		ENET_DEBUG("	Set status at remote close ...");
+		m_status = status::linkRemoteClose;
+	}
+	//#endif
 	return size;
 }
 
@@ -190,11 +178,7 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 	int32_t size;
 	{
 		std::unique_lock<std::mutex> lock(m_mutex);
-		#ifdef __TARGET_OS__Windows
-			size = ::send(m_socketId, (const char *)_data, _len, 0);
-		#else
-			size = ::write(m_socketId, _data, _len);
-		#endif
+		size = ::send(m_socketId, (const char *)_data, _len, 0);
 	}
 	if (    size != _len
 	     && errno != 0) {

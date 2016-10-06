@@ -88,7 +88,7 @@ void enet::TcpServer::setPort(uint16_t _port) {
 		
 		// open in Socket normal mode
 		m_socketId = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-		if (m_socketId != INVALID_SOCKET) {
+		if (m_socketId == INVALID_SOCKET) {
 			ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
 			freeaddrinfo(result);
 			return false;

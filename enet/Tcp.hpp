@@ -10,8 +10,6 @@
 #ifdef __TARGET_OS__Windows
 	#include <winsock2.h>
 	#include <ws2tcpip.h>
-#else
-	#include <poll.h>
 #endif
 
 namespace enet {
@@ -21,11 +19,6 @@ namespace enet {
 				SOCKET m_socketId; //!< socket Windows interface generic
 			#else
 				int32_t m_socketId; //!< socket linux interface generic
-			#endif
-			#ifdef __TARGET_OS__Windows
-				int32_t m_fds[1];
-			#else
-				struct pollfd m_fds[1];
 			#endif
 			std::mutex m_mutex;
 		public:

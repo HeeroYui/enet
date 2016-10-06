@@ -71,6 +71,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			for(struct addrinfo* ptr=result;
 			    ptr != nullptr;
 			    ptr=ptr->ai_next) {
+				ENET_DEBUG(" find one ...");
 				// Create a SOCKET for connecting to server
 				socketId = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 				if (socketId == INVALID_SOCKET) {
@@ -80,6 +81,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 				// Connect to server.
 				iResult = connect(socketId, ptr->ai_addr, (int)ptr->ai_addrlen);
 				if (iResult == SOCKET_ERROR) {
+					ENET_ERROR("socket connection failed with error: " << WSAGetLastError());
 					closesocket(socketId);
 					socketId = INVALID_SOCKET;
 					continue;
@@ -90,9 +92,10 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			
 			if (socketId == INVALID_SOCKET) {
 				ENET_ERROR("Unable to connect to server!");
-				WSACleanup();
 				usleep(200000);
 				continue;
+			} else {
+				break;
 			}
 		}
 		if (socketId == INVALID_SOCKET) {

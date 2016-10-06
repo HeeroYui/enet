@@ -5,6 +5,7 @@
  */
 
 #include <test-debug/debug.hpp>
+#include <enet/enet.hpp>
 #include <enet/Tcp.hpp>
 #include <enet/Http.hpp>
 #include <etk/etk.hpp>
@@ -14,6 +15,7 @@
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
+	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
 		std::string data = _argv[iii];
 		if (    data == "-h"
@@ -27,12 +29,11 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 	TEST_INFO("== Test TCP server              ==");
 	TEST_INFO("==================================");
-#ifndef __TARGET_OS__Windows
 	//Wait on TCP connection:
 	enet::TcpServer interface;
 	// Configure server interface:
 	interface.setHostNane("127.0.0.1");
-	interface.setPort(31235);
+	interface.setPort(12345);
 	// Start listening ...
 	interface.link();
 	// Wait a new connection ..
@@ -62,8 +63,5 @@ int main(int _argc, const char *_argv[]) {
 		TEST_ERROR("can not unlink to the socket...");
 		return -1;
 	}
-#else
-	TEST_CRITICAL("not implemented");
-#endif
 	return 0;
 }

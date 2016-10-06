@@ -36,7 +36,7 @@ void enet::init(int _argc, const char** _argv) {
 	}
 }
 
-void unInit() {
+void enet::unInit() {
 	if (getInitSatatus() == false) {
 		ENET_ERROR("Request UnInit of enent already done ...");
 	} else {
@@ -48,7 +48,7 @@ void unInit() {
 }
 
 
-bool isInit() {
+bool enet::isInit() {
 	return getInitSatatus();
 }
 

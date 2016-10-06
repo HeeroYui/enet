@@ -5,15 +5,17 @@
  */
 
 #include <test-debug/debug.hpp>
+#include <enet/enet.hpp>
 #include <enet/Tcp.hpp>
 #include <enet/TcpClient.hpp>
 #include <enet/Http.hpp>
 #include <etk/etk.hpp>
-
+#include <iostream>
 #include <etk/stdTools.hpp>
 
 int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
+	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
 		std::string data = _argv[iii];
 		if (    data == "-h"
@@ -27,7 +29,6 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 	TEST_INFO("== Test TCP client              ==");
 	TEST_INFO("==================================");
-#ifndef __TARGET_OS__Windows
 	// client mode ...
 	// connect on TCP server:
 	enet::Tcp connection = std::move(enet::connectTcpClient("127.0.0.1", 12345));
@@ -37,12 +38,18 @@ int main(int _argc, const char *_argv[]) {
 		return -1;
 	}
 	int32_t iii = 0;
+	int32_t delay = 200;
 	while (    connection.getConnectionStatus() == enet::Tcp::status::link
 	        && iii<10000) {
 		char data[1024];
 		int32_t len = connection.read(data, 1024);
 		TEST_INFO("read len=" << len << " data='" << data << "'");
 		//if (data[len-1] == '2') {
+			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+			delay--;
+			if (delay == 0) {
+				delay = 500;
+			}
 			int32_t lenWrite = connection.write("get pair value");
 			TEST_INFO("write len=" << lenWrite);
 		//}
@@ -59,8 +66,5 @@ int main(int _argc, const char *_argv[]) {
 		TEST_ERROR("can not unlink to the socket...");
 		return -1;
 	}
-#else
-	TEST_CRITICAL("not implemented");
-#endif
 	return 0;
 }
