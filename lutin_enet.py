@@ -43,6 +43,7 @@ def configure(target, my_module):
 	    'enet/WebSocket.cpp',
 	    ])
 	my_module.add_header_file([
+	    'enet/enet.hpp',
 	    'enet/debug.hpp',
 	    'enet/Udp.hpp',
 	    'enet/Tcp.hpp',
