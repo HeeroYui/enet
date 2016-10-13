@@ -12,7 +12,7 @@
 #include <random>
 #include <algue/base64.hpp>
 #include <algue/sha1.hpp>
-#include <unistd.h>
+
 
 
 namespace enet {
@@ -148,7 +148,7 @@ void enet::WebSocket::start(const std::string& _uri, const std::vector<std::stri
 				     || m_interface->isAlive() == false) {
 					break;
 				}
-				usleep(10000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				timeout--;
 			}
 			if (    m_connectionValidate == false

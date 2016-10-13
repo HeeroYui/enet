@@ -46,7 +46,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			socketId = socket(AF_INET, SOCK_STREAM, 0);
 			if (socketId < 0) {
 				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-				usleep(200000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
@@ -63,7 +63,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			int iResult = getaddrinfo(_hostname.c_str(), portValue.c_str(), &hints, &result);
 			if (iResult != 0) {
 				ENET_ERROR("getaddrinfo failed with error: " << iResult);
-				usleep(200000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			
@@ -92,7 +92,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			
 			if (socketId == INVALID_SOCKET) {
 				ENET_ERROR("Unable to connect to server!");
-				usleep(200000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			} else {
 				break;
@@ -119,7 +119,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			socketId = socket(AF_INET, SOCK_STREAM, 0);
 			if (socketId < 0) {
 				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-				usleep(200000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
@@ -127,7 +127,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			struct hostent* server = gethostbyname(_hostname.c_str());
 			if (server == nullptr) {
 				ENET_ERROR("ERROR, no such host : " << _hostname);
-				usleep(200000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			bzero((char *) &servAddr, sizeof(servAddr));
@@ -150,7 +150,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 					socketId = -1;
 				}
 				ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));
-				usleep(500000);
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			// if we are here ==> then the connextion is done corectly ...

@@ -9,7 +9,7 @@
 #include <map>
 #include <etk/stdTools.hpp>
 #include <cstring>
-#include <unistd.h>
+
 
 static std::string escapeChar(const std::string& _value) {
 	return _value;
@@ -147,7 +147,7 @@ void enet::Http::start() {
 	}
 	while (    m_threadRunning == true
 	        && m_connection.getConnectionStatus() != enet::Tcp::status::link) {
-		usleep(50000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
 	//ethread::setPriority(*m_receiveThread, -6);
 	ENET_DEBUG("connect [STOP]");
@@ -364,7 +364,7 @@ void enet::Http::getHeader() {
 		char type;
 		int32_t len = m_connection.read(&type, 1);
 		if (len == 0) {
-			usleep(1);
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
 			continue;
 		}
 		header += type;

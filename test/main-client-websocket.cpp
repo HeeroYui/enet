@@ -13,7 +13,7 @@
 #include <etk/etk.hpp>
 
 #include <etk/stdTools.hpp>
-#include <unistd.h>
+
 
 namespace appl {
 	void onReceiveData(std::vector<uint8_t>& _data, bool _isString) {
@@ -66,7 +66,7 @@ int main(int _argc, const char *_argv[]) {
 	int32_t timeout = 20;
 	while (connection.isAlive() == true
 	        && timeout > 0) {
-		usleep(100000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		timeout--;
 	}
 	return 0;

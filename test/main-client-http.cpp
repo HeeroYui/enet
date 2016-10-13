@@ -12,7 +12,7 @@
 #include <etk/etk.hpp>
 
 #include <etk/stdTools.hpp>
-#include <unistd.h>
+
 
 namespace appl {
 	void onReceiveData(std::vector<uint8_t>& _data) {
@@ -53,7 +53,7 @@ int main(int _argc, const char *_argv[]) {
 	connection.setHeader(req);
 	
 	while (connection.isAlive() == true) {
-		usleep(100000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	return 0;
 }

@@ -12,7 +12,7 @@
 #include <enet/TcpServer.hpp>
 #include <etk/etk.hpp>
 
-#include <unistd.h>
+
 #include <etk/stdTools.hpp>
 namespace appl {
 	void onReceiveData(enet::WebSocket* _interface, std::vector<uint8_t>& _data, bool _isString) {
@@ -85,7 +85,7 @@ int main(int _argc, const char *_argv[]) {
 	connection.start();
 	
 	while (connection.isAlive() == true) {
-		usleep(100000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	return 0;
 }
