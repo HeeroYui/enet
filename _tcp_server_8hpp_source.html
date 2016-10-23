@@ -1,0 +1,163 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>enet: Ewol network abstraction: framework/atria-soft/enet/enet/TcpServer.hpp Source File</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">enet: Ewol network abstraction 0.4.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_644e041c3a6521da7b27eba0e4eb2b95.html">framework</a></li><li class="navelem"><a class="el" href="dir_a094892b17be858f66bf3446bbb755c7.html">atria-soft</a></li><li class="navelem"><a class="el" href="dir_f7835a0040178a7c3fe3e7c27f6d9084.html">enet</a></li><li class="navelem"><a class="el" href="dir_8df4c94f510f53f1374a2c2b5801aba9.html">enet</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">TcpServer.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_tcp_server_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_tcp_8hpp.html">enet/Tcp.hpp</a>&gt;</span></div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifdef __TARGET_OS__Windows</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    </div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#else</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">    #include &lt;poll.h&gt;</span></div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#endif</span></div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceenet.html">enet</a> {</div><div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classenet_1_1_tcp_server.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classenet_1_1_tcp_server.html">TcpServer</a> {</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">private</span>:</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">            #ifdef __TARGET_OS__Windows</span></div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                SOCKET m_socketId; </div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">            #else</span></div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                int32_t m_socketId; </div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">            #endif</span></div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">            #ifndef __TARGET_OS__Windows</span></div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keyword">struct </span>pollfd m_fds[1];</div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">            #endif</span></div><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <a class="code" href="classenet_1_1_tcp_server.html">TcpServer</a>();</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keyword">virtual</span> ~<a class="code" href="classenet_1_1_tcp_server.html">TcpServer</a>();</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">private</span>:</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            std::string m_host; </div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classenet_1_1_tcp_server.html#ab22d5d4757d31237e9f3e7baa71caad0">setIpV4</a>(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro);</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classenet_1_1_tcp_server.html#afed69c71adcc2caace7b55829edb746e">setHostNane</a>(<span class="keyword">const</span> std::string&amp; _name);</div><div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classenet_1_1_tcp_server.html#a037aec50729f61bbf1ac48b08ecaa455">   48</a></span>&#160;            <span class="keyword">const</span> std::string&amp; <a class="code" href="classenet_1_1_tcp_server.html#a037aec50729f61bbf1ac48b08ecaa455">getHostName</a>() {</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="keywordflow">return</span> m_host;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            }</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">private</span>:</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            uint16_t m_port; </div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classenet_1_1_tcp_server.html#a73447da8c72e72fb893375a531991392">setPort</a>(uint16_t _port);</div><div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classenet_1_1_tcp_server.html#ab2842aab61243d89cbb5034e94cbdf54">   63</a></span>&#160;            uint16_t <a class="code" href="classenet_1_1_tcp_server.html#ab2842aab61243d89cbb5034e94cbdf54">getPort</a>() {</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keywordflow">return</span> m_port;</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            }</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">public</span>:</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordtype">bool</span> link();</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordtype">bool</span> unlink();</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <a class="code" href="classenet_1_1_tcp.html">enet::Tcp</a> <a class="code" href="classenet_1_1_tcp_server.html#a551984bb6b9a52340b06a95fcd4ce183">waitNext</a>();</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    };</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div><div class="ttc" id="classenet_1_1_tcp_server_html_ab2842aab61243d89cbb5034e94cbdf54"><div class="ttname"><a href="classenet_1_1_tcp_server.html#ab2842aab61243d89cbb5034e94cbdf54">enet::TcpServer::getPort</a></div><div class="ttdeci">uint16_t getPort()</div><div class="ttdoc">Get the port number. </div><div class="ttdef"><b>Definition:</b> TcpServer.hpp:63</div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html"><div class="ttname"><a href="classenet_1_1_tcp_server.html">enet::TcpServer</a></div><div class="ttdef"><b>Definition:</b> TcpServer.hpp:15</div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html_a73447da8c72e72fb893375a531991392"><div class="ttname"><a href="classenet_1_1_tcp_server.html#a73447da8c72e72fb893375a531991392">enet::TcpServer::setPort</a></div><div class="ttdeci">void setPort(uint16_t _port)</div><div class="ttdoc">set the port number to connect or to spy </div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html_afed69c71adcc2caace7b55829edb746e"><div class="ttname"><a href="classenet_1_1_tcp_server.html#afed69c71adcc2caace7b55829edb746e">enet::TcpServer::setHostNane</a></div><div class="ttdeci">void setHostNane(const std::string &amp;_name)</div><div class="ttdoc">set the Host name is the same things as set an Ip adress, but in test mode &quot;127.0.0.1&quot; or &quot;localhost&quot;. </div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html_a551984bb6b9a52340b06a95fcd4ce183"><div class="ttname"><a href="classenet_1_1_tcp_server.html#a551984bb6b9a52340b06a95fcd4ce183">enet::TcpServer::waitNext</a></div><div class="ttdeci">enet::Tcp waitNext()</div><div class="ttdoc">Wait next extern connection. </div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html_ab22d5d4757d31237e9f3e7baa71caad0"><div class="ttname"><a href="classenet_1_1_tcp_server.html#ab22d5d4757d31237e9f3e7baa71caad0">enet::TcpServer::setIpV4</a></div><div class="ttdeci">void setIpV4(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro)</div><div class="ttdoc">Set the connection IP id. </div></div>
+<div class="ttc" id="classenet_1_1_tcp_server_html_a037aec50729f61bbf1ac48b08ecaa455"><div class="ttname"><a href="classenet_1_1_tcp_server.html#a037aec50729f61bbf1ac48b08ecaa455">enet::TcpServer::getHostName</a></div><div class="ttdeci">const std::string &amp; getHostName()</div><div class="ttdoc">Get the decriptive name hot the host. </div><div class="ttdef"><b>Definition:</b> TcpServer.hpp:48</div></div>
+<div class="ttc" id="_tcp_8hpp_html"><div class="ttname"><a href="_tcp_8hpp.html">Tcp.hpp</a></div></div>
+<div class="ttc" id="classenet_1_1_tcp_html"><div class="ttname"><a href="classenet_1_1_tcp.html">enet::Tcp</a></div><div class="ttdef"><b>Definition:</b> Tcp.hpp:16</div></div>
+<div class="ttc" id="namespaceenet_html"><div class="ttname"><a href="namespaceenet.html">enet</a></div><div class="ttdoc">Main esvg namespace. </div><div class="ttdef"><b>Definition:</b> enet.hpp:17</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:23 for enet: Ewol network abstraction by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

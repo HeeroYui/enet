@@ -1,0 +1,545 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>enet: Ewol network abstraction: enet::WebSocket Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">enet: Ewol network abstraction 0.4.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceenet.html">enet</a></li><li class="navelem"><a class="el" href="classenet_1_1_web_socket.html">WebSocket</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="classenet_1_1_web_socket-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">enet::WebSocket Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a39fb42e7b04f5946a8cdbb6cde6b0ce4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#a39fb42e7b04f5946a8cdbb6cde6b0ce4">Observer</a> = std::function&lt; void(std::vector&lt; uint8_t &gt; &amp;, bool)&gt;</td></tr>
+<tr class="separator:a39fb42e7b04f5946a8cdbb6cde6b0ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c234c853a0ee0b56875bb0262fc8ce0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#a5c234c853a0ee0b56875bb0262fc8ce0">ObserverUriCheck</a> = std::function&lt; bool(const std::string &amp;, const std::vector&lt; std::string &gt; &amp;)&gt;</td></tr>
+<tr class="separator:a5c234c853a0ee0b56875bb0262fc8ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a3f5406cbfebf24abbeda96805e8c346b"><td class="memItemLeft" align="right" valign="top"><a id="a3f5406cbfebf24abbeda96805e8c346b"></a>
+const std::chrono::steady_clock::time_point &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLastTimeReceive</b> ()</td></tr>
+<tr class="separator:a3f5406cbfebf24abbeda96805e8c346b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf22258d777ac6af3cd15e2c7db379da"><td class="memItemLeft" align="right" valign="top"><a id="adf22258d777ac6af3cd15e2c7db379da"></a>
+const std::chrono::steady_clock::time_point &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLastTimeSend</b> ()</td></tr>
+<tr class="separator:adf22258d777ac6af3cd15e2c7db379da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5be062f7e69c8833ebe57a56d1334f8a"><td class="memItemLeft" align="right" valign="top"><a id="a5be062f7e69c8833ebe57a56d1334f8a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>WebSocket</b> (<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> _connection, bool _isServer=false)</td></tr>
+<tr class="separator:a5be062f7e69c8833ebe57a56d1334f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c73d3a5d47842a46dac676c9bda35a0"><td class="memItemLeft" align="right" valign="top"><a id="a5c73d3a5d47842a46dac676c9bda35a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setInterface</b> (<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> _connection, bool _isServer=false)</td></tr>
+<tr class="separator:a5c73d3a5d47842a46dac676c9bda35a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084861de3fb9176f1f2bfb5f3056463a"><td class="memItemLeft" align="right" valign="top"><a id="a084861de3fb9176f1f2bfb5f3056463a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> (const std::string &amp;_uri=&quot;&quot;, const std::vector&lt; std::string &gt; &amp;_listProtocols=std::vector&lt; std::string &gt;())</td></tr>
+<tr class="separator:a084861de3fb9176f1f2bfb5f3056463a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5791eb8002a44c016acdd5660fe17094"><td class="memItemLeft" align="right" valign="top"><a id="a5791eb8002a44c016acdd5660fe17094"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (bool _inThread=false)</td></tr>
+<tr class="separator:a5791eb8002a44c016acdd5660fe17094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b8f20335ed70c24b4dcd5d2b3cf6f3"><td class="memItemLeft" align="right" valign="top"><a id="ac5b8f20335ed70c24b4dcd5d2b3cf6f3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAlive</b> () const</td></tr>
+<tr class="separator:ac5b8f20335ed70c24b4dcd5d2b3cf6f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9e2f917ce477eb868506a400311f62b"><td class="memItemLeft" align="right" valign="top"><a id="ab9e2f917ce477eb868506a400311f62b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onReceiveData</b> (<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> &amp;_data)</td></tr>
+<tr class="separator:ab9e2f917ce477eb868506a400311f62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c32caa5da4c87334a4064cbac23fc9e"><td class="memItemLeft" align="right" valign="top"><a id="a3c32caa5da4c87334a4064cbac23fc9e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onReceiveRequest</b> (const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;_data)</td></tr>
+<tr class="separator:a3c32caa5da4c87334a4064cbac23fc9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7efdbaacbae0948b9dad7965f33a870d"><td class="memItemLeft" align="right" valign="top"><a id="a7efdbaacbae0948b9dad7965f33a870d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onReceiveAnswer</b> (const <a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a> &amp;_data)</td></tr>
+<tr class="separator:a7efdbaacbae0948b9dad7965f33a870d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29031761ddfe391074f69effcb266cdc"><td class="memItemLeft" align="right" valign="top"><a id="a29031761ddfe391074f69effcb266cdc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setProtocol</b> (const std::string &amp;_protocol)</td></tr>
+<tr class="separator:a29031761ddfe391074f69effcb266cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a7a4269d350a37bca2041c62e58f18f"><td class="memTemplParams" colspan="2">template&lt;class CLASS_TYPE &gt; </td></tr>
+<tr class="memitem:a3a7a4269d350a37bca2041c62e58f18f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#a3a7a4269d350a37bca2041c62e58f18f">connect</a> (CLASS_TYPE *_class, void(CLASS_TYPE::*_func)(std::vector&lt; uint8_t &gt; &amp;, bool))</td></tr>
+<tr class="separator:a3a7a4269d350a37bca2041c62e58f18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a028b4ee433c3a2381bad93882ada0"><td class="memItemLeft" align="right" valign="top"><a id="a57a028b4ee433c3a2381bad93882ada0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> (<a class="el" href="classenet_1_1_web_socket.html#a39fb42e7b04f5946a8cdbb6cde6b0ce4">Observer</a> _func)</td></tr>
+<tr class="separator:a57a028b4ee433c3a2381bad93882ada0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab74ff78fe5f3b2161011adec69c74c19"><td class="memTemplParams" colspan="2">template&lt;class CLASS_TYPE &gt; </td></tr>
+<tr class="memitem:ab74ff78fe5f3b2161011adec69c74c19"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#ab74ff78fe5f3b2161011adec69c74c19">connectUri</a> (CLASS_TYPE *_class, bool(CLASS_TYPE::*_func)(const std::string &amp;, const std::vector&lt; std::string &gt; &amp;))</td></tr>
+<tr class="separator:ab74ff78fe5f3b2161011adec69c74c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e0fd5bd1f188ea02899ac4ad72a255d"><td class="memItemLeft" align="right" valign="top"><a id="a9e0fd5bd1f188ea02899ac4ad72a255d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>connectUri</b> (<a class="el" href="classenet_1_1_web_socket.html#a5c234c853a0ee0b56875bb0262fc8ce0">ObserverUriCheck</a> _func)</td></tr>
+<tr class="separator:a9e0fd5bd1f188ea02899ac4ad72a255d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af67920a05692efba572125922e68eeaf"><td class="memItemLeft" align="right" valign="top"><a id="af67920a05692efba572125922e68eeaf"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>configHeader</b> (bool _isString=false, bool _mask=false)</td></tr>
+<tr class="separator:af67920a05692efba572125922e68eeaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6a621645e530c9f3329c63f77b8954d"><td class="memItemLeft" align="right" valign="top"><a id="ae6a621645e530c9f3329c63f77b8954d"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>writeData</b> (uint8_t *_data, int32_t _len)</td></tr>
+<tr class="separator:ae6a621645e530c9f3329c63f77b8954d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ca2ded70ca64e8b687390b81f03461c"><td class="memItemLeft" align="right" valign="top"><a id="a2ca2ded70ca64e8b687390b81f03461c"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>send</b> ()</td></tr>
+<tr class="separator:a2ca2ded70ca64e8b687390b81f03461c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c493cf31492424f7933ea7b9941cd3b"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#a9c493cf31492424f7933ea7b9941cd3b">write</a> (const void *_data, int32_t _len, bool _isString=false, bool _mask=false)</td></tr>
+<tr class="separator:a9c493cf31492424f7933ea7b9941cd3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f62bdf3fa652db1dd7ad3801e82612"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#ab5f62bdf3fa652db1dd7ad3801e82612">write</a> (const std::string &amp;_data, bool _writeBackSlashZero=true)</td></tr>
+<tr class="separator:ab5f62bdf3fa652db1dd7ad3801e82612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb3948198a6364c296727cab39a413ba"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aeb3948198a6364c296727cab39a413ba"><td class="memTemplItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html#aeb3948198a6364c296727cab39a413ba">write</a> (const std::vector&lt; T &gt; &amp;_data)</td></tr>
+<tr class="separator:aeb3948198a6364c296727cab39a413ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6700b445af9f854d239a1ab5c4879669"><td class="memItemLeft" align="right" valign="top"><a id="a6700b445af9f854d239a1ab5c4879669"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>controlPing</b> ()</td></tr>
+<tr class="separator:a6700b445af9f854d239a1ab5c4879669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae31725e7f067d78a51281ac794711ac7"><td class="memItemLeft" align="right" valign="top"><a id="ae31725e7f067d78a51281ac794711ac7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>controlPong</b> ()</td></tr>
+<tr class="separator:ae31725e7f067d78a51281ac794711ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6a33abb063912a48c879b7d376509c"><td class="memItemLeft" align="right" valign="top"><a id="abe6a33abb063912a48c879b7d376509c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>controlClose</b> ()</td></tr>
+<tr class="separator:abe6a33abb063912a48c879b7d376509c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a2d594d6243eebf978fc4ba5d714febb8"><td class="memItemLeft" align="right" valign="top"><a id="a2d594d6243eebf978fc4ba5d714febb8"></a>
+std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_sendBuffer</b></td></tr>
+<tr class="separator:a2d594d6243eebf978fc4ba5d714febb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4f9347a24096161c5633aaf6107b66c"><td class="memItemLeft" align="right" valign="top"><a id="ac4f9347a24096161c5633aaf6107b66c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_connectionValidate</b></td></tr>
+<tr class="separator:ac4f9347a24096161c5633aaf6107b66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87e60f9246988e10ba3ef9cfc549b383"><td class="memItemLeft" align="right" valign="top"><a id="a87e60f9246988e10ba3ef9cfc549b383"></a>
+<a class="elRef" doxygen="/home/heero/dev/perso/out/doc/release/ememory.tag:http://atria-soft.github.io/ememory/" href="http://atria-soft.github.io/ememory/classememory_1_1_shared_ptr.html">ememory::SharedPtr</a>&lt; <a class="el" href="classenet_1_1_http.html">enet::Http</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_interface</b></td></tr>
+<tr class="separator:a87e60f9246988e10ba3ef9cfc549b383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34c7971b3dfdb31e1f1993f3b5a611e1"><td class="memItemLeft" align="right" valign="top"><a id="a34c7971b3dfdb31e1f1993f3b5a611e1"></a>
+std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_buffer</b></td></tr>
+<tr class="separator:a34c7971b3dfdb31e1f1993f3b5a611e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81301c419c2524a50f56bf3d18330f8a"><td class="memItemLeft" align="right" valign="top"><a id="a81301c419c2524a50f56bf3d18330f8a"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>m_checkKey</b></td></tr>
+<tr class="separator:a81301c419c2524a50f56bf3d18330f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbf8d8db328c7b198f352a2f1df26ccc"><td class="memItemLeft" align="right" valign="top"><a id="afbf8d8db328c7b198f352a2f1df26ccc"></a>
+std::chrono::steady_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><b>m_lastReceive</b></td></tr>
+<tr class="separator:afbf8d8db328c7b198f352a2f1df26ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a351735ebf18354d5c9162897a37b5ae3"><td class="memItemLeft" align="right" valign="top"><a id="a351735ebf18354d5c9162897a37b5ae3"></a>
+std::chrono::steady_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><b>m_lastSend</b></td></tr>
+<tr class="separator:a351735ebf18354d5c9162897a37b5ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d990e2eb11d11c2d9bc743d66c7b522"><td class="memItemLeft" align="right" valign="top"><a id="a4d990e2eb11d11c2d9bc743d66c7b522"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>m_protocol</b></td></tr>
+<tr class="separator:a4d990e2eb11d11c2d9bc743d66c7b522"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe2db0119132e188c36a353676867c0a"><td class="memItemLeft" align="right" valign="top"><a id="abe2db0119132e188c36a353676867c0a"></a>
+<a class="el" href="classenet_1_1_web_socket.html#a39fb42e7b04f5946a8cdbb6cde6b0ce4">Observer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observer</b></td></tr>
+<tr class="separator:abe2db0119132e188c36a353676867c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe3b3c52f507b94ea624f84c976ab1c4"><td class="memItemLeft" align="right" valign="top"><a id="afe3b3c52f507b94ea624f84c976ab1c4"></a>
+<a class="el" href="classenet_1_1_web_socket.html#a5c234c853a0ee0b56875bb0262fc8ce0">ObserverUriCheck</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observerUriCheck</b></td></tr>
+<tr class="separator:afe3b3c52f507b94ea624f84c976ab1c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a39fb42e7b04f5946a8cdbb6cde6b0ce4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39fb42e7b04f5946a8cdbb6cde6b0ce4">&sect;&nbsp;</a></span>Observer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classenet_1_1_web_socket.html#a39fb42e7b04f5946a8cdbb6cde6b0ce4">enet::WebSocket::Observer</a> =  std::function&lt;void(std::vector&lt;uint8_t&gt;&amp;, bool)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define an Observer: function pointer. </p>
+
+</div>
+</div>
+<a id="a5c234c853a0ee0b56875bb0262fc8ce0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c234c853a0ee0b56875bb0262fc8ce0">&sect;&nbsp;</a></span>ObserverUriCheck</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classenet_1_1_web_socket.html#a5c234c853a0ee0b56875bb0262fc8ce0">enet::WebSocket::ObserverUriCheck</a> =  std::function&lt;bool(const std::string&amp;, const std::vector&lt;std::string&gt;&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define an Observer: function pointer. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3a7a4269d350a37bca2041c62e58f18f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a7a4269d350a37bca2041c62e58f18f">&sect;&nbsp;</a></span>connect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class CLASS_TYPE &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enet::WebSocket::connect </td>
+          <td>(</td>
+          <td class="paramtype">CLASS_TYPE *&#160;</td>
+          <td class="paramname"><em>_class</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void(CLASS_TYPE::*)(std::vector&lt; uint8_t &gt; &amp;, bool)&#160;</td>
+          <td class="paramname"><em>_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connect an function member on the signal with the shared_ptr object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_class</td><td>shared_ptr Object on whe we need to call ==&gt; the object is get in keeped in weak_ptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_func</td><td>Function to call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_args</td><td>Argument optinnal the user want to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab74ff78fe5f3b2161011adec69c74c19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab74ff78fe5f3b2161011adec69c74c19">&sect;&nbsp;</a></span>connectUri()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class CLASS_TYPE &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enet::WebSocket::connectUri </td>
+          <td>(</td>
+          <td class="paramtype">CLASS_TYPE *&#160;</td>
+          <td class="paramname"><em>_class</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool(CLASS_TYPE::*)(const std::string &amp;, const std::vector&lt; std::string &gt; &amp;)&#160;</td>
+          <td class="paramname"><em>_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connect an function member on the signal with the shared_ptr object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_class</td><td>shared_ptr Object on whe we need to call ==&gt; the object is get in keeped in weak_ptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_func</td><td>Function to call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_args</td><td>Argument optinnal the user want to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9c493cf31492424f7933ea7b9941cd3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c493cf31492424f7933ea7b9941cd3b">&sect;&nbsp;</a></span>write() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t enet::WebSocket::write </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isString</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_mask</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write a chunk of data on the socket. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_data</td><td>pointer on the data might be write </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_len</td><td>Size that must be written socket </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>&gt;0 byte size on the socket write </dd>
+<dd>
+-1 an error occured. </dd></dl>
+
+</div>
+</div>
+<a id="ab5f62bdf3fa652db1dd7ad3801e82612"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5f62bdf3fa652db1dd7ad3801e82612">&sect;&nbsp;</a></span>write() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t enet::WebSocket::write </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_writeBackSlashZero</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a chunk of data on the socket. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_data</td><td>String to rite on the soccket </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_writeBackSlashZero</td><td>if false, the \0 is not write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>&gt;0 byte size on the socket write </dd>
+<dd>
+-1 an error occured. </dd></dl>
+
+</div>
+</div>
+<a id="aeb3948198a6364c296727cab39a413ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb3948198a6364c296727cab39a413ba">&sect;&nbsp;</a></span>write() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t enet::WebSocket::write </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a chunk of data on the socket. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_data</td><td>String to rite on the soccket </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_writeBackSlashZero</td><td>if false, the \0 is not write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>&gt;0 T element write on the socket </dd>
+<dd>
+-1 an error occured. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/enet/enet/<a class="el" href="_web_socket_8hpp_source.html">WebSocket.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:23 for enet: Ewol network abstraction by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

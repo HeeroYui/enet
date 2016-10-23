@@ -1,0 +1,512 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>enet: Ewol network abstraction: enet Namespace Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">enet: Ewol network abstraction 0.4.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle">
+<div class="title">enet Namespace Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_ftp.html">Ftp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html">Http</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_answer.html">HttpAnswer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_client.html">HttpClient</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_header.html">HttpHeader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_request.html">HttpRequest</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_server.html">HttpServer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_tcp.html">Tcp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_tcp_server.html">TcpServer</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_udp.html">Udp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_web_socket.html">WebSocket</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a4962966a09900a4b99c8e86bbd1ebdb8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8">HTTPAnswerCode</a> { <br />
+&#160;&#160;<b>c000_unknow</b> = 0, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a9c2465d0fbbd1faef43c3e7abe72dbc0">HTTPAnswerCode::c100_continue</a> = 100, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8af56271db9bd7b6ff65bd095a80b46c55">HTTPAnswerCode::c101_switchingProtocols</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a7291ad083721cd167f37abc9079dfa62">HTTPAnswerCode::c103_checkpoint</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a6e7c5731ee8867928e59048d89b67d69">HTTPAnswerCode::c200_ok</a> = 200, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a02e2d4a7ad3569438270b5410222f89c">HTTPAnswerCode::c201_created</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a635f3724b256d8c5984e3ab332a8bc9d">HTTPAnswerCode::c202_accepted</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8aacb1755cc4a75de1b87b7d049cb05d84">HTTPAnswerCode::c203_nonAuthoritativeInformation</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8aae452323e9d6607d67f60b138c6acd8c">HTTPAnswerCode::c204_noContent</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a109a2b2d81a19949780ced37eb8c56b1">HTTPAnswerCode::c205_resetContent</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a395c7180ad65f9c1776071aab95488b5">HTTPAnswerCode::c206_partialContent</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a14b01d06b449b71e75882d7a1561f7a6">HTTPAnswerCode::c300_multipleChoices</a> = 300, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a706f6de245251e17ed2737eb005d05c9">HTTPAnswerCode::c301_movedPermanently</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a7ae5502ebcb59c3c63a7f03c7f95f776">HTTPAnswerCode::c302_found</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a5e22f735b40d2d9a50bb8161a5e0230b">HTTPAnswerCode::c303_seeOther</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ad95bf1e702e44047dbe235d575d10c88">HTTPAnswerCode::c304_notModified</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a32c0316c3360959d2102f173114b25e4">HTTPAnswerCode::c306_switchProxy</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a98dded4a4f383451fd6ecd27ba55a55c">HTTPAnswerCode::c307_temporaryRedirect</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8acf01e01e9014bc8a958525c18992028f">HTTPAnswerCode::c308_resumeIncomplete</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8afc2e7f1abc7155560b8d0f39bfdd45d2">HTTPAnswerCode::c400_badRequest</a> = 400, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a89e5edba8bc5c07c0b71cc3f1d7815bc">HTTPAnswerCode::c401_unauthorized</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ade19537e1ab5d23e89ea9321e31fc7db">HTTPAnswerCode::c402_paymentRequired</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a392ec06af8e38f3f7803f947e6b5bfb5">HTTPAnswerCode::c403_forbidden</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a10970049e7cf0031b6358c2701bd6610">HTTPAnswerCode::c404_notFound</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a745a1b2d86d7bab1296aec464fd7c4e9">HTTPAnswerCode::c405_methodNotAllowed</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ac110d12f00d9494d8a68902b1ff783d3">HTTPAnswerCode::c406_notAcceptable</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a00b501f91b891fbcb0fc2aa714ba47b8">HTTPAnswerCode::c407_proxyAuthenticationRequired</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ab6d5cbfb312814de28e60b7da5ae1f73">HTTPAnswerCode::c408_requestTimeout</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ac7f2fecfd704e1783b8384f7a40d2b84">HTTPAnswerCode::c409_conflict</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a03b519dbeed1a17ee9d13e0c845e8920">HTTPAnswerCode::c410_gone</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a5d992d228be97eabd565c6541bc9eace">HTTPAnswerCode::c411_lengthRequired</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a83a769f280db39b7f66ada176ec488a1">HTTPAnswerCode::c412_preconditionFailed</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8aba93e4f402136092e36630782d0151b3">HTTPAnswerCode::c413_requestEntityTooLarge</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a153cb173f6c3b789fc4cf497e95bf33e">HTTPAnswerCode::c414_requestURITooLong</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a2b9ebcea0fbac89015c29cca989f954d">HTTPAnswerCode::c415_unsupportedMediaType</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a4d11731044240b424b9de6fb01a9a557">HTTPAnswerCode::c416_requestedRangeNotSatisfiable</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a0d2e6857e63e43df60954d736e2584d7">HTTPAnswerCode::c417_expectationFailed</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a61e5f19a2aecbaf39dc349871960859b">HTTPAnswerCode::c500_internalServerError</a> = 500, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8ad4c5d9348726e82115e4efc9ecf66b50">HTTPAnswerCode::c501_notImplemented</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8aec3ffd6364e4e05dd5e2ce38b633c4f2">HTTPAnswerCode::c502_badGateway</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a60b0dc2b4a12dd50f1ec964993a8a503">HTTPAnswerCode::c503_serviceUnavailable</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a561a42b3d4d20af428704e3bcf9826ec">HTTPAnswerCode::c504_gatewayTimeout</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a0edb1d03dae4fec42c6c79786f4634c8">HTTPAnswerCode::c505_httpVersionNotSupported</a>, 
+<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8a09d10fff3a154cb64ce085c2718048b3">HTTPAnswerCode::c511_networkAuthenticationRequired</a>
+<br />
+ }</td></tr>
+<tr class="separator:a4962966a09900a4b99c8e86bbd1ebdb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2e75522ea903eb01892f2473e6f5c0"><td class="memItemLeft" align="right" valign="top"><a id="afc2e75522ea903eb01892f2473e6f5c0"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>HTTPProtocol</b> { <br />
+&#160;&#160;<b>http_0_1</b>, 
+<b>http_0_2</b>, 
+<b>http_0_3</b>, 
+<b>http_0_4</b>, 
+<br />
+&#160;&#160;<b>http_0_5</b>, 
+<b>http_0_6</b>, 
+<b>http_0_7</b>, 
+<b>http_0_8</b>, 
+<br />
+&#160;&#160;<b>http_0_9</b>, 
+<b>http_0_10</b>, 
+<b>http_1_0</b>, 
+<b>http_1_1</b>, 
+<br />
+&#160;&#160;<b>http_1_2</b>, 
+<b>http_1_3</b>, 
+<b>http_1_4</b>, 
+<b>http_1_5</b>, 
+<br />
+&#160;&#160;<b>http_1_6</b>, 
+<b>http_1_7</b>, 
+<b>http_1_8</b>, 
+<b>http_1_9</b>, 
+<br />
+&#160;&#160;<b>http_1_10</b>, 
+<b>http_2_0</b>, 
+<b>http_2_1</b>, 
+<b>http_2_2</b>, 
+<br />
+&#160;&#160;<b>http_2_3</b>, 
+<b>http_2_4</b>, 
+<b>http_2_5</b>, 
+<b>http_2_6</b>, 
+<br />
+&#160;&#160;<b>http_2_7</b>, 
+<b>http_2_8</b>, 
+<b>http_2_9</b>, 
+<b>http_2_10</b>, 
+<br />
+&#160;&#160;<b>http_3_0</b>, 
+<b>http_3_1</b>, 
+<b>http_3_2</b>, 
+<b>http_3_3</b>, 
+<br />
+&#160;&#160;<b>http_3_4</b>, 
+<b>http_3_5</b>, 
+<b>http_3_6</b>, 
+<b>http_3_7</b>, 
+<br />
+&#160;&#160;<b>http_3_8</b>, 
+<b>http_3_9</b>, 
+<b>http_3_10</b>
+<br />
+ }</td></tr>
+<tr class="separator:afc2e75522ea903eb01892f2473e6f5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2785a062c8a2bfcf5aea799573125843"><td class="memItemLeft" align="right" valign="top"><a id="a2785a062c8a2bfcf5aea799573125843"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>HTTPReqType</b> { <br />
+&#160;&#160;<b>HTTP_GET</b>, 
+<b>HTTP_HEAD</b>, 
+<b>HTTP_POST</b>, 
+<b>HTTP_PUT</b>, 
+<br />
+&#160;&#160;<b>HTTP_DELETE</b>
+<br />
+ }</td></tr>
+<tr class="separator:a2785a062c8a2bfcf5aea799573125843"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ae5d74fc124e3d0f56da5c00ecb033dae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceenet.html#ae5d74fc124e3d0f56da5c00ecb033dae">init</a> (int _argc, const char **_argv)</td></tr>
+<tr class="separator:ae5d74fc124e3d0f56da5c00ecb033dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2187def849a8abb1ff00a02aca4cace2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceenet.html#a2187def849a8abb1ff00a02aca4cace2">unInit</a> ()</td></tr>
+<tr class="separator:a2187def849a8abb1ff00a02aca4cace2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78ce546ea1ebb2f96a6b32de49ad34d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceenet.html#a78ce546ea1ebb2f96a6b32de49ad34d4">isInit</a> ()</td></tr>
+<tr class="separator:a78ce546ea1ebb2f96a6b32de49ad34d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab74ebbd51177956f6aac4325f6f078"><td class="memItemLeft" align="right" valign="top"><a id="a1ab74ebbd51177956f6aac4325f6f078"></a>
+<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a>&#160;</td><td class="memItemRight" valign="bottom"><b>connectTcpClient</b> (uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry=5)</td></tr>
+<tr class="separator:a1ab74ebbd51177956f6aac4325f6f078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09ab364d56f751634e499a3d50388247"><td class="memItemLeft" align="right" valign="top"><a id="a09ab364d56f751634e499a3d50388247"></a>
+<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a>&#160;</td><td class="memItemRight" valign="bottom"><b>connectTcpClient</b> (const std::string &amp;_hostname, uint16_t _port, uint32_t _numberRetry=5)</td></tr>
+<tr class="separator:a09ab364d56f751634e499a3d50388247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Main esvg namespace. </p>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a4962966a09900a4b99c8e86bbd1ebdb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4962966a09900a4b99c8e86bbd1ebdb8">&sect;&nbsp;</a></span>HTTPAnswerCode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8">enet::HTTPAnswerCode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a9c2465d0fbbd1faef43c3e7abe72dbc0"></a>c100_continue&#160;</td><td class="fielddoc"><p>The server has received the request headers, and the client should proceed to send the request body. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8af56271db9bd7b6ff65bd095a80b46c55"></a>c101_switchingProtocols&#160;</td><td class="fielddoc"><p>The requester has asked the server to switch protocols. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a7291ad083721cd167f37abc9079dfa62"></a>c103_checkpoint&#160;</td><td class="fielddoc"><p>Used in the resumable requests proposal to resume aborted PUT or POST requests. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a6e7c5731ee8867928e59048d89b67d69"></a>c200_ok&#160;</td><td class="fielddoc"><p>The request is OK (this is the standard response for successful HTTP requests) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a02e2d4a7ad3569438270b5410222f89c"></a>c201_created&#160;</td><td class="fielddoc"><p>The request has been fulfilled, and a new resource is created. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a635f3724b256d8c5984e3ab332a8bc9d"></a>c202_accepted&#160;</td><td class="fielddoc"><p>The request has been accepted for processing, but the processing has not been completed. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8aacb1755cc4a75de1b87b7d049cb05d84"></a>c203_nonAuthoritativeInformation&#160;</td><td class="fielddoc"><p>The request has been successfully processed, but is returning information that may be from another source. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8aae452323e9d6607d67f60b138c6acd8c"></a>c204_noContent&#160;</td><td class="fielddoc"><p>The request has been successfully processed, but is not returning any content. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a109a2b2d81a19949780ced37eb8c56b1"></a>c205_resetContent&#160;</td><td class="fielddoc"><p>The request has been successfully processed, but is not returning any content, and requires that the requester reset the document view. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a395c7180ad65f9c1776071aab95488b5"></a>c206_partialContent&#160;</td><td class="fielddoc"><p>The server is delivering only part of the resource due to a range header sent by the client. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a14b01d06b449b71e75882d7a1561f7a6"></a>c300_multipleChoices&#160;</td><td class="fielddoc"><p>A link list. The user can select a link and go to that location. Maximum five addresses. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a706f6de245251e17ed2737eb005d05c9"></a>c301_movedPermanently&#160;</td><td class="fielddoc"><p>The requested page has moved to a new URL. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a7ae5502ebcb59c3c63a7f03c7f95f776"></a>c302_found&#160;</td><td class="fielddoc"><p>The requested page has moved temporarily to a new URL. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a5e22f735b40d2d9a50bb8161a5e0230b"></a>c303_seeOther&#160;</td><td class="fielddoc"><p>The requested page can be found under a different URL. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ad95bf1e702e44047dbe235d575d10c88"></a>c304_notModified&#160;</td><td class="fielddoc"><p>Indicates the requested page has not been modified since last requested. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a32c0316c3360959d2102f173114b25e4"></a>c306_switchProxy&#160;</td><td class="fielddoc"><p>No longer used. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a98dded4a4f383451fd6ecd27ba55a55c"></a>c307_temporaryRedirect&#160;</td><td class="fielddoc"><p>The requested page has moved temporarily to a new URL. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8acf01e01e9014bc8a958525c18992028f"></a>c308_resumeIncomplete&#160;</td><td class="fielddoc"><p>Used in the resumable requests proposal to resume aborted PUT or POST requests. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8afc2e7f1abc7155560b8d0f39bfdd45d2"></a>c400_badRequest&#160;</td><td class="fielddoc"><p>The request cannot be fulfilled due to bad syntax. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a89e5edba8bc5c07c0b71cc3f1d7815bc"></a>c401_unauthorized&#160;</td><td class="fielddoc"><p>The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ade19537e1ab5d23e89ea9321e31fc7db"></a>c402_paymentRequired&#160;</td><td class="fielddoc"><p>Reserved for future use. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a392ec06af8e38f3f7803f947e6b5bfb5"></a>c403_forbidden&#160;</td><td class="fielddoc"><p>The request was a legal request, but the server is refusing to respond to it. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a10970049e7cf0031b6358c2701bd6610"></a>c404_notFound&#160;</td><td class="fielddoc"><p>The requested page could not be found but may be available again in the future. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a745a1b2d86d7bab1296aec464fd7c4e9"></a>c405_methodNotAllowed&#160;</td><td class="fielddoc"><p>A request was made of a page using a request method not supported by that page. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ac110d12f00d9494d8a68902b1ff783d3"></a>c406_notAcceptable&#160;</td><td class="fielddoc"><p>The server can only generate a response that is not accepted by the client. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a00b501f91b891fbcb0fc2aa714ba47b8"></a>c407_proxyAuthenticationRequired&#160;</td><td class="fielddoc"><p>The client must first authenticate itself with the proxy. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ab6d5cbfb312814de28e60b7da5ae1f73"></a>c408_requestTimeout&#160;</td><td class="fielddoc"><p>The server timed out waiting for the request. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ac7f2fecfd704e1783b8384f7a40d2b84"></a>c409_conflict&#160;</td><td class="fielddoc"><p>The request could not be completed because of a conflict in the request. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a03b519dbeed1a17ee9d13e0c845e8920"></a>c410_gone&#160;</td><td class="fielddoc"><p>The requested page is no longer available. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a5d992d228be97eabd565c6541bc9eace"></a>c411_lengthRequired&#160;</td><td class="fielddoc"><p>The "Content-Length" is not defined. The server will not accept the request without it. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a83a769f280db39b7f66ada176ec488a1"></a>c412_preconditionFailed&#160;</td><td class="fielddoc"><p>The precondition given in the request evaluated to false by the server. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8aba93e4f402136092e36630782d0151b3"></a>c413_requestEntityTooLarge&#160;</td><td class="fielddoc"><p>The server will not accept the request, because the request entity is too large. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a153cb173f6c3b789fc4cf497e95bf33e"></a>c414_requestURITooLong&#160;</td><td class="fielddoc"><p>The server will not accept the request, because the URL is too long. Occurs when you convert a POST request to a GET request with a long query information. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a2b9ebcea0fbac89015c29cca989f954d"></a>c415_unsupportedMediaType&#160;</td><td class="fielddoc"><p>The server will not accept the request, because the media type is not supported. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a4d11731044240b424b9de6fb01a9a557"></a>c416_requestedRangeNotSatisfiable&#160;</td><td class="fielddoc"><p>The client has asked for a portion of the file, but the server cannot supply that portion. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a0d2e6857e63e43df60954d736e2584d7"></a>c417_expectationFailed&#160;</td><td class="fielddoc"><p>The server cannot meet the requirements of the Expect request-header field. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a61e5f19a2aecbaf39dc349871960859b"></a>c500_internalServerError&#160;</td><td class="fielddoc"><p>A generic error message, given when no more specific message is suitable. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8ad4c5d9348726e82115e4efc9ecf66b50"></a>c501_notImplemented&#160;</td><td class="fielddoc"><p>The server either does not recognize the request method, or it lacks the ability to fulfill the request. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8aec3ffd6364e4e05dd5e2ce38b633c4f2"></a>c502_badGateway&#160;</td><td class="fielddoc"><p>The server was acting as a gateway or proxy and received an invalid response from the upstream server. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a60b0dc2b4a12dd50f1ec964993a8a503"></a>c503_serviceUnavailable&#160;</td><td class="fielddoc"><p>The server is currently unavailable (overloaded or down) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a561a42b3d4d20af428704e3bcf9826ec"></a>c504_gatewayTimeout&#160;</td><td class="fielddoc"><p>The server was acting as a gateway or proxy and did not receive a timely response from the upstream server. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a0edb1d03dae4fec42c6c79786f4634c8"></a>c505_httpVersionNotSupported&#160;</td><td class="fielddoc"><p>The server does not support the HTTP protocol version used in the request. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4962966a09900a4b99c8e86bbd1ebdb8a09d10fff3a154cb64ce085c2718048b3"></a>c511_networkAuthenticationRequired&#160;</td><td class="fielddoc"><p>The client needs to authenticate to gain network access. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ae5d74fc124e3d0f56da5c00ecb033dae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5d74fc124e3d0f56da5c00ecb033dae">&sect;&nbsp;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enet::init </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char **&#160;</td>
+          <td class="paramname"><em>_argv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize enet. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_argc</td><td>Number of argument list </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_argv</td><td>List of arguments </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a78ce546ea1ebb2f96a6b32de49ad34d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78ce546ea1ebb2f96a6b32de49ad34d4">&sect;&nbsp;</a></span>isInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool enet::isInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if the library is initialized. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool value to chek if initialize ot not </dd></dl>
+
+</div>
+</div>
+<a id="a2187def849a8abb1ff00a02aca4cace2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2187def849a8abb1ff00a02aca4cace2">&sect;&nbsp;</a></span>unInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enet::unInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>un-Initialize enet </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:23 for enet: Ewol network abstraction by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

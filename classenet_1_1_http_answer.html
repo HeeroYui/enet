@@ -1,0 +1,223 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>enet: Ewol network abstraction: enet::HttpAnswer Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">enet: Ewol network abstraction 0.4.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceenet.html">enet</a></li><li class="navelem"><a class="el" href="classenet_1_1_http_answer.html">HttpAnswer</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classenet_1_1_http_answer-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">enet::HttpAnswer Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for enet::HttpAnswer:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classenet_1_1_http_answer.png" usemap="#enet::HttpAnswer_map" alt=""/>
+  <map id="enet::HttpAnswer_map" name="enet::HttpAnswer_map">
+<area href="classenet_1_1_http_header.html" alt="enet::HttpHeader" shape="rect" coords="0,0,107,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a058f99a66a9db95db709a37a811eb613"><td class="memItemLeft" align="right" valign="top"><a id="a058f99a66a9db95db709a37a811eb613"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>HttpAnswer</b> (enum <a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8">HTTPAnswerCode</a> _code=<a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8afc2e7f1abc7155560b8d0f39bfdd45d2">enet::HTTPAnswerCode::c400_badRequest</a>, const std::string &amp;_help=&quot;&quot;)</td></tr>
+<tr class="separator:a058f99a66a9db95db709a37a811eb613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36f89e09efc6f197c36d7418f634364"><td class="memItemLeft" align="right" valign="top"><a id="ad36f89e09efc6f197c36d7418f634364"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>display</b> () const</td></tr>
+<tr class="separator:ad36f89e09efc6f197c36d7418f634364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db2d2f8341f80290302da95c4318cb8"><td class="memItemLeft" align="right" valign="top"><a id="a5db2d2f8341f80290302da95c4318cb8"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>generate</b> () const</td></tr>
+<tr class="separator:a5db2d2f8341f80290302da95c4318cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46238fc49cb540c41a634917fc5093bd"><td class="memItemLeft" align="right" valign="top"><a id="a46238fc49cb540c41a634917fc5093bd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setErrorCode</b> (enum <a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8">HTTPAnswerCode</a> _value)</td></tr>
+<tr class="separator:a46238fc49cb540c41a634917fc5093bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c5942e3fe45b55cd62cceb5ae08c03"><td class="memItemLeft" align="right" valign="top"><a id="a39c5942e3fe45b55cd62cceb5ae08c03"></a>
+enum <a class="el" href="namespaceenet.html#a4962966a09900a4b99c8e86bbd1ebdb8">HTTPAnswerCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getErrorCode</b> () const</td></tr>
+<tr class="separator:a39c5942e3fe45b55cd62cceb5ae08c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f3a1e082d2c0c731293fc25c40844b0"><td class="memItemLeft" align="right" valign="top"><a id="a1f3a1e082d2c0c731293fc25c40844b0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setHelp</b> (const std::string &amp;_value)</td></tr>
+<tr class="separator:a1f3a1e082d2c0c731293fc25c40844b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a921b459f3b522691b610961fb8162dc1"><td class="memItemLeft" align="right" valign="top"><a id="a921b459f3b522691b610961fb8162dc1"></a>
+const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getHelp</b> () const</td></tr>
+<tr class="separator:a921b459f3b522691b610961fb8162dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classenet_1_1_http_header"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classenet_1_1_http_header')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classenet_1_1_http_header.html">enet::HttpHeader</a></td></tr>
+<tr class="memitem:af25e61322556395dd5ecd66084e09ea4 inherit pub_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="af25e61322556395dd5ecd66084e09ea4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setKey</b> (const std::string &amp;_key, const std::string &amp;_value)</td></tr>
+<tr class="separator:af25e61322556395dd5ecd66084e09ea4 inherit pub_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50afa45c61c82fed3bdbfdb6d48314fe inherit pub_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a50afa45c61c82fed3bdbfdb6d48314fe"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>rmKey</b> (const std::string &amp;_key)</td></tr>
+<tr class="separator:a50afa45c61c82fed3bdbfdb6d48314fe inherit pub_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a85f26807a9021c91670fa02b42182b inherit pub_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a7a85f26807a9021c91670fa02b42182b"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getKey</b> (const std::string &amp;_key) const</td></tr>
+<tr class="separator:a7a85f26807a9021c91670fa02b42182b inherit pub_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a0eed29e3b59de032b7590159740616 inherit pub_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a7a0eed29e3b59de032b7590159740616"></a>
+enum HTTPProtocol&#160;</td><td class="memItemRight" valign="bottom"><b>getProtocol</b> () const</td></tr>
+<tr class="separator:a7a0eed29e3b59de032b7590159740616 inherit pub_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a832dba57cda97cbf74c4fb270e5a0632 inherit pub_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a832dba57cda97cbf74c4fb270e5a0632"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setProtocol</b> (enum HTTPProtocol _protocol)</td></tr>
+<tr class="separator:a832dba57cda97cbf74c4fb270e5a0632 inherit pub_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classenet_1_1_http_header"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classenet_1_1_http_header')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classenet_1_1_http_header.html">enet::HttpHeader</a></td></tr>
+<tr class="memitem:a71d9e3ad53d423488199dfd7a0ce8e37 inherit pro_methods_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a71d9e3ad53d423488199dfd7a0ce8e37"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>generateKeys</b> () const</td></tr>
+<tr class="separator:a71d9e3ad53d423488199dfd7a0ce8e37 inherit pro_methods_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classenet_1_1_http_header"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classenet_1_1_http_header')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classenet_1_1_http_header.html">enet::HttpHeader</a></td></tr>
+<tr class="memitem:a1dddcc58ed230b1e239326256d13c39d inherit pro_attribs_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a1dddcc58ed230b1e239326256d13c39d"></a>
+std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_map</b></td></tr>
+<tr class="separator:a1dddcc58ed230b1e239326256d13c39d inherit pro_attribs_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a664ba8d0bb8f9a73788fdb8c7b6540e9 inherit pro_attribs_classenet_1_1_http_header"><td class="memItemLeft" align="right" valign="top"><a id="a664ba8d0bb8f9a73788fdb8c7b6540e9"></a>
+enum HTTPProtocol&#160;</td><td class="memItemRight" valign="bottom"><b>m_protocol</b></td></tr>
+<tr class="separator:a664ba8d0bb8f9a73788fdb8c7b6540e9 inherit pro_attribs_classenet_1_1_http_header"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/enet/enet/<a class="el" href="_http_8hpp_source.html">Http.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:23 for enet: Ewol network abstraction by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

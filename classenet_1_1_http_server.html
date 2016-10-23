@@ -1,0 +1,331 @@
+<!-- HTML header for doxygen 1.8.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- For Mobile Devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta name="generator" content="Doxygen 1.8.12"/>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <title>enet: Ewol network abstraction: enet::HttpServer Class Reference</title>
+        <!--<link href="tabs.css" rel="stylesheet" type="text/css"/>-->
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="customdoxygen.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="doxy-boot.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">enet: Ewol network abstraction 0.4.0</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">Main&nbsp;Page</a></li>
+                        <li><a href="pages.html">Related&nbsp;Pages</a></li>
+                        <li><a href="namespaces.html">Namespaces</a></li>
+                        <li><a href="annotated.html">Classes</a></li>
+                        <li><a href="files.html">Files</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Link-libs<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://HeeroYui.github.io/lutin">lutin</a></li>
+                                <li><a href="http://atria-soft.github.io/ewol">ewol</a></li>
+                                <li><a href="http://atria-soft.github.io/etk">etk</a></li>
+                                <li><a href="http://atria-soft.github.io/ejson">ejson</a></li>
+                                <li><a href="http://atria-soft.github.io/exml">exml</a></li>
+                                <li><a href="http://atria-soft.github.io/esvg">esvg</a></li>
+                                <li><a href="http://atria-soft.github.io/egami">egami</a></li>
+                                <li><a href="http://atria-soft.github.io/gale">gale</a></li>
+                                <li><a href="http://atria-soft.github.io/ege">ege</a></li>
+                                <li><a href="http://atria-soft.github.io/elog">elog</a></li>
+                                <li><a href="http://atria-soft.github.io/ememory">ememory</a></li>
+                                <li><a href="http://atria-soft.github.io/enet">enet</a></li>
+                                <li><a href="http://atria-soft.github.io/eproperty">eproperty</a></li>
+                                <li><a href="http://atria-soft.github.io/esignal">esignal</a></li>
+                                <li><a href="http://atria-soft.github.io/zeus">zeus</a></li>
+                                <li><a href="http://atria-soft.github.io/audio-ess">audio-ess</a></li>
+                                <li><a href="http://musicdsp.github.io/audio">audio</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-drain">audio-drain</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-orchestra">audio-orchestra</a></li>
+                                <li><a href="http://musicdsp.github.io/audio-river">audio-river</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div id="search-box" class="input-group">
+                        <div class="input-group-btn">
+                            <button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Namespaces</a></li>
+                                <li><a href="#">Files</a></li>
+                                <li><a href="#">Functions</a></li>
+                                <li><a href="#">Variables</a></li>
+                                <li><a href="#">Typedefs</a></li>
+                                <li><a href="#">Enumerations</a></li>
+                                <li><a href="#">Enumerator</a></li>
+                                <li><a href="#">Friends</a></li>
+                                <li><a href="#">Macros</a></li>
+                                <li><a href="#">Pages</a></li>
+                            </ul>
+                        </div>
+                        <button id="search-close" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <input id="search-field" class="form-control" accesskey="S" onkeydown="searchBox.OnSearchFieldChange(event);" placeholder="Search ..." type="text">
+                    </div>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <div class="content" id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 panel panel-default" style="padding-bottom: 15px;">
+                            <div style="margin-bottom: 15px;">
+<!-- end header part -->
+<!-- Generated by Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespaceenet.html">enet</a></li><li class="navelem"><a class="el" href="classenet_1_1_http_server.html">HttpServer</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classenet_1_1_http_server-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">enet::HttpServer Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for enet::HttpServer:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classenet_1_1_http_server.png" usemap="#enet::HttpServer_map" alt=""/>
+  <map id="enet::HttpServer_map" name="enet::HttpServer_map">
+<area href="classenet_1_1_http.html" alt="enet::Http" shape="rect" coords="0,0,103,24"/>
+</map>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa41e98663171350cb6f700c0629403de"><td class="memItemLeft" align="right" valign="top"><a id="aa41e98663171350cb6f700c0629403de"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>HttpServer</b> (<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> _connection)</td></tr>
+<tr class="separator:aa41e98663171350cb6f700c0629403de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2e9208a85cde29dbcfbd37bc6c58f3b"><td class="memItemLeft" align="right" valign="top"><a id="ab2e9208a85cde29dbcfbd37bc6c58f3b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeader</b> (const <a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a> &amp;_header)</td></tr>
+<tr class="separator:ab2e9208a85cde29dbcfbd37bc6c58f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b34d9576677d7d6f0167bbe076aecf1"><td class="memTemplParams" colspan="2">template&lt;class CLASS_TYPE &gt; </td></tr>
+<tr class="memitem:a7b34d9576677d7d6f0167bbe076aecf1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_http_server.html#a7b34d9576677d7d6f0167bbe076aecf1">connectHeader</a> (CLASS_TYPE *_class, void(CLASS_TYPE::*_func)(const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;))</td></tr>
+<tr class="separator:a7b34d9576677d7d6f0167bbe076aecf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac96d4a1f53f77f15733e2e1949354624"><td class="memItemLeft" align="right" valign="top"><a id="ac96d4a1f53f77f15733e2e1949354624"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>connectHeader</b> (<a class="el" href="classenet_1_1_http.html#aa1df33aa84cbc67980411e5f6fcfb8b8">Http::ObserverRequest</a> _func)</td></tr>
+<tr class="separator:ac96d4a1f53f77f15733e2e1949354624"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classenet_1_1_http"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classenet_1_1_http')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classenet_1_1_http.html">enet::Http</a></td></tr>
+<tr class="memitem:a08e8a403518d86ea43b926b89e2b4ed1 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a08e8a403518d86ea43b926b89e2b4ed1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Http</b> (<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> _connection, bool _isServer=false)</td></tr>
+<tr class="separator:a08e8a403518d86ea43b926b89e2b4ed1 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3463fcfdf6fd777615daf1c1b66a38 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a6d3463fcfdf6fd777615daf1c1b66a38"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getServerState</b> ()</td></tr>
+<tr class="separator:a6d3463fcfdf6fd777615daf1c1b66a38 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8037cf658944dbfa75e8a29899fbaabe inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a8037cf658944dbfa75e8a29899fbaabe"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isServer</b> ()</td></tr>
+<tr class="separator:a8037cf658944dbfa75e8a29899fbaabe inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7ffc3d5b43433d6434fd01967a71f38 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="ad7ffc3d5b43433d6434fd01967a71f38"></a>
+const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRequestHeader</b> ()</td></tr>
+<tr class="separator:ad7ffc3d5b43433d6434fd01967a71f38 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a224dc8c9be6a1a9364fc7d8dd3f628c0 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a224dc8c9be6a1a9364fc7d8dd3f628c0"></a>
+const <a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getAnswerHeader</b> ()</td></tr>
+<tr class="separator:a224dc8c9be6a1a9364fc7d8dd3f628c0 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa050ed1b174c20dfda2cec9de1a7f8a6 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="aa050ed1b174c20dfda2cec9de1a7f8a6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()</td></tr>
+<tr class="separator:aa050ed1b174c20dfda2cec9de1a7f8a6 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac78d8fd36488cf99e260e5f550d8f3c3 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="ac78d8fd36488cf99e260e5f550d8f3c3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (bool _inThread=false)</td></tr>
+<tr class="separator:ac78d8fd36488cf99e260e5f550d8f3c3 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4888f4ed601539be054dfba0a91b0d2 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="aa4888f4ed601539be054dfba0a91b0d2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAlive</b> () const</td></tr>
+<tr class="separator:aa4888f4ed601539be054dfba0a91b0d2 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01daa4144a8cfb83b9993c4984789bc inherit pub_methods_classenet_1_1_http"><td class="memTemplParams" colspan="2">template&lt;class CLASS_TYPE &gt; </td></tr>
+<tr class="memitem:ad01daa4144a8cfb83b9993c4984789bc inherit pub_methods_classenet_1_1_http"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#ad01daa4144a8cfb83b9993c4984789bc">connect</a> (CLASS_TYPE *_class, void(CLASS_TYPE::*_func)(std::vector&lt; uint8_t &gt; &amp;))</td></tr>
+<tr class="separator:ad01daa4144a8cfb83b9993c4984789bc inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af03585f9cc8c38218920a1ea5bad4114 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="af03585f9cc8c38218920a1ea5bad4114"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> (<a class="el" href="classenet_1_1_http.html#aa9e26e6f8df71a04b99554c472f29832">Observer</a> _func)</td></tr>
+<tr class="separator:af03585f9cc8c38218920a1ea5bad4114 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf2c7db3c46fc2688e0e70c1e48ea57 inherit pub_methods_classenet_1_1_http"><td class="memTemplParams" colspan="2">template&lt;class CLASS_TYPE &gt; </td></tr>
+<tr class="memitem:a9cf2c7db3c46fc2688e0e70c1e48ea57 inherit pub_methods_classenet_1_1_http"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#a9cf2c7db3c46fc2688e0e70c1e48ea57">connectRaw</a> (CLASS_TYPE *_class, void(CLASS_TYPE::*_func)(<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> &amp;))</td></tr>
+<tr class="separator:a9cf2c7db3c46fc2688e0e70c1e48ea57 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af47098ea601ca50762d634c44f48e132 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="af47098ea601ca50762d634c44f48e132"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>connectRaw</b> (<a class="el" href="classenet_1_1_http.html#a9ae2bf2348fd92ec51b2b38c81a012d9">ObserverRaw</a> _func)</td></tr>
+<tr class="separator:af47098ea601ca50762d634c44f48e132 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8066d206f654cd3e46977792ad443206 inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#a8066d206f654cd3e46977792ad443206">write</a> (const void *_data, int32_t _len)</td></tr>
+<tr class="separator:a8066d206f654cd3e46977792ad443206 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab259cfca77e060ab40bc2cf0cd93b0ed inherit pub_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#ab259cfca77e060ab40bc2cf0cd93b0ed">write</a> (const std::string &amp;_data, bool _writeBackSlashZero=true)</td></tr>
+<tr class="separator:ab259cfca77e060ab40bc2cf0cd93b0ed inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef11ede74b77bc8d4446c53528ed88a8 inherit pub_methods_classenet_1_1_http"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aef11ede74b77bc8d4446c53528ed88a8 inherit pub_methods_classenet_1_1_http"><td class="memTemplItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#aef11ede74b77bc8d4446c53528ed88a8">write</a> (const std::vector&lt; T &gt; &amp;_data)</td></tr>
+<tr class="separator:aef11ede74b77bc8d4446c53528ed88a8 inherit pub_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classenet_1_1_http"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classenet_1_1_http')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classenet_1_1_http.html">enet::Http</a></td></tr>
+<tr class="memitem:aa9e26e6f8df71a04b99554c472f29832 inherit pub_types_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#aa9e26e6f8df71a04b99554c472f29832">Observer</a> = std::function&lt; void(std::vector&lt; uint8_t &gt; &amp;)&gt;</td></tr>
+<tr class="separator:aa9e26e6f8df71a04b99554c472f29832 inherit pub_types_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae2bf2348fd92ec51b2b38c81a012d9 inherit pub_types_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#a9ae2bf2348fd92ec51b2b38c81a012d9">ObserverRaw</a> = std::function&lt; void(<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a> &amp;)&gt;</td></tr>
+<tr class="separator:a9ae2bf2348fd92ec51b2b38c81a012d9 inherit pub_types_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1df33aa84cbc67980411e5f6fcfb8b8 inherit pub_types_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#aa1df33aa84cbc67980411e5f6fcfb8b8">ObserverRequest</a> = std::function&lt; void(const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;)&gt;</td></tr>
+<tr class="separator:aa1df33aa84cbc67980411e5f6fcfb8b8 inherit pub_types_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdb219a8b8a7310cb75a69b9c2bc9133 inherit pub_types_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classenet_1_1_http.html#afdb219a8b8a7310cb75a69b9c2bc9133">ObserverAnswer</a> = std::function&lt; void(const <a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a> &amp;)&gt;</td></tr>
+<tr class="separator:afdb219a8b8a7310cb75a69b9c2bc9133 inherit pub_types_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classenet_1_1_http"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classenet_1_1_http')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classenet_1_1_http.html">enet::Http</a></td></tr>
+<tr class="memitem:ac5221cc5258c18f0db59d96f21a02cef inherit pub_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="ac5221cc5258c18f0db59d96f21a02cef"></a>
+<a class="el" href="classenet_1_1_http.html#aa9e26e6f8df71a04b99554c472f29832">Observer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observer</b></td></tr>
+<tr class="separator:ac5221cc5258c18f0db59d96f21a02cef inherit pub_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a654f9bfc7403b7c4601db130b22f0058 inherit pub_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a654f9bfc7403b7c4601db130b22f0058"></a>
+<a class="el" href="classenet_1_1_http.html#a9ae2bf2348fd92ec51b2b38c81a012d9">ObserverRaw</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observerRaw</b></td></tr>
+<tr class="separator:a654f9bfc7403b7c4601db130b22f0058 inherit pub_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classenet_1_1_http"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classenet_1_1_http')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classenet_1_1_http.html">enet::Http</a></td></tr>
+<tr class="memitem:a57bbba062f15e875275c59673fe0c043 inherit pro_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a57bbba062f15e875275c59673fe0c043"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRequestHeader</b> (const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;_req)</td></tr>
+<tr class="separator:a57bbba062f15e875275c59673fe0c043 inherit pro_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a941da1abdf617240d8a43ff8136db4 inherit pro_methods_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a5a941da1abdf617240d8a43ff8136db4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAnswerHeader</b> (const <a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a> &amp;_req)</td></tr>
+<tr class="separator:a5a941da1abdf617240d8a43ff8136db4 inherit pro_methods_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classenet_1_1_http"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classenet_1_1_http')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classenet_1_1_http.html">enet::Http</a></td></tr>
+<tr class="memitem:a014812e59cb36d38afff0bbb7af2af9b inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a014812e59cb36d38afff0bbb7af2af9b"></a>
+<a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_requestHeader</b></td></tr>
+<tr class="separator:a014812e59cb36d38afff0bbb7af2af9b inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd942d7ebd3b6ab3528212c737728a0e inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="abd942d7ebd3b6ab3528212c737728a0e"></a>
+<a class="el" href="classenet_1_1_http_answer.html">enet::HttpAnswer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_answerHeader</b></td></tr>
+<tr class="separator:abd942d7ebd3b6ab3528212c737728a0e inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3f068fb8d074e2bace9b83d83ae79d3 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="aa3f068fb8d074e2bace9b83d83ae79d3"></a>
+<a class="el" href="classenet_1_1_tcp.html">enet::Tcp</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_connection</b></td></tr>
+<tr class="separator:aa3f068fb8d074e2bace9b83d83ae79d3 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c84d75700d93e702b1a94801010ca06 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a8c84d75700d93e702b1a94801010ca06"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_headerIsSend</b></td></tr>
+<tr class="separator:a8c84d75700d93e702b1a94801010ca06 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ae1aa100b94d0addd8e26cb59735b25 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a7ae1aa100b94d0addd8e26cb59735b25"></a>
+std::thread *&#160;</td><td class="memItemRight" valign="bottom"><b>m_thread</b></td></tr>
+<tr class="separator:a7ae1aa100b94d0addd8e26cb59735b25 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab710aa19824b360eda7e22eab63f1078 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="ab710aa19824b360eda7e22eab63f1078"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_threadRunning</b></td></tr>
+<tr class="separator:ab710aa19824b360eda7e22eab63f1078 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a364d878d98d43b9ff590a185bc796da4 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="a364d878d98d43b9ff590a185bc796da4"></a>
+std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_temporaryBuffer</b></td></tr>
+<tr class="separator:a364d878d98d43b9ff590a185bc796da4 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac458639ab6008cf99971828298ef7df2 inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="ac458639ab6008cf99971828298ef7df2"></a>
+<a class="el" href="classenet_1_1_http.html#aa1df33aa84cbc67980411e5f6fcfb8b8">ObserverRequest</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observerRequest</b></td></tr>
+<tr class="separator:ac458639ab6008cf99971828298ef7df2 inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9f14342e475fbad741f705d70b3639a inherit pro_attribs_classenet_1_1_http"><td class="memItemLeft" align="right" valign="top"><a id="af9f14342e475fbad741f705d70b3639a"></a>
+<a class="el" href="classenet_1_1_http.html#afdb219a8b8a7310cb75a69b9c2bc9133">ObserverAnswer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_observerAnswer</b></td></tr>
+<tr class="separator:af9f14342e475fbad741f705d70b3639a inherit pro_attribs_classenet_1_1_http"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7b34d9576677d7d6f0167bbe076aecf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b34d9576677d7d6f0167bbe076aecf1">&sect;&nbsp;</a></span>connectHeader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class CLASS_TYPE &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enet::HttpServer::connectHeader </td>
+          <td>(</td>
+          <td class="paramtype">CLASS_TYPE *&#160;</td>
+          <td class="paramname"><em>_class</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void(CLASS_TYPE::*)(const <a class="el" href="classenet_1_1_http_request.html">enet::HttpRequest</a> &amp;)&#160;</td>
+          <td class="paramname"><em>_func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connect an function member on the signal with the shared_ptr object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_class</td><td>shared_ptr Object on whe we need to call ==&gt; the object is get in keeped in weak_ptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_func</td><td>Function to call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_args</td><td>Argument optinnal the user want to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>framework/atria-soft/enet/enet/<a class="el" href="_http_8hpp_source.html">Http.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.8-->
+<!-- start footer part -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Mon Oct 24 2016 10:48:23 for enet: Ewol network abstraction by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
