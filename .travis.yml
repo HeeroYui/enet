@@ -1,0 +1,56 @@
+language:
+  - cpp
+
+sudo: false
+
+os:
+  - linux
+  - osx
+
+branches:
+  only:
+    - master
+    - dev
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
+
+install:
+  - pip install --user lutin
+
+env:
+  - CONF=debug   BOARD=Linux BUILDER=clang GCOV=
+  - CONF=release BOARD=Linux BUILDER=clang GCOV=
+  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=
+  - CONF=release BOARD=Linux BUILDER=gcc   GCOV=
+  - CONF=debug   BOARD=Linux BUILDER=gcc   GCOV=--gcov
+
+before_script:
+  - cd ..
+  - wget http://atria-soft.com/ci/coverage_send.py
+  - wget http://atria-soft.com/ci/test_send.py
+  - wget http://atria-soft.com/ci/warning_send.py
+  - git clone https://github.com/atria-soft/etk.git
+  - git clone https://github.com/generic-library/gtest-lutin.git --recursive
+  - pwd
+  - ls -l
+  - if [ "$BUILDER" == "gcc" ]; then COMPILATOR_OPTION="--compilator-version=4.9"; else COMPILATOR_OPTION=""; fi
+
+script: 
+  - lutin -w -j4 -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF $GCOV -p enet-test
+
+after_script:
+  - if [ "$GCOV" != "" ]; then python ./warning_send.py --find-path ./out/Linux_x86_64/$CONF/build/$BUILDER/enet/ ; fi
+  - ./out/Linux_x86_64/$CONF/staging/$BUILDER/enet-test/usr/bin/enet-test -l6 | tee out_test.txt
+  - if [ "$GCOV" != "" ]; then python ./test_send.py --file=out_test.txt; fi
+  - if [ "$GCOV" != "" ]; then lutin -C -P -c $BUILDER $COMPILATOR_OPTION -m $CONF -p enet?gcov; fi
+  - if [ "$GCOV" != "" ]; then python ./coverage_send.py --json=out/Linux_x86_64/$CONF/build/$BUILDER/enet/enet_coverage.json; fi
+
+notifications:
+  email:
+    - yui.heero@gmail.com
+
