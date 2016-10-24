@@ -28,7 +28,8 @@ def configure(target, my_module):
 	my_module.add_depend([
 	    'etk',
 	    'ememory',
-	    'algue'
+	    'algue',
+	    'ethread'
 	    ])
 	my_module.add_path(".")
 	my_module.add_src_file([
