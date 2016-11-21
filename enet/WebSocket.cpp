@@ -40,25 +40,7 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
   m_interface(nullptr),
   m_observer(nullptr),
   m_observerUriCheck(nullptr) {
-	_connection.setTCPNoDelay(true);
-	if (_isServer == true) {
-		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(std::move(_connection));
-		m_interface = interface;
-		if (interface != nullptr) {
-			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
-		}
-	} else {
-		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(std::move(_connection));
-		m_interface = interface;
-		if (interface != nullptr) {
-			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
-		}
-	}
-	if (m_interface == nullptr) {
-		ENET_ERROR("can not create interface for the websocket");
-		return;
-	}
-	m_interface->connectRaw(this, &enet::WebSocket::onReceiveData);
+	setInterface(std::move(_connection), _isServer);
 }
 
 void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
