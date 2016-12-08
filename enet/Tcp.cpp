@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <etk/stdTools.hpp>
+#include <ethread/tools.hpp>
 
 #ifdef __TARGET_OS__Windows
 	#include <winsock2.h>
@@ -89,20 +90,25 @@ enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 }
 
 bool enet::Tcp::unlink() {
+	// prevent call while stoping ...
+	m_status = status::unlink;
 	if (m_socketId >= 0) {
 		ENET_INFO("Close socket (start)");
 		#ifdef __TARGET_OS__Windows
 			shutdown(m_socketId, SD_BOTH);
+			// Release hand of the socket to permit the Select to exit ... ==> otherwise it lock ...
+			std::this_thread::sleep_for(std::chrono::milliseconds(20));
 			closesocket(m_socketId);
 			m_socketId = INVALID_SOCKET;
 		#else
 			shutdown(m_socketId, SHUT_RDWR);
+			// Release hand of the socket to permit the Select to exit ... ==> otherwise it lock ...
+			std::this_thread::sleep_for(std::chrono::milliseconds(20));
 			close(m_socketId);
 			m_socketId = -1;
 		#endif
 		ENET_INFO("Close socket (done)");
 	}
-	m_status = status::unlink;
 	return true;
 }
 
@@ -121,7 +127,9 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	timeOutStruct.tv_usec = 0;
 	FD_ZERO(&sock);
 	FD_SET(m_socketId,&sock);
+	ENET_VERBOSE("	select ...");
 	int rc = select(m_socketId+1, &sock, NULL, NULL, &timeOutStruct);
+	ENET_VERBOSE("	select (done)");
 	// Check to see if the poll call failed.
 	if (rc < 0) {
 		ENET_ERROR("	select() failed");

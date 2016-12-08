@@ -167,7 +167,9 @@ void enet::Http::stop(bool _inThreadStop){
 	}
 	if (_inThreadStop == false) {
 		if (m_thread != nullptr) {
+			ENET_DEBUG("wait join Thread ...");
 			m_thread->join();
+			ENET_DEBUG("wait join Thread (done)");
 			delete m_thread;
 			m_thread = nullptr;
 		}
