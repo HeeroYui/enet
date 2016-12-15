@@ -169,7 +169,7 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	}
 	m_lastReceive = std::chrono::steady_clock::now();
 	if ((opcode & 0x80) == 0) {
-		ENET_ERROR("Multiple frames ... NOT managed ...");
+		ENET_ERROR("Multiple frames ... NOT managed ... : " << (opcode & 0x80) << (opcode & 0x40) << (opcode & 0x20) << (opcode & 0x10) << (opcode & 0x08) << (opcode & 0x04) << (opcode & 0x02) << (opcode & 0x01));
 		m_interface->stop(true);
 		return;
 	}
