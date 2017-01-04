@@ -167,7 +167,7 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		ENET_VERBOSE("ReadRaw 2 [STOP]");
 		return;
 	}
-	m_lastReceive = std::chrono::steady_clock::now();
+	m_lastReceive = echrono::Steady::now();
 	if ((opcode & 0x80) == 0) {
 		ENET_ERROR("Multiple frames ... NOT managed ... : " << (opcode & 0x80) << (opcode & 0x40) << (opcode & 0x20) << (opcode & 0x10) << (opcode & 0x08) << (opcode & 0x04) << (opcode & 0x02) << (opcode & 0x01));
 		m_interface->stop(true);
@@ -510,7 +510,7 @@ void enet::WebSocket::controlPing() {
 	}
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PING;
-	m_lastSend = std::chrono::steady_clock::now();
+	m_lastSend = echrono::Steady::now();
 	m_interface->write(&header, sizeof(uint8_t));
 	header = 0;
 	m_interface->write(&header, sizeof(uint8_t));
@@ -523,7 +523,7 @@ void enet::WebSocket::controlPong() {
 	}
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PONG;
-	m_lastSend = std::chrono::steady_clock::now();
+	m_lastSend = echrono::Steady::now();
 	m_interface->write(&header, sizeof(uint8_t));
 	header = 0;
 	m_interface->write(&header, sizeof(uint8_t));
@@ -536,7 +536,7 @@ void enet::WebSocket::controlClose() {
 	}
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_CLOSE;
-	m_lastSend = std::chrono::steady_clock::now();
+	m_lastSend = echrono::Steady::now();
 	m_interface->write(&header, sizeof(uint8_t));
 	header = 0;
 	m_interface->write(&header, sizeof(uint8_t));

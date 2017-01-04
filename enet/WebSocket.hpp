@@ -7,6 +7,7 @@
 
 #include <enet/Http.hpp>
 #include <ememory/memory.hpp>
+#include <echrono/Steady.hpp>
 #include <vector>
 #include <map>
 
@@ -18,13 +19,13 @@ namespace enet {
 			ememory::SharedPtr<enet::Http> m_interface;
 			std::vector<uint8_t> m_buffer;
 			std::string m_checkKey;
-			std::chrono::steady_clock::time_point m_lastReceive;
-			std::chrono::steady_clock::time_point m_lastSend;
+			echrono::Steady m_lastReceive;
+			echrono::Steady m_lastSend;
 		public:
-			const std::chrono::steady_clock::time_point& getLastTimeReceive() {
+			const echrono::Steady& getLastTimeReceive() {
 				return m_lastReceive;
 			}
-			const std::chrono::steady_clock::time_point& getLastTimeSend() {
+			const echrono::Steady& getLastTimeSend() {
 				return m_lastSend;
 			}
 		public:
