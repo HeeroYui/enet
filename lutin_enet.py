@@ -10,7 +10,7 @@ def get_desc():
 	return "TCP/UDP/HTTP/FTP interface"
 
 def get_licence():
-	return "APACHE-2"
+	return "MPL-2"
 
 def get_compagny_type():
 	return "com"
