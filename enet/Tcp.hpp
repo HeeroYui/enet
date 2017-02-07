@@ -12,6 +12,12 @@
 	#include <ws2tcpip.h>
 #endif
 
+//#define ENET_STORE_INPUT
+
+#ifdef ENET_STORE_INPUT
+	#include <etk/os/FSNode.hpp>
+#endif
+
 namespace enet {
 	class Tcp {
 		private:
@@ -19,6 +25,9 @@ namespace enet {
 				SOCKET m_socketId; //!< socket Windows interface generic
 			#else
 				int32_t m_socketId; //!< socket linux interface generic
+			#endif
+			#ifdef ENET_STORE_INPUT
+				etk::FSNode m_nodeStoreInput;
 			#endif
 			std::mutex m_mutex;
 		public:

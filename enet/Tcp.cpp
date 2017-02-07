@@ -23,6 +23,10 @@
 	#include <netdb.h>
 #endif
 
+#ifdef ENET_STORE_INPUT
+	static uint32_t baseID = 0;
+#endif
+
 bool enet::Tcp::setTCPNoDelay(bool _enabled) {
 	if (m_socketId >= 0) {
 		int flag = _enabled==true?1:0;
@@ -54,13 +58,20 @@ enet::Tcp::Tcp() :
   m_socketId(_idSocket),
   m_name(_name),
   m_status(status::link) {
-	
+	#ifdef ENET_STORE_INPUT
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput.fileOpenWrite();
+	#endif
 }
 
 enet::Tcp::Tcp(Tcp&& _obj) :
   m_socketId(_obj.m_socketId),
   m_name(_obj.m_name),
   m_status(_obj.m_status) {
+	#ifdef ENET_STORE_INPUT
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput.fileOpenWrite();
+	#endif
 	#ifdef __TARGET_OS__Windows
 		_obj.m_socketId = INVALID_SOCKET;
 	#else
@@ -76,6 +87,10 @@ enet::Tcp::~Tcp() {
 
 enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 	unlink();
+	#ifdef ENET_STORE_INPUT
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput.fileOpenWrite();
+	#endif
 	m_socketId = _obj.m_socketId;
 	#ifdef __TARGET_OS__Windows
 		_obj.m_socketId = INVALID_SOCKET;
@@ -172,7 +187,9 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 		ENET_DEBUG("	Set status at remote close ...");
 		m_status = status::linkRemoteClose;
 	}
-	//#endif
+	#ifdef ENET_STORE_INPUT
+		m_nodeStoreInput.fileWrite(_data, 1, size);
+	#endif
 	return size;
 }
 

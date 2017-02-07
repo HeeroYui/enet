@@ -175,7 +175,10 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	}
 	int8_t size1 = 0;
 	len = _connection.read(&size1, sizeof(uint8_t));
-	if (len <= 0) {
+	int32_t maxIteration = 50;
+	// We must get the payload size in all case ... ==> otherwise it create problems
+	while (    len <= 0
+	        && maxIteration > 0) {
 		if (len < 0) {
 			if (_connection.getConnectionStatus() == enet::Tcp::status::link) {
 				ENET_ERROR("Protocol error occured ...");
@@ -186,6 +189,12 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 		}
 		ENET_ERROR("Time out ... ==> not managed ...");
 		ENET_VERBOSE("ReadRaw 2 [STOP]");
+		len = _connection.read(&size1, sizeof(uint8_t));
+		maxIteration--;
+	}
+	if (maxIteration <= 0) {
+		ENET_ERROR("Can not read the Socket >> auto kill");
+		m_interface->stop(true);
 		return;
 	}
 	uint64_t totalSize = size1 & 0x7F;
@@ -265,24 +274,24 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	// check opcode:
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_CLOSE) {
 		// Close the conection by remote:
-		ENET_INFO("Close connection by remote :");
+		ENET_WARNING("Close connection by remote :");
 		m_interface->stop(true);
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_PING) {
 		// Close the conection by remote:
-		ENET_DEBUG("Receive a ping (send a pong)");
+		ENET_WARNING("Receive a ping (send a pong)");
 		controlPong();
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_PONG) {
 		// Close the conection by remote:
-		ENET_DEBUG("Receive a pong");
+		ENET_WARNING("Receive a pong");
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_TEXT) {
 		// Close the conection by remote:
-		ENET_DEBUG("Receive a Text(UTF-8) data " << m_buffer.size() << " Bytes");
+		ENET_WARNING("Receive a Text(UTF-8) data " << m_buffer.size() << " Bytes");
 		if (m_observer != nullptr) {
 			m_observer(m_buffer, true);
 		}
@@ -496,6 +505,7 @@ int32_t enet::WebSocket::send() {
 }
 
 int32_t enet::WebSocket::write(const void* _data, int32_t _len, bool _isString, bool _mask) {
+	std::unique_lock<std::mutex> lock(m_mutex);
 	if (configHeader(_isString, _mask) == false) {
 		return -1;
 	}
@@ -508,6 +518,7 @@ void enet::WebSocket::controlPing() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
+	std::unique_lock<std::mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PING;
 	m_lastSend = echrono::Steady::now();
@@ -521,6 +532,7 @@ void enet::WebSocket::controlPong() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
+	std::unique_lock<std::mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PONG;
 	m_lastSend = echrono::Steady::now();
@@ -534,6 +546,7 @@ void enet::WebSocket::controlClose() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
+	std::unique_lock<std::mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_CLOSE;
 	m_lastSend = echrono::Steady::now();

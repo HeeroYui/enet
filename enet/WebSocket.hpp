@@ -21,6 +21,7 @@ namespace enet {
 			std::string m_checkKey;
 			echrono::Steady m_lastReceive;
 			echrono::Steady m_lastSend;
+			std::mutex m_mutex;
 		public:
 			const echrono::Steady& getLastTimeReceive() {
 				return m_lastReceive;
@@ -96,8 +97,20 @@ namespace enet {
 			bool m_haveMask;
 			uint8_t m_dataMask[4];
 		public:
+			std::unique_lock<std::mutex> getScopeLock() {
+				return std::move(std::unique_lock<std::mutex>(m_mutex));
+			}
+			/**
+			 * Compose the local header inside a temporary buffer ==> must lock external to prevent multiple simultaneous access
+			 */
 			bool configHeader(bool _isString=false, bool _mask= false);
+			/**
+			 * CWrite data in a temporary buffer ==> must lock external to prevent multiple simultaneous access
+			 */
 			int32_t writeData(uint8_t* _data, int32_t _len);
+			/**
+			 * Use temporary buffer to send it in the socket ==> must lock external to prevent multiple simultaneous access
+			 */
 			int32_t send();
 			/**
 			 * @brief Write a chunk of data on the socket
@@ -105,8 +118,8 @@ namespace enet {
 			 * @param[in] _len Size that must be written socket
 			 * @return >0 byte size on the socket write
 			 * @return -1 an error occured.
+			 * @note: This function is locked ...
 			 */
-			//TODO : ...
 			int32_t write(const void* _data, int32_t _len, bool _isString=false, bool _mask= false);
 			/**
 			 * @brief Write a chunk of data on the socket
