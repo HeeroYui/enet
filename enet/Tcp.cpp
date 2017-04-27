@@ -199,6 +199,19 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 		ENET_ERROR("Can not write on unlink connection");
 		return -1;
 	}
+	if (_data == nullptr) {
+		ENET_ERROR("try write nullptr data on TCP socket");
+		return -1;
+	}
+	if (_len <= 0) {
+		if (_len == 0) {
+			ENET_WARNING("try write data with lenght=" << _len << " ==> bad case");
+			return 0;
+		}
+		ENET_ERROR("try write data with lenght=" << _len << " ==> bad case");
+		elog::displayBacktrace();
+		return -1;
+	}
 	//ENET_DEBUG("write on socketid = " << m_socketId << " data@=" << int64_t(_data) << " size=" << _len );
 	int32_t size;
 	{

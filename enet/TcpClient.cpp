@@ -19,9 +19,11 @@
 #else
 	#include <netinet/in.h>
 	#include <netdb.h>
+	#include <netinet/in.h>
+	#include <arpa/inet.h>
 #endif
 
-enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry) {
+enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 	std::string tmpname;
 	tmpname  = etk::to_string(_ip1);
 	tmpname += ".";
@@ -30,23 +32,29 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 	tmpname += etk::to_string(_ip3);
 	tmpname += ".";
 	tmpname += etk::to_string(_ip4);
-	return std::move(enet::connectTcpClient(tmpname, _port, _numberRetry));
+	return std::move(enet::connectTcpClient(tmpname, _port, _numberRetry, _timeOut));
 }
 
 #ifdef __TARGET_OS__Windows
-	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
+	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 		if (enet::isInit() == false) {
 			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
+			return std::move(enet::Tcp());
+		}
+		if (_hostname == "") {
+			ENET_ERROR("get connection wihtout hostname");
 			return std::move(enet::Tcp());
 		}
 		SOCKET socketId = INVALID_SOCKET;
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
 		for(int32_t iii=0; iii<_numberRetry ;iii++) {
+			if (iii > 0) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			}
 			// open in Socket normal mode
 			socketId = socket(AF_INET, SOCK_STREAM, 0);
 			if (socketId < 0) {
 				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
@@ -63,7 +71,6 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			int iResult = getaddrinfo(_hostname.c_str(), portValue.c_str(), &hints, &result);
 			if (iResult != 0) {
 				ENET_ERROR("getaddrinfo failed with error: " << iResult);
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			
@@ -92,7 +99,6 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			
 			if (socketId == INVALID_SOCKET) {
 				ENET_ERROR("Unable to connect to server!");
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			} else {
 				break;
@@ -107,27 +113,48 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 	}
 #else
 	#include <sys/socket.h>
-	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry) {
+	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 		if (enet::isInit() == false) {
 			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
+			return std::move(enet::Tcp());
+		}
+		if (_hostname == "") {
+			ENET_ERROR("get connection wihtout hostname");
 			return std::move(enet::Tcp());
 		}
 		int32_t socketId = -1;
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
 		for(int32_t iii=0; iii<_numberRetry ;iii++) {
+			if (iii > 0) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			}
 			// open in Socket normal mode
 			socketId = socket(AF_INET, SOCK_STREAM, 0);
 			if (socketId < 0) {
 				ENET_ERROR("ERROR while opening socket : errno=" << errno << "," << strerror(errno));
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
 			struct sockaddr_in servAddr;
-			struct hostent* server = gethostbyname(_hostname.c_str());
+			struct hostent* server = nullptr;
+			if (isalpha(_hostname.c_str()[0])) {        /* host address is a name */
+				ENET_INFO("Calling gethostbyname with " << _hostname);
+				// TODO : This is deprecated use getaddrinfo like windows ...
+				server = gethostbyname(_hostname.c_str());
+			} else {
+				ENET_INFO("Calling gethostbyaddr with " << _hostname);
+				struct in_addr addr;
+				addr.s_addr = inet_addr(_hostname.c_str());
+				if (addr.s_addr == INADDR_NONE) {
+					ENET_ERROR("The IPv4 address entered must be a legal address" << _hostname.c_str());
+					return std::move(enet::Tcp());
+				} else {
+					// TODO : This is deprecated use getaddrinfo like windows ...
+					server = gethostbyaddr((char *) &addr, 4, AF_INET);
+				}
+			}
 			if (server == nullptr) {
 				ENET_ERROR("ERROR, no such host : " << _hostname);
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
 			bzero((char *) &servAddr, sizeof(servAddr));
@@ -150,17 +177,15 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 					socketId = -1;
 				}
 				ENET_ERROR("ERROR connecting, maybe retry ... errno=" << errno << "," << strerror(errno));
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
-			// if we are here ==> then the connextion is done corectly ...
 			break;
 		}
 		if (socketId<0) {
 			ENET_ERROR("ERROR connecting ... (after all try)");
 			return std::move(enet::Tcp());
 		}
-		ENET_DEBUG("Connection done");
+		ENET_INFO("Connection done");
 		return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
 	}
 #endif
