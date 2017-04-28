@@ -177,6 +177,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	if (rc == 0) {
 		ENET_INFO("Connection closed");
 		closeConn = true;
+		size = 0;
 	}
 	if (closeConn == false) {
 		// Data was received

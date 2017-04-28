@@ -363,7 +363,7 @@ void enet::Http::getHeader() {
 	bool headerEnded = false;
 	std::string header;
 	while (m_connection.getConnectionStatus() == enet::Tcp::status::link) {
-		char type;
+		char type = '?';
 		int32_t len = m_connection.read(&type, 1);
 		if (len == 0) {
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
