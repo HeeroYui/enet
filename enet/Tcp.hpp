@@ -7,6 +7,7 @@
 
 #include <etk/types.hpp>
 #include <mutex>
+#include <functional>
 #ifdef __TARGET_OS__Windows
 	#include <winsock2.h>
 	#include <ws2tcpip.h>

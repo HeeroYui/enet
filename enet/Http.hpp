@@ -10,6 +10,7 @@
 #include <map>
 #include <thread>
 #include <ethread/tools.hpp>
+#include <functional>
 
 namespace enet {
 	enum class HTTPAnswerCode {
