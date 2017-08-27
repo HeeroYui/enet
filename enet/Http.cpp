@@ -6,19 +6,19 @@
 
 #include <enet/debug.hpp>
 #include <enet/Http.hpp>
-#include <map>
+#include <etk/Map.hpp>
 #include <etk/stdTools.hpp>
 #include <cstring>
 
 
-static std::string escapeChar(const std::string& _value) {
+static etk::String escapeChar(const etk::String& _value) {
 	return _value;
 }
-static std::string unEscapeChar(const std::string& _value) {
+static etk::String unEscapeChar(const etk::String& _value) {
 	return _value;
 }
-static std::string removeStartAndStopSpace(const std::string& _value) {
-	std::string out;
+static etk::String removeStartAndStopSpace(const etk::String& _value) {
+	etk::String out;
 	out.reserve(_value.size());
 	bool findSpace = false;
 	for (auto &it : _value) {
@@ -36,7 +36,7 @@ static std::string removeStartAndStopSpace(const std::string& _value) {
 	return out;
 }
 
-static std::map<enet::HTTPAnswerCode, std::string> protocolName = {
+static etk::Map<enet::HTTPAnswerCode, etk::String> protocolName = {
 	{enet::HTTPAnswerCode::c100_continue, "Continue"},
 	{enet::HTTPAnswerCode::c101_switchingProtocols, "Switching Protocols"},
 	{enet::HTTPAnswerCode::c103_checkpoint, "Checkpoint"},
@@ -84,14 +84,14 @@ static std::map<enet::HTTPAnswerCode, std::string> protocolName = {
 
 
 
-static std::map<int32_t, std::string> getErrorList() {
-	static std::map<int32_t, std::string> g_list;
+static etk::Map<int32_t, etk::String> getErrorList() {
+	static etk::Map<int32_t, etk::String> g_list;
 	return g_list;
 }
 
 enet::Http::Http(enet::Tcp _connection, bool _isServer) :
   m_isServer(_isServer),
-  m_connection(std::move(_connection)),
+  m_connection(etk::move(_connection)),
   m_headerIsSend(false),
   m_thread(nullptr),
   m_threadRunning(false) {
@@ -178,9 +178,9 @@ void enet::Http::stop(bool _inThreadStop){
 }
 /*
 void enet::Http::writeAnswerHeader(enum enet::HTTPAnswerCode _value) {
-	std::string out;
+	etk::String out;
 	out = "HTTP/1.1 ";
-	out += etk::to_string(int32_t(_value));
+	out += etk::toString(int32_t(_value));
 	auto it = protocolName.find(_value);
 	if (it == protocolName.end() ) {
 		out += " ???";
@@ -194,10 +194,10 @@ void enet::Http::writeAnswerHeader(enum enet::HTTPAnswerCode _value) {
 */
 namespace etk {
 	template <>
-	bool from_string<enum enet::HTTPAnswerCode>(enum enet::HTTPAnswerCode& _variableRet, const std::string& _value) {
+	bool from_string<enum enet::HTTPAnswerCode>(enum enet::HTTPAnswerCode& _variableRet, const etk::String& _value) {
 		_variableRet = enet::HTTPAnswerCode::c000_unknow;
 		for (auto &it : protocolName) {
-			if (etk::to_string(int32_t(it.first)) == _value) {
+			if (etk::toString(int32_t(it.first)) == _value) {
 				_variableRet = it.first;
 				return true;
 			}
@@ -205,11 +205,11 @@ namespace etk {
 		return false;
 	}
 	template <>
-	std::string to_string<enum enet::HTTPAnswerCode>(const enum enet::HTTPAnswerCode& _value) {
-		return etk::to_string(int32_t(_value));
+	etk::String toString<enum enet::HTTPAnswerCode>(const enum enet::HTTPAnswerCode& _value) {
+		return etk::toString(int32_t(_value));
 	}
 	template <>
-	bool from_string<enum enet::HTTPReqType>(enum enet::HTTPReqType& _variableRet, const std::string& _value) {
+	bool from_string<enum enet::HTTPReqType>(enum enet::HTTPReqType& _variableRet, const etk::String& _value) {
 		_variableRet = enet::HTTPReqType::HTTP_GET;
 		if (_value == "GET") {
 			_variableRet = enet::HTTPReqType::HTTP_GET;
@@ -230,7 +230,7 @@ namespace etk {
 		return false;
 	}
 	template <>
-	std::string to_string<enum enet::HTTPReqType>(const enum enet::HTTPReqType& _value) {
+	etk::String toString<enum enet::HTTPReqType>(const enum enet::HTTPReqType& _value) {
 		switch (_value) {
 			case enet::HTTPReqType::HTTP_GET: return "GET";
 			case enet::HTTPReqType::HTTP_HEAD: return "HEAD";
@@ -241,7 +241,7 @@ namespace etk {
 		return "UNKNOW";
 	}
 	template <>
-	bool from_string<enum enet::HTTPProtocol>(enum enet::HTTPProtocol& _variableRet, const std::string& _value) {
+	bool from_string<enum enet::HTTPProtocol>(enum enet::HTTPProtocol& _variableRet, const etk::String& _value) {
 		_variableRet = enet::HTTPProtocol::http_0_1;
 		if (_value == "HTTP/0.1") { _variableRet = enet::HTTPProtocol::http_0_1; return true; }
 		if (_value == "HTTP/0.2") { _variableRet = enet::HTTPProtocol::http_0_2; return true; }
@@ -289,7 +289,7 @@ namespace etk {
 		return false;
 	}
 	template <>
-	std::string to_string<enum enet::HTTPProtocol>(const enum enet::HTTPProtocol& _value) {
+	etk::String toString<enum enet::HTTPProtocol>(const enum enet::HTTPProtocol& _value) {
 		switch (_value) {
 			case enet::HTTPProtocol::http_0_1:  return "HTTP/0.1";
 			case enet::HTTPProtocol::http_0_2:  return "HTTP/0.2";
@@ -345,7 +345,7 @@ void enet::Http::setRequestHeader(const enet::HttpRequest& _req) {
 	if (m_requestHeader.getKey("User-Agent") == "") {
 		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
 	}
-	std::string value = m_requestHeader.generate();
+	etk::String value = m_requestHeader.generate();
 	write(value, false);
 }
 
@@ -354,14 +354,14 @@ void enet::Http::setAnswerHeader(const enet::HttpAnswer& _req) {
 	if (m_requestHeader.getKey("User-Agent") == "") {
 		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
 	}
-	std::string value = m_answerHeader.generate();
+	etk::String value = m_answerHeader.generate();
 	write(value, false);
 }
 
 void enet::Http::getHeader() {
 	ENET_VERBOSE("Read HTTP Header [START]");
 	bool headerEnded = false;
-	std::string header;
+	etk::String header;
 	while (m_connection.getConnectionStatus() == enet::Tcp::status::link) {
 		char type = '?';
 		int32_t len = m_connection.read(&type, 1);
@@ -396,7 +396,7 @@ void enet::Http::getHeader() {
 	ENET_VERBOSE("Read HTTP Header [STOP] : '" << header << "'");
 	m_headerIsSend = true;
 	// parse header :
-	std::vector<std::string> list = etk::split(header, '\n');
+	etk::Vector<etk::String> list = etk::split(header, '\n');
 	for (auto &it : list) {
 		if (    it.size()>0
 		     && it[it.size()-1] == '\r') {
@@ -404,7 +404,7 @@ void enet::Http::getHeader() {
 		}
 	}
 	//parse first element:
-	std::vector<std::string> listLineOne = etk::split(list[0], ' ');
+	etk::Vector<etk::String> listLineOne = etk::split(list[0], ' ');
 	if (listLineOne.size() < 2) {
 		ENET_ERROR("can not parse answear : " << listLineOne);
 		// answer bad request and close connection ...
@@ -459,7 +459,7 @@ void enet::Http::getHeader() {
 		m_answerHeader.setErrorCode(valueErrorCode);
 		
 		// get comment:
-		std::string comment;
+		etk::String comment;
 		for (size_t iii=2; iii<listLineOne.size(); ++iii) {
 			if (comment.size() != 0) {
 				comment += " ";
@@ -478,13 +478,13 @@ void enet::Http::getHeader() {
 	}
 	for (size_t iii=1; iii<list.size(); ++iii) {
 		size_t found = list[iii].find(":");
-		if (found == std::string::npos) {
+		if (found == etk::String::npos) {
 			// nothing
 			continue;
 		}
-		std::string key = unEscapeChar(std::string(list[iii], 0, found));
+		etk::String key = unEscapeChar(etk::String(list[iii], 0, found));
 		key = removeStartAndStopSpace(key);
-		std::string value = unEscapeChar(std::string(list[iii], found+2));
+		etk::String value = unEscapeChar(etk::String(list[iii], found+2));
 		value = removeStartAndStopSpace(value);
 		ENET_VERBOSE("header : key='" << key << "' value='" << value << "'");
 		if (m_isServer == false) {
@@ -511,9 +511,9 @@ void enet::Http::getHeader() {
 
 
 /*
-bool enet::Http::get(const std::string& _address) {
+bool enet::Http::get(const etk::String& _address) {
 	m_header.m_map.clear();
-	std::string req = "GET http://" + m_connection.getName();
+	etk::String req = "GET http://" + m_connection.getName();
 	if (_address != "") {
 		req += "/";
 		req += _address;
@@ -538,10 +538,10 @@ bool enet::Http::get(const std::string& _address) {
 	return false;
 }
 
-bool enet::Http::post(const std::string& _address, const std::map<std::string, std::string>& _values) {
+bool enet::Http::post(const etk::String& _address, const etk::Map<etk::String, etk::String>& _values) {
 	m_header.m_map.clear();
 	// First create body :
-	std::string body;
+	etk::String body;
 	for (auto &it : _values) {
 		if (body.size() > 0) {
 			body += "&";
@@ -551,16 +551,16 @@ bool enet::Http::post(const std::string& _address, const std::map<std::string, s
 	return post(_address, "application/x-www-form-urlencoded", body);
 }
 
-bool enet::Http::post(const std::string& _address, const std::string& _contentType, const std::string& _data) {
+bool enet::Http::post(const etk::String& _address, const etk::String& _contentType, const etk::String& _data) {
 	m_header.m_map.clear();
-	std::string req = "POST http://" + m_connection.getName();
+	etk::String req = "POST http://" + m_connection.getName();
 	if (_address != "") {
 		req += "/";
 		req += _address;
 	}
 	req += " HTTP/1.0\n";
 	setSendHeaderProperties("Content-Type", _contentType);
-	setSendHeaderProperties("Content-Length", etk::to_string(_data.size()));
+	setSendHeaderProperties("Content-Length", etk::toString(_data.size()));
 	// add header properties :
 	for (auto &it : m_header.m_map) {
 		req += escapeChar(it.first) + ": " + escapeChar(it.second) + "\r\n";
@@ -585,7 +585,7 @@ int32_t enet::Http::write(const void* _data, int32_t _len) {
 }
 
 
-void enet::HttpHeader::setKey(const std::string& _key, const std::string& _value) {
+void enet::HttpHeader::setKey(const etk::String& _key, const etk::String& _value) {
 	auto it = m_map.find(_key);
 	if (it == m_map.end()) {
 		m_map.insert(make_pair(_key, _value));
@@ -594,14 +594,14 @@ void enet::HttpHeader::setKey(const std::string& _key, const std::string& _value
 	}
 }
 
-void enet::HttpHeader::rmKey(const std::string& _key) {
+void enet::HttpHeader::rmKey(const etk::String& _key) {
 	auto it = m_map.find(_key);
 	if (it != m_map.end()) {
 		m_map.erase(it);
 	}
 }
 
-std::string enet::HttpHeader::getKey(const std::string& _key) const {
+etk::String enet::HttpHeader::getKey(const etk::String& _key) const {
 	auto it = m_map.find(_key);
 	if (it != m_map.end()) {
 		return it->second;
@@ -609,8 +609,8 @@ std::string enet::HttpHeader::getKey(const std::string& _key) const {
 	return "";
 }
 
-std::string enet::HttpHeader::generateKeys() const {
-	std::string out;
+etk::String enet::HttpHeader::generateKeys() const {
+	etk::String out;
 	for (auto &it : m_map) {
 		if (    it.first != ""
 		     && it.second != "") {
@@ -629,7 +629,7 @@ enet::HttpHeader::HttpHeader():
 // -----------------------------------------------------------------------------------------
 
 
-enet::HttpAnswer::HttpAnswer(enum HTTPAnswerCode _code, const std::string& _help):
+enet::HttpAnswer::HttpAnswer(enum HTTPAnswerCode _code, const etk::String& _help):
   m_what(_code),
   m_helpMessage(_help) {
 	
@@ -649,11 +649,11 @@ void enet::HttpAnswer::display() const {
 	}
 }
 
-std::string enet::HttpAnswer::generate() const {
-	std::string out;
-	out += etk::to_string(m_protocol);
+etk::String enet::HttpAnswer::generate() const {
+	etk::String out;
+	out += etk::toString(m_protocol);
 	out += " ";
-	out += etk::to_string(int32_t(m_what));
+	out += etk::toString(int32_t(m_what));
 	out += " ";
 	if (m_helpMessage != "") {
 		out += escapeChar(m_helpMessage);
@@ -671,12 +671,12 @@ std::string enet::HttpAnswer::generate() const {
 	return out;
 }
 enet::HttpServer::HttpServer(enet::Tcp _connection) :
-  enet::Http(std::move(_connection), true) {
+  enet::Http(etk::move(_connection), true) {
 	
 }
 
 enet::HttpClient::HttpClient(enet::Tcp _connection) :
-  enet::Http(std::move(_connection), false) {
+  enet::Http(etk::move(_connection), false) {
 	
 }
 // -----------------------------------------------------------------------------------------
@@ -701,13 +701,13 @@ void enet::HttpRequest::display() const {
 	}
 }
 
-std::string enet::HttpRequest::generate() const {
-	std::string out;
-	out += etk::to_string(m_req);
+etk::String enet::HttpRequest::generate() const {
+	etk::String out;
+	out += etk::toString(m_req);
 	out += " ";
 	out += m_uri;
 	out += " ";
-	out += etk::to_string(m_protocol);
+	out += etk::toString(m_protocol);
 	out += "\r\n";
 	out += generateKeys();
 	out += "\r\n";
@@ -715,17 +715,17 @@ std::string enet::HttpRequest::generate() const {
 }
 
 
-std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPProtocol _obj) {
-	_os << "enet::HTTPProtocol::" <<etk::to_string(_obj);
+etk::Stream& enet::operator <<(etk::Stream& _os, enum enet::HTTPProtocol _obj) {
+	_os << "enet::HTTPProtocol::" <<etk::toString(_obj);
 	return _os;
 }
 
-std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPAnswerCode _obj) {
-	_os << "enet::HTTPAnswerCode::" << etk::to_string(_obj);
+etk::Stream& enet::operator <<(etk::Stream& _os, enum enet::HTTPAnswerCode _obj) {
+	_os << "enet::HTTPAnswerCode::" << etk::toString(_obj);
 	return _os;
 }
 
-std::ostream& enet::operator <<(std::ostream& _os, enum enet::HTTPReqType _obj) {
-	_os << "enet::HTTPReqType::" << etk::to_string(_obj);
+etk::Stream& enet::operator <<(etk::Stream& _os, enum enet::HTTPReqType _obj) {
+	_os << "enet::HTTPReqType::" << etk::toString(_obj);
 	return _os;
 }

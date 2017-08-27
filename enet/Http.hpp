@@ -6,8 +6,8 @@
 #pragma once
 
 #include <enet/Tcp.hpp>
-#include <vector>
-#include <map>
+#include <etk/Vector.hpp>
+#include <etk/Map.hpp>
 #include <thread>
 #include <ethread/tools.hpp>
 #include <functional>
@@ -64,7 +64,7 @@ namespace enet {
 		c505_httpVersionNotSupported, //!< The server does not support the HTTP protocol version used in the request
 		c511_networkAuthenticationRequired, //!< The client needs to authenticate to gain network access
 	};
-	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPAnswerCode _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum enet::HTTPAnswerCode _obj);
 	
 	enum class HTTPProtocol {
 		http_0_1,
@@ -111,18 +111,18 @@ namespace enet {
 		http_3_9,
 		http_3_10,
 	};
-	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPProtocol _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum enet::HTTPProtocol _obj);
 	class HttpHeader {
 		protected:
 			// key, val
-			std::map<std::string, std::string> m_map;
+			etk::Map<etk::String, etk::String> m_map;
 			enum HTTPProtocol m_protocol;
 		public:
-			void setKey(const std::string& _key, const std::string& _value);
-			void rmKey(const std::string& _key);
-			std::string getKey(const std::string& _key) const;
+			void setKey(const etk::String& _key, const etk::String& _value);
+			void rmKey(const etk::String& _key);
+			etk::String getKey(const etk::String& _key) const;
 		protected:
-			std::string generateKeys() const;
+			etk::String generateKeys() const;
 		public:
 			enum HTTPProtocol getProtocol() const {
 				return m_protocol;
@@ -132,27 +132,27 @@ namespace enet {
 			}
 			HttpHeader();
 			virtual ~HttpHeader() = default;
-			virtual std::string generate() const = 0;
+			virtual etk::String generate() const = 0;
 	};
 	
 	class HttpAnswer : public HttpHeader {
 		private:
 			enet::HTTPAnswerCode m_what;
-			std::string m_helpMessage;
+			etk::String m_helpMessage;
 		public:
-			HttpAnswer(enum HTTPAnswerCode _code = enet::HTTPAnswerCode::c400_badRequest, const std::string& _help="");
+			HttpAnswer(enum HTTPAnswerCode _code = enet::HTTPAnswerCode::c400_badRequest, const etk::String& _help="");
 			void display() const;
-			std::string generate() const;
+			etk::String generate() const;
 			void setErrorCode(enum HTTPAnswerCode _value) {
 				m_what = _value;
 			}
 			enum HTTPAnswerCode getErrorCode() const {
 				return m_what;
 			}
-			void setHelp(const std::string& _value) {
+			void setHelp(const etk::String& _value) {
 				m_helpMessage = _value;
 			}
-			const std::string& getHelp() const {
+			const etk::String& getHelp() const {
 				return m_helpMessage;
 			}
 	};
@@ -163,26 +163,26 @@ namespace enet {
 		HTTP_PUT,
 		HTTP_DELETE,
 	};
-	std::ostream& operator <<(std::ostream& _os, enum enet::HTTPReqType _obj);
+	etk::Stream& operator <<(etk::Stream& _os, enum enet::HTTPReqType _obj);
 	class HttpRequest : public HttpHeader {
 		private:
 			// key, val
 			enum HTTPReqType m_req;
-			std::string m_uri;
+			etk::String m_uri;
 		public:
 			HttpRequest(enum enet::HTTPReqType _type=enet::HTTPReqType::HTTP_GET);
 			void display() const;
-			std::string generate() const;
+			etk::String generate() const;
 			void setType(enum enet::HTTPReqType _value) {
 				m_req = _value;
 			}
 			enum enet::HTTPReqType getType() const{
 				return m_req;
 			}
-			void setUri(const std::string& _value) {
+			void setUri(const etk::String& _value) {
 				m_uri = _value;
 			}
-			const std::string& getUri() const {
+			const etk::String& getUri() const {
 				return m_uri;
 			}
 	};
@@ -218,7 +218,7 @@ namespace enet {
 			bool m_headerIsSend;
 			std::thread* m_thread;
 			bool m_threadRunning;
-			std::vector<uint8_t> m_temporaryBuffer;
+			etk::Vector<uint8_t> m_temporaryBuffer;
 		private:
 			void threadCallback();
 		private:
@@ -230,7 +230,7 @@ namespace enet {
 				return m_connection.getConnectionStatus() == enet::Tcp::status::link;
 			}
 		public:
-			using Observer = std::function<void(std::vector<uint8_t>&)>; //!< Define an Observer: function pointer
+			using Observer = std::function<void(etk::Vector<uint8_t>&)>; //!< Define an Observer: function pointer
 			Observer m_observer;
 			/**
 			 * @brief Connect an function member on the signal with the shared_ptr object.
@@ -239,8 +239,8 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(std::vector<uint8_t>&)) {
-				m_observer = [=](std::vector<uint8_t>& _value){
+			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(etk::Vector<uint8_t>&)) {
+				m_observer = [=](etk::Vector<uint8_t>& _value){
 					(*_class.*_func)(_value);
 				};
 			}
@@ -289,7 +289,7 @@ namespace enet {
 			 * @return >0 byte size on the socket write
 			 * @return -1 an error occured.
 			 */
-			int32_t write(const std::string& _data, bool _writeBackSlashZero = true) {
+			int32_t write(const etk::String& _data, bool _writeBackSlashZero = true) {
 				if (_data.size() == 0) {
 					return 0;
 				}
@@ -306,7 +306,7 @@ namespace enet {
 			 * @return -1 an error occured.
 			 */
 			template <class T>
-			int32_t write(const std::vector<T>& _data) {
+			int32_t write(const etk::Vector<T>& _data) {
 				if (_data.size() == 0) {
 					return 0;
 				}
@@ -326,9 +326,9 @@ namespace enet {
 				setRequestHeader(_header);
 			}
 		public:
-			//bool get(const std::string& _address);
-			//bool post(const std::string& _address, const std::map<std::string, std::string>& _values);
-			//bool post(const std::string& _address, const std::string& _contentType, const std::string& _data);
+			//bool get(const etk::String& _address);
+			//bool post(const etk::String& _address, const etk::Map<etk::String, etk::String>& _values);
+			//bool post(const etk::String& _address, const etk::String& _contentType, const etk::String& _data);
 		public:
 			/**
 			 * @brief Connect an function member on the signal with the shared_ptr object.

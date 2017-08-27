@@ -24,26 +24,26 @@
 #endif
 
 enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
-	std::string tmpname;
-	tmpname  = etk::to_string(_ip1);
+	etk::String tmpname;
+	tmpname  = etk::toString(_ip1);
 	tmpname += ".";
-	tmpname += etk::to_string(_ip2);
+	tmpname += etk::toString(_ip2);
 	tmpname += ".";
-	tmpname += etk::to_string(_ip3);
+	tmpname += etk::toString(_ip3);
 	tmpname += ".";
-	tmpname += etk::to_string(_ip4);
-	return std::move(enet::connectTcpClient(tmpname, _port, _numberRetry, _timeOut));
+	tmpname += etk::toString(_ip4);
+	return etk::move(enet::connectTcpClient(tmpname, _port, _numberRetry, _timeOut));
 }
 
 #ifdef __TARGET_OS__Windows
-	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
+	enet::Tcp enet::connectTcpClient(const etk::String& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 		if (enet::isInit() == false) {
 			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		if (_hostname == "") {
 			ENET_ERROR("get connection wihtout hostname");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		SOCKET socketId = INVALID_SOCKET;
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
@@ -67,7 +67,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			
 			// Resolve the server address and port
 			struct addrinfo* result = nullptr;
-			std::string portValue = etk::to_string(_port);
+			etk::String portValue = etk::toString(_port);
 			int iResult = getaddrinfo(_hostname.c_str(), portValue.c_str(), &hints, &result);
 			if (iResult != 0) {
 				ENET_ERROR("getaddrinfo failed with error: " << iResult);
@@ -106,21 +106,21 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 		}
 		if (socketId == INVALID_SOCKET) {
 			ENET_ERROR("ERROR connecting ... (after all try)");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		ENET_DEBUG("Connection done");
-		return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
+		return etk::move(enet::Tcp(socketId, _hostname + ":" + etk::toString(_port)));
 	}
 #else
 	#include <sys/socket.h>
-	enet::Tcp enet::connectTcpClient(const std::string& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
+	enet::Tcp enet::connectTcpClient(const etk::String& _hostname, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 		if (enet::isInit() == false) {
 			ENET_ERROR("Need call enet::init(...) before accessing to the socket");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		if (_hostname == "") {
 			ENET_ERROR("get connection wihtout hostname");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		int32_t socketId = -1;
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
@@ -147,7 +147,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 				addr.s_addr = inet_addr(_hostname.c_str());
 				if (addr.s_addr == INADDR_NONE) {
 					ENET_ERROR("The IPv4 address entered must be a legal address" << _hostname.c_str());
-					return std::move(enet::Tcp());
+					return etk::move(enet::Tcp());
 				} else {
 					// TODO : This is deprecated use getaddrinfo like windows ...
 					server = gethostbyaddr((char *) &addr, 4, AF_INET);
@@ -183,10 +183,10 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 		}
 		if (socketId<0) {
 			ENET_ERROR("ERROR connecting ... (after all try)");
-			return std::move(enet::Tcp());
+			return etk::move(enet::Tcp());
 		}
 		ENET_INFO("Connection done");
-		return std::move(enet::Tcp(socketId, _hostname + ":" + etk::to_string(_port)));
+		return etk::move(enet::Tcp(socketId, _hostname + ":" + etk::toString(_port)));
 	}
 #endif
 

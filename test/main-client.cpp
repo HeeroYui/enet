@@ -17,7 +17,7 @@ int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
 	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (    data == "-h"
 		     || data == "--help") {
 			TEST_PRINT(etk::getApplicationName() << " - help : ");
@@ -31,7 +31,7 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("==================================");
 	// client mode ...
 	// connect on TCP server:
-	enet::Tcp connection = std::move(enet::connectTcpClient("127.0.0.1", 12345));
+	enet::Tcp connection = etk::move(enet::connectTcpClient("127.0.0.1", 12345));
 	TEST_INFO("CLIENT connect ...");
 	if (connection.getConnectionStatus() != enet::Tcp::status::link) {
 		TEST_ERROR("can not link to the socket...");

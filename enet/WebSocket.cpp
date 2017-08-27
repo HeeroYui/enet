@@ -6,7 +6,7 @@
 
 #include <enet/debug.hpp>
 #include <enet/WebSocket.hpp>
-#include <map>
+#include <etk/Map.hpp>
 #include <etk/stdTools.hpp>
 #include <cstring>
 #include <random>
@@ -40,19 +40,19 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
   m_interface(nullptr),
   m_observer(nullptr),
   m_observerUriCheck(nullptr) {
-	setInterface(std::move(_connection), _isServer);
+	setInterface(etk::move(_connection), _isServer);
 }
 
 void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
-		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(etk::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		}
 	} else {
-		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(std::move(_connection));
+		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(etk::move(_connection));
 		m_interface = interface;
 		if (interface != nullptr) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
@@ -72,7 +72,7 @@ enet::WebSocket::~WebSocket() {
 	stop(true);
 }
 
-static std::string generateKey() {
+static etk::String generateKey() {
 	// create dynamic key:
 	std::random_device rd;
 	std::mt19937 e2(rd());
@@ -84,13 +84,13 @@ static std::string generateKey() {
 	return algue::base64::encode(dataKey, 16);
 }
 
-static std::string generateCheckKey(const std::string& _key) {
-	std::string out = _key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-	std::vector<uint8_t> keyData = algue::sha1::encode(out);
+static etk::String generateCheckKey(const etk::String& _key) {
+	etk::String out = _key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+	etk::Vector<uint8_t> keyData = algue::sha1::encode(out);
 	return algue::base64::encode(keyData);
 }
 
-void enet::WebSocket::start(const std::string& _uri, const std::vector<std::string>& _listProtocols) {
+void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::String>& _listProtocols) {
 	if (m_interface == nullptr) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
@@ -108,7 +108,7 @@ void enet::WebSocket::start(const std::string& _uri, const std::vector<std::stri
 		req.setKey("Sec-WebSocket-Version", "13");
 		req.setKey("Pragma", "no-cache");
 		req.setKey("Cache-Control", "no-cache");
-		std::string protocolList;
+		etk::String protocolList;
 		for (auto &it : _listProtocols) {
 			if (it == "") {
 				continue;
@@ -307,8 +307,8 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	ENET_ERROR("ReadRaw [STOP] (no opcode manage ... " << int32_t(opcode & 0x0F));
 }
 
-static std::string removeStartAndStopSpace(const std::string& _value) {
-	std::string out;
+static etk::String removeStartAndStopSpace(const etk::String& _value) {
+	etk::String out;
 	out.reserve(_value.size());
 	bool findSpace = false;
 	for (auto &it : _value) {
@@ -366,7 +366,7 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 		return;
 	}
 	// parse all protocols:
-	std::vector<std::string> listProtocol;
+	etk::Vector<etk::String> listProtocol;
 	if (_data.getKey("Sec-WebSocket-Protocol") != "") {
 		listProtocol = etk::split(_data.getKey("Sec-WebSocket-Protocol"),',');
 		for (size_t iii=0; iii<listProtocol.size(); ++iii) {
@@ -388,7 +388,7 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 	answer.setProtocol(enet::HTTPProtocol::http_1_1);
 	answer.setKey("Upgrade", "websocket");
 	answer.setKey("Connection", "Upgrade");
-	std::string answerKey = generateCheckKey(_data.getKey("Sec-WebSocket-Key"));
+	etk::String answerKey = generateCheckKey(_data.getKey("Sec-WebSocket-Key"));
 	answer.setKey("Sec-WebSocket-Accept", answerKey);
 	if (m_protocol != "") {
 		answer.setKey("Sec-WebSocket-Protocol", m_protocol);

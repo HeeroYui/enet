@@ -34,9 +34,9 @@ namespace enet {
 		public:
 			Tcp();
 			#ifdef __TARGET_OS__Windows
-				Tcp(SOCKET _idSocket, const std::string& _name);
+				Tcp(SOCKET _idSocket, const etk::String& _name);
 			#else
-				Tcp(int32_t _idSocket, const std::string& _name);
+				Tcp(int32_t _idSocket, const etk::String& _name);
 			#endif
 			// move constructor
 			Tcp(Tcp&& _obj);
@@ -46,13 +46,13 @@ namespace enet {
 			Tcp& operator= (Tcp& _obj) = delete;
 			virtual ~Tcp();
 		private:
-			std::string m_name; //!< hostname/IP:port.
+			etk::String m_name; //!< hostname/IP:port.
 		public:
 			/**
 			 * @brief Get the decriptive name hot the host:port
 			 * @return the string requested
 			 */
-			const std::string& getName() {
+			const etk::String& getName() {
 				return m_name;
 			}
 		public:
@@ -102,7 +102,7 @@ namespace enet {
 			 * @return >0 byte size on the socket write
 			 * @return -1 an error occured.
 			 */
-			int32_t write(const std::string& _data, bool _writeBackSlashZero = true) {
+			int32_t write(const etk::String& _data, bool _writeBackSlashZero = true) {
 				if (_data.size() == 0) {
 					return 0;
 				}
@@ -119,7 +119,7 @@ namespace enet {
 			 * @return -1 an error occured.
 			 */
 			template <class T>
-			int32_t write(const std::vector<T>& _data) {
+			int32_t write(const etk::Vector<T>& _data) {
 				if (_data.size() == 0) {
 					return 0;
 				}

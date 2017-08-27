@@ -14,7 +14,7 @@
 
 #include <etk/stdTools.hpp>
 namespace appl {
-	void onReceiveData(enet::HttpServer* _interface, std::vector<uint8_t>& _data) {
+	void onReceiveData(enet::HttpServer* _interface, etk::Vector<uint8_t>& _data) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");
 	}
 	void onReceiveHeader(enet::HttpServer* _interface, const enet::HttpRequest& _data) {
@@ -23,8 +23,8 @@ namespace appl {
 		if (_data.getType() == enet::HTTPReqType::HTTP_GET) {
 			if (_data.getUri() == "plop.txt") {
 				enet::HttpAnswer answer(enet::HTTPAnswerCode::c200_ok);
-				std::string data = "<html><head></head></body>coucou</body></html>";
-				answer.setKey("Content-Length", etk::to_string(data.size()));
+				etk::String data = "<html><head></head></body>coucou</body></html>";
+				answer.setKey("Content-Length", etk::toString(data.size()));
 				_interface->setHeader(answer);
 				_interface->write(data);
 				_interface->stop(true);
@@ -42,7 +42,7 @@ int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
 	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (    data == "-h"
 		     || data == "--help") {
 			TEST_PRINT(etk::getApplicationName() << " - help : ");
@@ -62,16 +62,16 @@ int main(int _argc, const char *_argv[]) {
 	// Start listening ...
 	interface.link();
 	// Wait a new connection ..
-	enet::Tcp tcpConnection = std::move(interface.waitNext());
+	enet::Tcp tcpConnection = etk::move(interface.waitNext());
 	// Free Connected port
 	interface.unlink();
 	// TODO : Check if connection is valid ...
 	
 	// Create a HTTP connection in Server mode
-	enet::HttpServer connection(std::move(tcpConnection));
+	enet::HttpServer connection(etk::move(tcpConnection));
 	enet::HttpServer* tmp = &connection;
 	// Set callbacks:
-	connection.connect([=](std::vector<uint8_t>& _value){
+	connection.connect([=](etk::Vector<uint8_t>& _value){
 					appl::onReceiveData(tmp, _value);
 				});
 	connection.connectHeader([=](const enet::HttpRequest& _value){
@@ -97,8 +97,8 @@ int main(int _argc, const char *_argv[]) {
 	
 	TEST_INFO("----------------------------");
 	TEST_INFO("POST data : ");
-	std::map<std::string, std::string> values;
-	values.insert(std::make_pair<std::string, std::string>("plop", "valuePlop"));
+	etk::Map<etk::String, etk::String> values;
+	values.insert(etk::makePair<etk::String, etk::String>("plop", "valuePlop"));
 	if (connection.post("", values) == false) {
 		TEST_ERROR("can not POST data...");
 		return -1;
@@ -107,7 +107,7 @@ int main(int _argc, const char *_argv[]) {
 	
 	TEST_INFO("----------------------------");
 	TEST_INFO("POST xml : ");
-	if (connection.post("", "text/xml; charset=utf-8", "<plop><string>value1</string></plop>") == false) {
+	if (connection.post("", "text/xml; charset=utf-8", "<plop><etk/String.hpp>value1</string></plop>") == false) {
 		TEST_ERROR("can not POST XML data...");
 		return -1;
 	}

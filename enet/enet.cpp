@@ -19,7 +19,7 @@ static bool& getInitSatatus() {
 
 void enet::init(int _argc, const char** _argv) {
 	for (int32_t iii=0; iii<_argc; ++iii) {
-		std::string value = _argv[iii];
+		etk::String value = _argv[iii];
 		if (etk::start_with(value, "--enet") == true) {
 			ENET_ERROR("Unknow parameter type: '" << value << "'");
 		}

@@ -8,17 +8,17 @@
 #include <enet/Http.hpp>
 #include <ememory/memory.hpp>
 #include <echrono/Steady.hpp>
-#include <vector>
-#include <map>
+#include <etk/Vector.hpp>
+#include <etk/Map.hpp>
 
 namespace enet {
 	class WebSocket {
 		protected:
-			std::vector<uint8_t> m_sendBuffer;
+			etk::Vector<uint8_t> m_sendBuffer;
 			bool m_connectionValidate;
 			ememory::SharedPtr<enet::Http> m_interface;
-			std::vector<uint8_t> m_buffer;
-			std::string m_checkKey;
+			etk::Vector<uint8_t> m_buffer;
+			etk::String m_checkKey;
 			echrono::Steady m_lastReceive;
 			echrono::Steady m_lastSend;
 			std::mutex m_mutex;
@@ -34,7 +34,7 @@ namespace enet {
 			WebSocket(enet::Tcp _connection, bool _isServer=false);
 			void setInterface(enet::Tcp _connection, bool _isServer=false);
 			virtual ~WebSocket();
-			void start(const std::string& _uri="", const std::vector<std::string>& _listProtocols=std::vector<std::string>());
+			void start(const etk::String& _uri="", const etk::Vector<etk::String>& _listProtocols=etk::Vector<etk::String>());
 			void stop(bool _inThread=false);
 			bool isAlive() const {
 				if (m_interface == nullptr) {
@@ -46,13 +46,13 @@ namespace enet {
 			void onReceiveRequest(const enet::HttpRequest& _data);
 			void onReceiveAnswer(const enet::HttpAnswer& _data);
 		protected:
-			std::string m_protocol;
+			etk::String m_protocol;
 		public:
-			void setProtocol(const std::string& _protocol) {
+			void setProtocol(const etk::String& _protocol) {
 				m_protocol = _protocol;
 			}
 		public:
-			using Observer = std::function<void(std::vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
+			using Observer = std::function<void(etk::Vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
 		protected:
 			Observer m_observer;
 		public:
@@ -63,8 +63,8 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(std::vector<uint8_t>&, bool)) {
-				m_observer = [=](std::vector<uint8_t>& _value, bool _isString){
+			void connect(CLASS_TYPE* _class, void (CLASS_TYPE::*_func)(etk::Vector<uint8_t>&, bool)) {
+				m_observer = [=](etk::Vector<uint8_t>& _value, bool _isString){
 					(*_class.*_func)(_value, _isString);
 				};
 			}
@@ -73,7 +73,7 @@ namespace enet {
 			}
 		// Only server:
 		public:
-			using ObserverUriCheck = std::function<bool(const std::string&, const std::vector<std::string>&)>; //!< Define an Observer: function pointer
+			using ObserverUriCheck = std::function<bool(const etk::String&, const etk::Vector<etk::String>&)>; //!< Define an Observer: function pointer
 		protected:
 			ObserverUriCheck m_observerUriCheck;
 		public:
@@ -84,8 +84,8 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const std::string&, const std::vector<std::string>&)) {
-				m_observerUriCheck = [=](const std::string& _value, const std::vector<std::string>& _protocols){
+			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const etk::String&, const etk::Vector<etk::String>&)) {
+				m_observerUriCheck = [=](const etk::String& _value, const etk::Vector<etk::String>& _protocols){
 					return (*_class.*_func)(_value, _protocols);
 				};
 			}
@@ -98,7 +98,7 @@ namespace enet {
 			uint8_t m_dataMask[4];
 		public:
 			std::unique_lock<std::mutex> getScopeLock() {
-				return std::move(std::unique_lock<std::mutex>(m_mutex));
+				return etk::move(std::unique_lock<std::mutex>(m_mutex));
 			}
 			/**
 			 * Compose the local header inside a temporary buffer ==> must lock external to prevent multiple simultaneous access
@@ -128,7 +128,7 @@ namespace enet {
 			 * @return >0 byte size on the socket write
 			 * @return -1 an error occured.
 			 */
-			int32_t write(const std::string& _data, bool _writeBackSlashZero = true) {
+			int32_t write(const etk::String& _data, bool _writeBackSlashZero = true) {
 				if (_data.size() == 0) {
 					return 0;
 				}
@@ -145,7 +145,7 @@ namespace enet {
 			 * @return -1 an error occured.
 			 */
 			template <class T>
-			int32_t write(const std::vector<T>& _data) {
+			int32_t write(const etk::Vector<T>& _data) {
 				if (_data.size() == 0) {
 					return 0;
 				}

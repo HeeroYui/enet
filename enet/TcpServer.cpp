@@ -37,18 +37,18 @@ enet::TcpServer::~TcpServer() {
 }
 
 void enet::TcpServer::setIpV4(uint8_t _fist, uint8_t _second, uint8_t _third, uint8_t _quatro) {
-	std::string tmpname;
-	tmpname  = etk::to_string(_fist);
+	etk::String tmpname;
+	tmpname  = etk::toString(_fist);
 	tmpname += ".";
-	tmpname += etk::to_string(_second);
+	tmpname += etk::toString(_second);
 	tmpname += ".";
-	tmpname += etk::to_string(_third);
+	tmpname += etk::toString(_third);
 	tmpname += ".";
-	tmpname += etk::to_string(_quatro);
+	tmpname += etk::toString(_quatro);
 	setHostNane(tmpname);
 }
 
-void enet::TcpServer::setHostNane(const std::string& _name) {
+void enet::TcpServer::setHostNane(const etk::String& _name) {
 	if (_name == m_host) {
 		return;
 	}
@@ -79,7 +79,7 @@ void enet::TcpServer::setPort(uint16_t _port) {
 		hints.ai_flags = AI_PASSIVE;
 		
 		// Resolve the server address and port
-		std::string portValue = etk::to_string(m_port);
+		etk::String portValue = etk::toString(m_port);
 		int iResult = getaddrinfo(nullptr, portValue.c_str(), &hints, &result);
 		if (iResult != 0) {
 			ENET_ERROR("getaddrinfo failed with error: " << iResult);
@@ -153,7 +153,7 @@ void enet::TcpServer::setPort(uint16_t _port) {
 enet::Tcp enet::TcpServer::waitNext() {
 	if (enet::isInit() == false) {
 		ENET_ERROR("Need call enet::init(...) before accessing to the socket");
-		return std::move(enet::Tcp());
+		return etk::move(enet::Tcp());
 	}
 	ENET_INFO("End binding Socket ... (start listen)");
 	#ifdef __TARGET_OS__Windows
@@ -182,7 +182,7 @@ enet::Tcp enet::TcpServer::waitNext() {
 		return enet::Tcp();
 	}
 	ENET_INFO("End configuring Socket ... Find New one");
-	return enet::Tcp(socketIdClient, m_host + ":" + etk::to_string(m_port));
+	return enet::Tcp(socketIdClient, m_host + ":" + etk::toString(m_port));
 }
 
 

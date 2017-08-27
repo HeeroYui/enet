@@ -16,7 +16,7 @@
 
 
 namespace appl {
-	void onReceiveData(std::vector<uint8_t>& _data, bool _isString) {
+	void onReceiveData(etk::Vector<uint8_t>& _data, bool _isString) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");
 		if (_isString == true) {
 			_data.resize(_data.size()+1);
@@ -32,7 +32,7 @@ int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
 	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (    data == "-h"
 		     || data == "--help") {
 			TEST_PRINT(etk::getApplicationName() << " - help : ");
@@ -45,19 +45,19 @@ int main(int _argc, const char *_argv[]) {
 	TEST_INFO("== Test WebSocket client        ==");
 	TEST_INFO("==================================");
 	// connect on TCP server:
-	enet::Tcp tcpConnection = std::move(enet::connectTcpClient("127.0.0.1", 12345));
+	enet::Tcp tcpConnection = etk::move(enet::connectTcpClient("127.0.0.1", 12345));
 	// TODO : Check if connection is valid ...
 	
 	// Create a HTTP connection in Client mode
-	enet::WebSocket connection(std::move(tcpConnection), false);
+	enet::WebSocket connection(etk::move(tcpConnection), false);
 	// Set callbacks:
 	connection.connect(appl::onReceiveData);
 	
 	// start http connection (the actual state is just TCP start ...)
-	std::vector<std::string> protocols;
-	protocols.push_back("test1526/1.0");
-	protocols.push_back("test1526/1.5");
-	protocols.push_back("Hello");
+	etk::Vector<etk::String> protocols;
+	protocols.pushBack("test1526/1.0");
+	protocols.pushBack("test1526/1.5");
+	protocols.pushBack("Hello");
 	connection.start("/plop.txt", protocols);
 	
 	// send some data to play ...

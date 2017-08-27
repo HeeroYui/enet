@@ -17,7 +17,7 @@ int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
 	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (    data == "-h"
 		     || data == "--help") {
 			TEST_PRINT(etk::getApplicationName() << " - help : ");
@@ -37,13 +37,13 @@ int main(int _argc, const char *_argv[]) {
 	// Start listening ...
 	interface.link();
 	// Wait a new connection ..
-	enet::Tcp tcpConnection = std::move(interface.waitNext());
+	enet::Tcp tcpConnection = etk::move(interface.waitNext());
 	// Free Connected port
 	interface.unlink();
 	
 	int32_t iii = 0;
 	while (tcpConnection.getConnectionStatus() == enet::Tcp::status::link) {
-		int32_t len = tcpConnection.write("plop" + etk::to_string(iii));
+		int32_t len = tcpConnection.write("plop" + etk::toString(iii));
 		TEST_INFO("write len=" << len);
 		char data[1024];
 		len = tcpConnection.read(data, 1024);

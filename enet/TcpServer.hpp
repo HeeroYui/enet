@@ -26,7 +26,7 @@ namespace enet {
 			TcpServer();
 			virtual ~TcpServer();
 		private:
-			std::string m_host; //!< hostname/IP to connect with.
+			etk::String m_host; //!< hostname/IP to connect with.
 		public:
 			/**
 			 * @brief Set the connection IP id.
@@ -40,12 +40,12 @@ namespace enet {
 			 * @brief set the Host name is the same things as set an Ip adress, but in test mode "127.0.0.1" or "localhost".
 			 * @param[in] _name Host name to connect.
 			 */
-			void setHostNane(const std::string& _name);
+			void setHostNane(const etk::String& _name);
 			/**
 			 * @brief Get the decriptive name hot the host
 			 * @return the string requested
 			 */
-			const std::string& getHostName() {
+			const etk::String& getHostName() {
 				return m_host;
 			}
 		private:

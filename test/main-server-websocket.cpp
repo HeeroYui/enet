@@ -15,7 +15,7 @@
 
 #include <etk/stdTools.hpp>
 namespace appl {
-	void onReceiveData(enet::WebSocket* _interface, std::vector<uint8_t>& _data, bool _isString) {
+	void onReceiveData(enet::WebSocket* _interface, etk::Vector<uint8_t>& _data, bool _isString) {
 		TEST_INFO("Receive Datas : " << _data.size() << " bytes");
 		if (_isString == true) {
 			_data.resize(_data.size()+1);
@@ -26,7 +26,7 @@ namespace appl {
 			TEST_INFO("binary data: ... ");
 		}
 	}
-	bool onReceiveUri(enet::WebSocket* _interface, const std::string& _uri, const std::vector<std::string>& _protocols) {
+	bool onReceiveUri(enet::WebSocket* _interface, const etk::String& _uri, const etk::Vector<etk::String>& _protocols) {
 		TEST_INFO("Receive Header uri: " << _uri);
 		for (auto &it : _protocols) {
 			if (it == "test1526/1.5") {
@@ -45,7 +45,7 @@ int main(int _argc, const char *_argv[]) {
 	etk::init(_argc, _argv);
 	enet::init(_argc, _argv);
 	for (int32_t iii=0; iii<_argc ; ++iii) {
-		std::string data = _argv[iii];
+		etk::String data = _argv[iii];
 		if (    data == "-h"
 		     || data == "--help") {
 			TEST_PRINT(etk::getApplicationName() << " - help : ");
@@ -65,19 +65,19 @@ int main(int _argc, const char *_argv[]) {
 	// Start listening ...
 	interface.link();
 	// Wait a new connection ..
-	enet::Tcp tcpConnection = std::move(interface.waitNext());
+	enet::Tcp tcpConnection = etk::move(interface.waitNext());
 	// Free Connected port
 	interface.unlink();
 	// TODO : Check if connection is valid ...
 	
 	// Create a HTTP connection in Server mode
-	enet::WebSocket connection(std::move(tcpConnection), true);
+	enet::WebSocket connection(etk::move(tcpConnection), true);
 	enet::WebSocket* tmp = &connection;
 	// Set callbacks:
-	connection.connect([=](std::vector<uint8_t>& _value, bool _isString){
+	connection.connect([=](etk::Vector<uint8_t>& _value, bool _isString){
 					appl::onReceiveData(tmp, _value, _isString);
 				});
-	connection.connectUri([=](const std::string& _value, const std::vector<std::string>& _protocols){
+	connection.connectUri([=](const etk::String& _value, const etk::Vector<etk::String>& _protocols){
 					return appl::onReceiveUri(tmp, _value, _protocols);
 				});
 	

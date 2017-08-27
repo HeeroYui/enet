@@ -51,15 +51,15 @@ enet::Tcp::Tcp() :
 }
 
 #ifdef __TARGET_OS__Windows
-	enet::Tcp::Tcp(SOCKET _idSocket, const std::string& _name) :
+	enet::Tcp::Tcp(SOCKET _idSocket, const etk::String& _name) :
 #else
-	enet::Tcp::Tcp(int32_t _idSocket, const std::string& _name) :
+	enet::Tcp::Tcp(int32_t _idSocket, const etk::String& _name) :
 #endif
   m_socketId(_idSocket),
   m_name(_name),
   m_status(status::link) {
 	#ifdef ENET_STORE_INPUT
-		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::toString(baseID++) + ".tcp");
 		m_nodeStoreInput.fileOpenWrite();
 	#endif
 }
@@ -69,7 +69,7 @@ enet::Tcp::Tcp(Tcp&& _obj) :
   m_name(_obj.m_name),
   m_status(_obj.m_status) {
 	#ifdef ENET_STORE_INPUT
-		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::toString(baseID++) + ".tcp");
 		m_nodeStoreInput.fileOpenWrite();
 	#endif
 	#ifdef __TARGET_OS__Windows
@@ -88,7 +88,7 @@ enet::Tcp::~Tcp() {
 enet::Tcp& enet::Tcp::operator = (enet::Tcp&& _obj) {
 	unlink();
 	#ifdef ENET_STORE_INPUT
-		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::to_string(baseID++) + ".tcp");
+		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::toString(baseID++) + ".tcp");
 		m_nodeStoreInput.fileOpenWrite();
 	#endif
 	m_socketId = _obj.m_socketId;
