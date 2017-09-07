@@ -8,7 +8,7 @@
 #include <enet/Tcp.hpp>
 #include <etk/Vector.hpp>
 #include <etk/Map.hpp>
-#include <thread>
+#include <ethread/Thread.hpp>
 #include <ethread/tools.hpp>
 #include <functional>
 
@@ -216,7 +216,7 @@ namespace enet {
 		protected:
 			enet::Tcp m_connection;
 			bool m_headerIsSend;
-			std::thread* m_thread;
+			ethread::Thread* m_thread;
 			bool m_threadRunning;
 			etk::Vector<uint8_t> m_temporaryBuffer;
 		private:
@@ -230,7 +230,7 @@ namespace enet {
 				return m_connection.getConnectionStatus() == enet::Tcp::status::link;
 			}
 		public:
-			using Observer = std::function<void(etk::Vector<uint8_t>&)>; //!< Define an Observer: function pointer
+			using Observer = etk::Function<void(etk::Vector<uint8_t>&)>; //!< Define an Observer: function pointer
 			Observer m_observer;
 			/**
 			 * @brief Connect an function member on the signal with the shared_ptr object.
@@ -248,7 +248,7 @@ namespace enet {
 				m_observer = _func;
 			}
 		public:
-			using ObserverRaw = std::function<void(enet::Tcp&)>; //!< Define an Observer: function pointer
+			using ObserverRaw = etk::Function<void(enet::Tcp&)>; //!< Define an Observer: function pointer
 			ObserverRaw m_observerRaw;
 			/**
 			 * @brief Connect an function member on the signal with the shared_ptr object.
@@ -266,11 +266,11 @@ namespace enet {
 				m_observerRaw = _func;
 			}
 		public:
-			using ObserverRequest = std::function<void(const enet::HttpRequest&)>; //!< Define an Observer: function pointer
+			using ObserverRequest = etk::Function<void(const enet::HttpRequest&)>; //!< Define an Observer: function pointer
 		protected:
 			ObserverRequest m_observerRequest;
 		public:
-			using ObserverAnswer = std::function<void(const enet::HttpAnswer&)>; //!< Define an Observer: function pointer
+			using ObserverAnswer = etk::Function<void(const enet::HttpAnswer&)>; //!< Define an Observer: function pointer
 		protected:
 			ObserverAnswer m_observerAnswer;
 		public:

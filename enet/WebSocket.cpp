@@ -505,7 +505,7 @@ int32_t enet::WebSocket::send() {
 }
 
 int32_t enet::WebSocket::write(const void* _data, int32_t _len, bool _isString, bool _mask) {
-	std::unique_lock<std::mutex> lock(m_mutex);
+	std::unique_lock<ethread::Mutex> lock(m_mutex);
 	if (configHeader(_isString, _mask) == false) {
 		return -1;
 	}
@@ -518,7 +518,7 @@ void enet::WebSocket::controlPing() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<std::mutex> lock(m_mutex);
+	std::unique_lock<ethread::Mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PING;
 	m_lastSend = echrono::Steady::now();
@@ -532,7 +532,7 @@ void enet::WebSocket::controlPong() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<std::mutex> lock(m_mutex);
+	std::unique_lock<ethread::Mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PONG;
 	m_lastSend = echrono::Steady::now();
@@ -546,7 +546,7 @@ void enet::WebSocket::controlClose() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<std::mutex> lock(m_mutex);
+	std::unique_lock<ethread::Mutex> lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_CLOSE;
 	m_lastSend = echrono::Steady::now();

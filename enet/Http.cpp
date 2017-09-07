@@ -139,7 +139,7 @@ void enet::Http::threadCallback() {
 void enet::Http::start() {
 	ENET_DEBUG("connect [START]");
 	m_threadRunning = true;
-	m_thread = new std::thread([&](void *){ this->threadCallback();}, nullptr);
+	m_thread = new ethread::Thread([&](void *){ this->threadCallback();}, nullptr);
 	if (m_thread == nullptr) {
 		m_threadRunning = false;
 		ENET_ERROR("creating callback thread!");

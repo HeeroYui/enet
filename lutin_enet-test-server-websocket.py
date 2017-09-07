@@ -28,7 +28,7 @@ def configure(target, my_module):
 	my_module.add_path(".")
 	my_module.add_depend([
 	    'enet',
-	    'gtest',
+	    'etest',
 	    'test-debug'
 	    ])
 	my_module.add_src_file([

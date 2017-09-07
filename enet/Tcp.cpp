@@ -164,7 +164,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	// Receive data on this connection until the recv fails with EWOULDBLOCK.
 	// If any other failure occurs, we will close the connection.
 	{
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::unique_lock<ethread::Mutex> lock(m_mutex);
 		rc = recv(m_socketId, (char *)_data, _maxLen, 0);
 	}
 	if (rc < 0) {
@@ -216,7 +216,7 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 	//ENET_DEBUG("write on socketid = " << m_socketId << " data@=" << int64_t(_data) << " size=" << _len );
 	int32_t size;
 	{
-		std::unique_lock<std::mutex> lock(m_mutex);
+		std::unique_lock<ethread::Mutex> lock(m_mutex);
 		size = ::send(m_socketId, (const char *)_data, _len, 0);
 	}
 	if (    size != _len

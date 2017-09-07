@@ -21,7 +21,7 @@ namespace enet {
 			etk::String m_checkKey;
 			echrono::Steady m_lastReceive;
 			echrono::Steady m_lastSend;
-			std::mutex m_mutex;
+			ethread::Mutex m_mutex;
 		public:
 			const echrono::Steady& getLastTimeReceive() {
 				return m_lastReceive;
@@ -52,7 +52,7 @@ namespace enet {
 				m_protocol = _protocol;
 			}
 		public:
-			using Observer = std::function<void(etk::Vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
+			using Observer = etk::Function<void(etk::Vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
 		protected:
 			Observer m_observer;
 		public:
@@ -73,7 +73,7 @@ namespace enet {
 			}
 		// Only server:
 		public:
-			using ObserverUriCheck = std::function<bool(const etk::String&, const etk::Vector<etk::String>&)>; //!< Define an Observer: function pointer
+			using ObserverUriCheck = etk::Function<bool(const etk::String&, const etk::Vector<etk::String>&)>; //!< Define an Observer: function pointer
 		protected:
 			ObserverUriCheck m_observerUriCheck;
 		public:
@@ -97,8 +97,8 @@ namespace enet {
 			bool m_haveMask;
 			uint8_t m_dataMask[4];
 		public:
-			std::unique_lock<std::mutex> getScopeLock() {
-				return etk::move(std::unique_lock<std::mutex>(m_mutex));
+			std::unique_lock<ethread::Mutex> getScopeLock() {
+				return etk::move(std::unique_lock<ethread::Mutex>(m_mutex));
 			}
 			/**
 			 * Compose the local header inside a temporary buffer ==> must lock external to prevent multiple simultaneous access

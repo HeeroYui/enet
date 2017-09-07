@@ -6,7 +6,7 @@
 #pragma once
 
 #include <etk/types.hpp>
-#include <mutex>
+#include <ethread/Mutex.hpp>
 #include <functional>
 #ifdef __TARGET_OS__Windows
 	#include <winsock2.h>
@@ -30,7 +30,7 @@ namespace enet {
 			#ifdef ENET_STORE_INPUT
 				etk::FSNode m_nodeStoreInput;
 			#endif
-			std::mutex m_mutex;
+			ethread::Mutex m_mutex;
 		public:
 			Tcp();
 			#ifdef __TARGET_OS__Windows
