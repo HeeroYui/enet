@@ -8,10 +8,12 @@
 #include <enet/Tcp.hpp>
 #include <enet/TcpClient.hpp>
 #include <enet/enet.hpp>
-#include <sys/types.h>
-#include <cerrno>
-#include <unistd.h>
-#include <cstring>
+extern "C" {
+	#include <sys/types.h>
+	#include <errno.h>
+	#include <unistd.h>
+	#include <string.h>
+}
 #include <etk/stdTools.hpp>
 
 #ifdef __TARGET_OS__Windows
@@ -49,7 +51,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
 		for(int32_t iii=0; iii<_numberRetry ;iii++) {
 			if (iii > 0) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+				ethread::sleepMilliSeconds((200));
 			}
 			// open in Socket normal mode
 			socketId = socket(AF_INET, SOCK_STREAM, 0);
@@ -126,7 +128,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 		ENET_INFO("Start connection on " << _hostname << ":" << _port);
 		for(int32_t iii=0; iii<_numberRetry ;iii++) {
 			if (iii > 0) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+				ethread::sleepMilliSeconds((200));
 			}
 			// open in Socket normal mode
 			socketId = socket(AF_INET, SOCK_STREAM, 0);

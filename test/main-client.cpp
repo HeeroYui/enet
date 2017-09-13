@@ -10,7 +10,6 @@
 #include <enet/TcpClient.hpp>
 #include <enet/Http.hpp>
 #include <etk/etk.hpp>
-#include <iostream>
 #include <etk/stdTools.hpp>
 
 int main(int _argc, const char *_argv[]) {
@@ -45,7 +44,7 @@ int main(int _argc, const char *_argv[]) {
 		int32_t len = connection.read(data, 1024);
 		TEST_INFO("read len=" << len << " data='" << data << "'");
 		//if (data[len-1] == '2') {
-			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+			ethread::sleepMilliSeconds((delay));
 			delay--;
 			if (delay == 0) {
 				delay = 500;

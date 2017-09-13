@@ -97,8 +97,8 @@ namespace enet {
 			bool m_haveMask;
 			uint8_t m_dataMask[4];
 		public:
-			std::unique_lock<ethread::Mutex> getScopeLock() {
-				return etk::move(std::unique_lock<ethread::Mutex>(m_mutex));
+			ethread::UniqueLock getScopeLock() {
+				return etk::move(ethread::UniqueLock(m_mutex));
 			}
 			/**
 			 * Compose the local header inside a temporary buffer ==> must lock external to prevent multiple simultaneous access

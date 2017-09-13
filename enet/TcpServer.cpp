@@ -8,10 +8,12 @@
 #include <enet/Tcp.hpp>
 #include <enet/TcpServer.hpp>
 #include <enet/enet.hpp>
-#include <sys/types.h>
-#include <cerrno>
-#include <unistd.h>
-#include <cstring>
+extern "C" {
+	#include <sys/types.h>
+	#include <errno.h>
+	#include <unistd.h>
+	#include <string.h>
+}
 #include <etk/stdTools.hpp>
 
 #ifdef __TARGET_OS__Windows

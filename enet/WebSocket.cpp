@@ -8,8 +8,8 @@
 #include <enet/WebSocket.hpp>
 #include <etk/Map.hpp>
 #include <etk/stdTools.hpp>
-#include <cstring>
-#include <random>
+#include <etk/String.hpp>
+#include <etk/tool.hpp>
 #include <algue/base64.hpp>
 #include <algue/sha1.hpp>
 
@@ -74,12 +74,8 @@ enet::WebSocket::~WebSocket() {
 
 static etk::String generateKey() {
 	// create dynamic key:
-	std::random_device rd;
-	std::mt19937 e2(rd());
-	std::uniform_real_distribution<> dist(0, 0xFF);
-	uint8_t dataKey[16];
 	for (size_t iii=0; iii<16; ++iii) {
-		dataKey[iii] = uint8_t(dist(e2));
+		dataKey[iii] = uint8_t(etk::tool::urand(0,255));
 	}
 	return algue::base64::encode(dataKey, 16);
 }
@@ -130,7 +126,7 @@ void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::Stri
 				     || m_interface->isAlive() == false) {
 					break;
 				}
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				ethread::sleepMilliSeconds((10));
 				timeout--;
 			}
 			if (    m_connectionValidate == false
@@ -435,15 +431,10 @@ bool enet::WebSocket::configHeader(bool _isString, bool _mask) {
 	m_sendBuffer.clear();
 	m_sendBuffer.resize(ZEUS_BASE_OFFSET_HEADER, 0);
 	if (_mask == true) {
-		std::random_device rd;
-		// Engine
-		std::mt19937 e2(rd());
-		// Distribtuions
-		std::uniform_real_distribution<> dist(0, 0xFF);
-		m_dataMask[0] = uint8_t(dist(e2));
-		m_dataMask[1] = uint8_t(dist(e2));
-		m_dataMask[2] = uint8_t(dist(e2));
-		m_dataMask[3] = uint8_t(dist(e2));
+		m_dataMask[0] = uint8_t(etk::tool::urand(0,255));
+		m_dataMask[1] = uint8_t(etk::tool::urand(0,255));
+		m_dataMask[2] = uint8_t(etk::tool::urand(0,255));
+		m_dataMask[3] = uint8_t(etk::tool::urand(0,255));
 	}
 	return true;
 }
@@ -505,7 +496,7 @@ int32_t enet::WebSocket::send() {
 }
 
 int32_t enet::WebSocket::write(const void* _data, int32_t _len, bool _isString, bool _mask) {
-	std::unique_lock<ethread::Mutex> lock(m_mutex);
+	ethread::UniqueLock lock(m_mutex);
 	if (configHeader(_isString, _mask) == false) {
 		return -1;
 	}
@@ -518,7 +509,7 @@ void enet::WebSocket::controlPing() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<ethread::Mutex> lock(m_mutex);
+	ethread::UniqueLock lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PING;
 	m_lastSend = echrono::Steady::now();
@@ -532,7 +523,7 @@ void enet::WebSocket::controlPong() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<ethread::Mutex> lock(m_mutex);
+	ethread::UniqueLock lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_PONG;
 	m_lastSend = echrono::Steady::now();
@@ -546,7 +537,7 @@ void enet::WebSocket::controlClose() {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	std::unique_lock<ethread::Mutex> lock(m_mutex);
+	ethread::UniqueLock lock(m_mutex);
 	uint8_t header =   enet::websocket::FLAG_FIN
 	                 | enet::websocket::OPCODE_FRAME_CLOSE;
 	m_lastSend = echrono::Steady::now();

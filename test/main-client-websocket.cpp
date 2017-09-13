@@ -66,7 +66,7 @@ int main(int _argc, const char *_argv[]) {
 	int32_t timeout = 20;
 	while (connection.isAlive() == true
 	        && timeout > 0) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		ethread::sleepMilliSeconds((100));
 		timeout--;
 	}
 	return 0;

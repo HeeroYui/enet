@@ -7,9 +7,11 @@
 #include <enet/debug.hpp>
 #include <enet/Tcp.hpp>
 #include <sys/types.h>
-#include <cerrno>
-#include <unistd.h>
-#include <cstring>
+extern "C" {
+	#include <errno.h>
+	#include <unistd.h>
+	#include <string.h>
+}
 #include <etk/stdTools.hpp>
 #include <ethread/tools.hpp>
 
@@ -112,13 +114,13 @@ bool enet::Tcp::unlink() {
 		#ifdef __TARGET_OS__Windows
 			shutdown(m_socketId, SD_BOTH);
 			// Release hand of the socket to permit the Select to exit ... ==> otherwise it lock ...
-			std::this_thread::sleep_for(std::chrono::milliseconds(20));
+			ethread::sleepMilliSeconds((20));
 			closesocket(m_socketId);
 			m_socketId = INVALID_SOCKET;
 		#else
 			shutdown(m_socketId, SHUT_RDWR);
 			// Release hand of the socket to permit the Select to exit ... ==> otherwise it lock ...
-			std::this_thread::sleep_for(std::chrono::milliseconds(20));
+			ethread::sleepMilliSeconds((20));
 			close(m_socketId);
 			m_socketId = -1;
 		#endif
@@ -164,7 +166,7 @@ int32_t enet::Tcp::read(void* _data, int32_t _maxLen) {
 	// Receive data on this connection until the recv fails with EWOULDBLOCK.
 	// If any other failure occurs, we will close the connection.
 	{
-		std::unique_lock<ethread::Mutex> lock(m_mutex);
+		ethread::UniqueLock lock(m_mutex);
 		rc = recv(m_socketId, (char *)_data, _maxLen, 0);
 	}
 	if (rc < 0) {
@@ -216,7 +218,7 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 	//ENET_DEBUG("write on socketid = " << m_socketId << " data@=" << int64_t(_data) << " size=" << _len );
 	int32_t size;
 	{
-		std::unique_lock<ethread::Mutex> lock(m_mutex);
+		ethread::UniqueLock lock(m_mutex);
 		size = ::send(m_socketId, (const char *)_data, _len, 0);
 	}
 	if (    size != _len

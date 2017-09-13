@@ -85,7 +85,7 @@ int main(int _argc, const char *_argv[]) {
 	connection.start();
 	
 	while (connection.isAlive() == true) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		ethread::sleepMilliSeconds((100));
 	}
 	return 0;
 }

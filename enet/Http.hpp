@@ -10,7 +10,7 @@
 #include <etk/Map.hpp>
 #include <ethread/Thread.hpp>
 #include <ethread/tools.hpp>
-#include <functional>
+#include <etk/Function.hpp>
 
 namespace enet {
 	enum class HTTPAnswerCode {
