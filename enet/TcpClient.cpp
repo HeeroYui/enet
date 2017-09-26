@@ -139,11 +139,8 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
 			struct sockaddr_in servAddr;
 			struct hostent* server = nullptr;
-			if (isalpha(_hostname.c_str()[0])) {        /* host address is a name */
-				ENET_INFO("Calling gethostbyname with " << _hostname);
-				// TODO : This is deprecated use getaddrinfo like windows ...
-				server = gethostbyname(_hostname.c_str());
-			} else {
+			if (    _hostname.c_str()[0] >= '0'
+			     && _hostname.c_str()[0] <= '9') {
 				ENET_INFO("Calling gethostbyaddr with " << _hostname);
 				struct in_addr addr;
 				addr.s_addr = inet_addr(_hostname.c_str());
@@ -154,6 +151,10 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 					// TODO : This is deprecated use getaddrinfo like windows ...
 					server = gethostbyaddr((char *) &addr, 4, AF_INET);
 				}
+			} else {
+				ENET_INFO("Calling gethostbyname with " << _hostname);
+				// TODO : This is deprecated use getaddrinfo like windows ...
+				server = gethostbyname(_hostname.c_str());
 			}
 			if (server == nullptr) {
 				ENET_ERROR("ERROR, no such host : " << _hostname);

@@ -73,6 +73,7 @@ enet::WebSocket::~WebSocket() {
 }
 
 static etk::String generateKey() {
+	uint8_t dataKey[16];
 	// create dynamic key:
 	for (size_t iii=0; iii<16; ++iii) {
 		dataKey[iii] = uint8_t(etk::tool::urand(0,255));

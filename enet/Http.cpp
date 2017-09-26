@@ -7,6 +7,7 @@
 #include <enet/debug.hpp>
 #include <enet/Http.hpp>
 #include <etk/Map.hpp>
+#include <etk/Stream.hpp>
 #include <etk/stdTools.hpp>
 extern "C" {
 	#include <string.h>
@@ -38,50 +39,57 @@ static etk::String removeStartAndStopSpace(const etk::String& _value) {
 	return out;
 }
 
-static etk::Map<enet::HTTPAnswerCode, etk::String> protocolName = {
-	{enet::HTTPAnswerCode::c100_continue, "Continue"},
-	{enet::HTTPAnswerCode::c101_switchingProtocols, "Switching Protocols"},
-	{enet::HTTPAnswerCode::c103_checkpoint, "Checkpoint"},
-	{enet::HTTPAnswerCode::c200_ok, "OK"},
-	{enet::HTTPAnswerCode::c201_created, "Created"},
-	{enet::HTTPAnswerCode::c202_accepted, "Accepted"},
-	{enet::HTTPAnswerCode::c203_nonAuthoritativeInformation, "Non-Authoritative Information"},
-	{enet::HTTPAnswerCode::c204_noContent, "No Content"},
-	{enet::HTTPAnswerCode::c205_resetContent, "Reset Content"},
-	{enet::HTTPAnswerCode::c206_partialContent, "Partial Content"},
-	{enet::HTTPAnswerCode::c300_multipleChoices, "Multiple Choices"},
-	{enet::HTTPAnswerCode::c301_movedPermanently, "Moved Permanently"},
-	{enet::HTTPAnswerCode::c302_found, "Found"},
-	{enet::HTTPAnswerCode::c303_seeOther, "See Other"},
-	{enet::HTTPAnswerCode::c304_notModified, "Not Modified"},
-	{enet::HTTPAnswerCode::c306_switchProxy, "Switch Proxy"},
-	{enet::HTTPAnswerCode::c307_temporaryRedirect, "Temporary Redirect"},
-	{enet::HTTPAnswerCode::c308_resumeIncomplete, "Resume Incomplete"},
-	{enet::HTTPAnswerCode::c400_badRequest, "Bad Request"},
-	{enet::HTTPAnswerCode::c401_unauthorized, "Unauthorized"},
-	{enet::HTTPAnswerCode::c402_paymentRequired, "Payment Required"},
-	{enet::HTTPAnswerCode::c403_forbidden, "Forbidden"},
-	{enet::HTTPAnswerCode::c404_notFound, "Not Found"},
-	{enet::HTTPAnswerCode::c405_methodNotAllowed, "Method Not Allowed"},
-	{enet::HTTPAnswerCode::c406_notAcceptable, "Not Acceptable"},
-	{enet::HTTPAnswerCode::c407_proxyAuthenticationRequired, "Proxy Authentication Required"},
-	{enet::HTTPAnswerCode::c408_requestTimeout, "Request Timeout"},
-	{enet::HTTPAnswerCode::c409_conflict, "Conflict"},
-	{enet::HTTPAnswerCode::c410_gone, "Gone"},
-	{enet::HTTPAnswerCode::c411_lengthRequired, "Length Required"},
-	{enet::HTTPAnswerCode::c412_preconditionFailed, "Precondition Failed"},
-	{enet::HTTPAnswerCode::c413_requestEntityTooLarge, "Request Entity Too Large"},
-	{enet::HTTPAnswerCode::c414_requestURITooLong, "Request-URI Too Long"},
-	{enet::HTTPAnswerCode::c415_unsupportedMediaType, "Unsupported Media Type"},
-	{enet::HTTPAnswerCode::c416_requestedRangeNotSatisfiable, "Requested Range Not Satisfiable"},
-	{enet::HTTPAnswerCode::c417_expectationFailed, "Expectation Failed"},
-	{enet::HTTPAnswerCode::c500_internalServerError, "Internal Server Error"},
-	{enet::HTTPAnswerCode::c501_notImplemented, "Not Implemented"},
-	{enet::HTTPAnswerCode::c502_badGateway, "Bad Gateway"},
-	{enet::HTTPAnswerCode::c503_serviceUnavailable, "Service Unavailable"},
-	{enet::HTTPAnswerCode::c504_gatewayTimeout, "Gateway Timeout"},
-	{enet::HTTPAnswerCode::c505_httpVersionNotSupported, "HTTP Version Not Supported"},
-	{enet::HTTPAnswerCode::c511_networkAuthenticationRequired, "Network Authentication Required"}
+static const etk::Map<enet::HTTPAnswerCode, etk::String>& getProtocolName() {
+	static etk::Map<enet::HTTPAnswerCode, etk::String> protocolName;
+	static bool isInit = false;
+	if (isInit == true) {
+		return protocolName;
+	}
+	isInit = true;
+	protocolName.add(enet::HTTPAnswerCode::c100_continue, "Continue");
+	protocolName.add(enet::HTTPAnswerCode::c101_switchingProtocols, "Switching Protocols");
+	protocolName.add(enet::HTTPAnswerCode::c103_checkpoint, "Checkpoint");
+	protocolName.add(enet::HTTPAnswerCode::c200_ok, "OK");
+	protocolName.add(enet::HTTPAnswerCode::c201_created, "Created");
+	protocolName.add(enet::HTTPAnswerCode::c202_accepted, "Accepted");
+	protocolName.add(enet::HTTPAnswerCode::c203_nonAuthoritativeInformation, "Non-Authoritative Information");
+	protocolName.add(enet::HTTPAnswerCode::c204_noContent, "No Content");
+	protocolName.add(enet::HTTPAnswerCode::c205_resetContent, "Reset Content");
+	protocolName.add(enet::HTTPAnswerCode::c206_partialContent, "Partial Content");
+	protocolName.add(enet::HTTPAnswerCode::c300_multipleChoices, "Multiple Choices");
+	protocolName.add(enet::HTTPAnswerCode::c301_movedPermanently, "Moved Permanently");
+	protocolName.add(enet::HTTPAnswerCode::c302_found, "Found");
+	protocolName.add(enet::HTTPAnswerCode::c303_seeOther, "See Other");
+	protocolName.add(enet::HTTPAnswerCode::c304_notModified, "Not Modified");
+	protocolName.add(enet::HTTPAnswerCode::c306_switchProxy, "Switch Proxy");
+	protocolName.add(enet::HTTPAnswerCode::c307_temporaryRedirect, "Temporary Redirect");
+	protocolName.add(enet::HTTPAnswerCode::c308_resumeIncomplete, "Resume Incomplete");
+	protocolName.add(enet::HTTPAnswerCode::c400_badRequest, "Bad Request");
+	protocolName.add(enet::HTTPAnswerCode::c401_unauthorized, "Unauthorized");
+	protocolName.add(enet::HTTPAnswerCode::c402_paymentRequired, "Payment Required");
+	protocolName.add(enet::HTTPAnswerCode::c403_forbidden, "Forbidden");
+	protocolName.add(enet::HTTPAnswerCode::c404_notFound, "Not Found");
+	protocolName.add(enet::HTTPAnswerCode::c405_methodNotAllowed, "Method Not Allowed");
+	protocolName.add(enet::HTTPAnswerCode::c406_notAcceptable, "Not Acceptable");
+	protocolName.add(enet::HTTPAnswerCode::c407_proxyAuthenticationRequired, "Proxy Authentication Required");
+	protocolName.add(enet::HTTPAnswerCode::c408_requestTimeout, "Request Timeout");
+	protocolName.add(enet::HTTPAnswerCode::c409_conflict, "Conflict");
+	protocolName.add(enet::HTTPAnswerCode::c410_gone, "Gone");
+	protocolName.add(enet::HTTPAnswerCode::c411_lengthRequired, "Length Required");
+	protocolName.add(enet::HTTPAnswerCode::c412_preconditionFailed, "Precondition Failed");
+	protocolName.add(enet::HTTPAnswerCode::c413_requestEntityTooLarge, "Request Entity Too Large");
+	protocolName.add(enet::HTTPAnswerCode::c414_requestURITooLong, "Request-URI Too Long");
+	protocolName.add(enet::HTTPAnswerCode::c415_unsupportedMediaType, "Unsupported Media Type");
+	protocolName.add(enet::HTTPAnswerCode::c416_requestedRangeNotSatisfiable, "Requested Range Not Satisfiable");
+	protocolName.add(enet::HTTPAnswerCode::c417_expectationFailed, "Expectation Failed");
+	protocolName.add(enet::HTTPAnswerCode::c500_internalServerError, "Internal Server Error");
+	protocolName.add(enet::HTTPAnswerCode::c501_notImplemented, "Not Implemented");
+	protocolName.add(enet::HTTPAnswerCode::c502_badGateway, "Bad Gateway");
+	protocolName.add(enet::HTTPAnswerCode::c503_serviceUnavailable, "Service Unavailable");
+	protocolName.add(enet::HTTPAnswerCode::c504_gatewayTimeout, "Gateway Timeout");
+	protocolName.add(enet::HTTPAnswerCode::c505_httpVersionNotSupported, "HTTP Version Not Supported");
+	protocolName.add(enet::HTTPAnswerCode::c511_networkAuthenticationRequired, "Network Authentication Required");
+	return protocolName;
 };
 
 
@@ -141,7 +149,7 @@ void enet::Http::threadCallback() {
 void enet::Http::start() {
 	ENET_DEBUG("connect [START]");
 	m_threadRunning = true;
-	m_thread = new ethread::Thread([&](void *){ this->threadCallback();}, nullptr);
+	m_thread = new ethread::Thread([&](){ threadCallback();});
 	if (m_thread == nullptr) {
 		m_threadRunning = false;
 		ENET_ERROR("creating callback thread!");
@@ -183,8 +191,8 @@ void enet::Http::writeAnswerHeader(enum enet::HTTPAnswerCode _value) {
 	etk::String out;
 	out = "HTTP/1.1 ";
 	out += etk::toString(int32_t(_value));
-	auto it = protocolName.find(_value);
-	if (it == protocolName.end() ) {
+	auto it = getProtocolName().find(_value);
+	if (it == getProtocolName().end() ) {
 		out += " ???";
 	} else {
 		out += " " + it->second;
@@ -198,7 +206,7 @@ namespace etk {
 	template <>
 	bool from_string<enum enet::HTTPAnswerCode>(enum enet::HTTPAnswerCode& _variableRet, const etk::String& _value) {
 		_variableRet = enet::HTTPAnswerCode::c000_unknow;
-		for (auto &it : protocolName) {
+		for (auto &it : getProtocolName()) {
 			if (etk::toString(int32_t(it.first)) == _value) {
 				_variableRet = it.first;
 				return true;
@@ -590,7 +598,7 @@ int32_t enet::Http::write(const void* _data, int32_t _len) {
 void enet::HttpHeader::setKey(const etk::String& _key, const etk::String& _value) {
 	auto it = m_map.find(_key);
 	if (it == m_map.end()) {
-		m_map.insert(make_pair(_key, _value));
+		m_map.add(_key, _value);
 	} else {
 		it->second = _value;
 	}
@@ -660,8 +668,8 @@ etk::String enet::HttpAnswer::generate() const {
 	if (m_helpMessage != "") {
 		out += escapeChar(m_helpMessage);
 	} else {
-		auto it = protocolName.find(m_what);
-		if (it != protocolName.end()) {
+		auto it = getProtocolName().find(m_what);
+		if (it != getProtocolName().end()) {
 			out += escapeChar(it->second);
 		} else {
 			out += "???";
