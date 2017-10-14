@@ -25,6 +25,17 @@ extern "C" {
 	#include <arpa/inet.h>
 #endif
 
+enet::Tcp enet::connectTcpClient(const etk::String& _config, uint32_t _numberRetry, echrono::Duration _timeOut) {
+	size_t pos = _config.find(':');
+	if (pos == etk::String::npos) {
+		return etk::move(enet::connectTcpClient(_config, 0, _numberRetry, _timeOut));
+	}
+	return etk::move(enet::connectTcpClient(_config.extract(0, pos),
+	                                        etk::string_to_uint16_t(_config.extract(pos+1)),
+	                                        _numberRetry,
+	                                        _timeOut));
+}
+
 enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8_t _ip4, uint16_t _port, uint32_t _numberRetry, echrono::Duration _timeOut) {
 	etk::String tmpname;
 	tmpname  = etk::toString(_ip1);
