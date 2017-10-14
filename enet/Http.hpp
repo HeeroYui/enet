@@ -219,6 +219,14 @@ namespace enet {
 			ethread::Thread* m_thread;
 			bool m_threadRunning;
 			etk::Vector<uint8_t> m_temporaryBuffer;
+		public:
+			/**
+			 * @brief Get the adress of the connection source IP:port
+			 * @return string with the remote address name.
+			 */
+			const etk::String& getRemoteAddress() const {
+				return m_connection.getRemoteName();
+			}
 		private:
 			void threadCallback();
 		private:
@@ -229,6 +237,13 @@ namespace enet {
 			bool isAlive() const {
 				return m_connection.getConnectionStatus() == enet::Tcp::status::link;
 			}
+		public:
+			/**
+			 * @brief Redirect the current HTTP request to an other network address.
+			 * @param[in] _addressRedirect new redirection address:port
+			 * @param[in] _inThreadStop the http thread request an auto-stop.
+			 */
+			void redirectTo(const etk::String& _addressRedirect, bool _inThreadStop=false);
 		public:
 			using Observer = etk::Function<void(etk::Vector<uint8_t>&)>; //!< Define an Observer: function pointer
 			Observer m_observer;
@@ -323,6 +338,7 @@ namespace enet {
 			HttpClient(enet::Tcp _connection);
 		public:
 			void setHeader(const enet::HttpRequest& _header) {
+				_header.display();
 				setRequestHeader(_header);
 			}
 		public:
@@ -352,6 +368,7 @@ namespace enet {
 			HttpServer(enet::Tcp _connection);
 		public:
 			void setHeader(const enet::HttpAnswer& _header) {
+				_header.display();
 				setAnswerHeader(_header);
 			}
 		public:

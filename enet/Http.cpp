@@ -9,6 +9,7 @@
 #include <etk/Map.hpp>
 #include <etk/Stream.hpp>
 #include <etk/stdTools.hpp>
+#include <enet/TcpClient.hpp>
 extern "C" {
 	#include <string.h>
 }
@@ -126,7 +127,9 @@ void enet::Http::threadCallback() {
 		// READ section data:
 		if (m_headerIsSend == false) {
 			getHeader();
-			m_headerIsSend = true;
+			if (m_headerIsSend == false) {
+				continue;
+			}
 		}
 		if (m_observerRaw != nullptr) {
 			m_observerRaw(m_connection);
@@ -145,6 +148,15 @@ void enet::Http::threadCallback() {
 	ENET_DEBUG("End of thread HTTP");
 }
 
+void enet::Http::redirectTo(const etk::String& _addressRedirect, bool _inThreadStop) {
+	if (m_isServer == true) {
+		ENET_ERROR("Request a redirect in Server mode ==> not authorised");
+		return;
+	}
+	stop(_inThreadStop);
+	m_headerIsSend = false;
+	m_connection = etk::move(connectTcpClient(_addressRedirect));
+}
 
 void enet::Http::start() {
 	ENET_DEBUG("connect [START]");
@@ -508,6 +520,7 @@ void enet::Http::getHeader() {
 			m_connection.unlink();
 		}
 	}
+	m_headerIsSend = true;
 	if (m_isServer == false) {
 		if (m_observerAnswer != nullptr) {
 			m_observerAnswer(m_answerHeader);
