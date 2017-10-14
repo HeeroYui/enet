@@ -43,6 +43,14 @@ enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
 	setInterface(etk::move(_connection), _isServer);
 }
 
+const etk::String& enet::WebSocket::getRemoteAddress() const {
+	if (m_interface == nullptr) {
+		static const etk::String tmpOut;
+		return tmpOut;
+	}
+	return m_interface->getRemoteAddress();
+}
+
 void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 	_connection.setTCPNoDelay(true);
 	if (_isServer == true) {
@@ -92,49 +100,61 @@ void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::Stri
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
-	m_interface->start();
-	if (m_interface->isServer() == false) {
-		enet::HttpRequest req(enet::HTTPReqType::HTTP_GET);
-		req.setProtocol(enet::HTTPProtocol::http_1_1);
-		req.setUri(_uri);
-		req.setKey("Upgrade", "websocket");
-		req.setKey("Connection", "Upgrade");
-		m_checkKey = generateKey();
-		req.setKey("Sec-WebSocket-Key", m_checkKey); // this is an example key ...
-		m_checkKey = generateCheckKey(m_checkKey);
-		req.setKey("Sec-WebSocket-Version", "13");
-		req.setKey("Pragma", "no-cache");
-		req.setKey("Cache-Control", "no-cache");
-		etk::String protocolList;
-		for (auto &it : _listProtocols) {
-			if (it == "") {
-				continue;
+	if (m_interface->isServer() == true) {
+		m_interface->start();
+	} else {
+		do {
+			m_redirectInProgress = false;
+			m_interface->start();
+			enet::HttpRequest req(enet::HTTPReqType::HTTP_GET);
+			req.setProtocol(enet::HTTPProtocol::http_1_1);
+			req.setUri(_uri);
+			req.setKey("Upgrade", "websocket");
+			req.setKey("Connection", "Upgrade");
+			m_checkKey = generateKey();
+			req.setKey("Sec-WebSocket-Key", m_checkKey); // this is an example key ...
+			m_checkKey = generateCheckKey(m_checkKey);
+			req.setKey("Sec-WebSocket-Version", "13");
+			req.setKey("Pragma", "no-cache");
+			req.setKey("Cache-Control", "no-cache");
+			etk::String protocolList;
+			for (auto &it : _listProtocols) {
+				if (it == "") {
+					continue;
+				}
+				if (protocolList != "") {
+					protocolList += ", ";
+				}
+				protocolList += it;
 			}
 			if (protocolList != "") {
-				protocolList += ", ";
+				req.setKey("Sec-WebSocket-Protocol", protocolList);
 			}
-			protocolList += it;
-		}
-		if (protocolList != "") {
-			req.setKey("Sec-WebSocket-Protocol", protocolList);
-		}
-		ememory::SharedPtr<enet::HttpClient> interface = ememory::dynamicPointerCast<enet::HttpClient>(m_interface);
-		if (interface != nullptr) {
-			interface->setHeader(req);
-			int32_t timeout = 500000; // 5 second
-			while (timeout>=0) {
-				if (    m_connectionValidate == true
-				     || m_interface->isAlive() == false) {
-					break;
+			ememory::SharedPtr<enet::HttpClient> interface = ememory::dynamicPointerCast<enet::HttpClient>(m_interface);
+			if (interface != nullptr) {
+				interface->setHeader(req);
+				int32_t timeout = 500000; // 5 second
+				while (    timeout>=0
+				        && m_redirectInProgress == false) {
+					if (    m_connectionValidate == true
+					     || m_interface->isAlive() == false) {
+						break;
+					}
+					ethread::sleepMilliSeconds(10);
+					timeout--;
 				}
-				ethread::sleepMilliSeconds((10));
-				timeout--;
+				if (m_redirectInProgress == true) {
+					ENET_WARNING("Request a redirection (wait 500ms)");
+					ethread::sleepMilliSeconds(500);
+					ENET_WARNING("Request a redirection (wait-end)");
+				} else {
+					if (    m_connectionValidate == false
+					     || m_interface->isAlive() == false) {
+						ENET_ERROR("Connection refused by SERVER ...");
+					}
+				}
 			}
-			if (    m_connectionValidate == false
-			     || m_interface->isAlive() == false) {
-				ENET_ERROR("Connection refused by SERVER ...");
-			}
-		}
+		} while (m_redirectInProgress == true);
 	}
 }
 
@@ -370,9 +390,22 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 			listProtocol[iii] = removeStartAndStopSpace(listProtocol[iii]);
 		}
 	}
-	
 	if (m_observerUriCheck != nullptr) {
-		if (m_observerUriCheck(_data.getUri(), listProtocol) == false) {
+		etk::String ret = m_observerUriCheck(_data.getUri(), listProtocol);
+		if (ret == "OK") {
+			// Nothing to do
+		} else if (ret.startWith("REDIRECT:") == true) {
+			ENET_INFO("Request redirection of HTTP/WebSocket connection to : '" << ret.extract(9, ret.size()) << "'");
+			enet::HttpAnswer answer(enet::HTTPAnswerCode::c307_temporaryRedirect);
+			answer.setProtocol(enet::HTTPProtocol::http_1_1);
+			answer.setKey("Location", ret.extract(9, ret.size()));
+			interface->setHeader(answer);
+			interface->stop(true);
+			return;
+		} else {
+			if (ret != "CLOSE") {
+				ENET_ERROR("UNKNOW return type of URI request: '" << ret << "'");
+			}
 			enet::HttpAnswer answer(enet::HTTPAnswerCode::c404_notFound);
 			answer.setProtocol(enet::HTTPProtocol::http_1_1);
 			answer.setKey("Connection", "close");
@@ -399,6 +432,14 @@ void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
 		return;
 	}
 	_data.display();
+	if (_data.getErrorCode() == enet::HTTPAnswerCode::c307_temporaryRedirect) {
+		ENET_ERROR("Request connection redirection to '" << _data.getKey("Location") << "'");
+		// We are a client mode, we need to recreate a TCP connection on the new remote interface
+		// This is the generic way to accept a redirection
+		m_redirectInProgress = true;
+		m_interface->redirectTo(_data.getKey("Location"), true);
+		return;
+	}
 	if (_data.getErrorCode() != enet::HTTPAnswerCode::c101_switchingProtocols) {
 		ENET_ERROR("change protocol has not been accepted ... " << _data.getErrorCode() << " with message : " << _data.getHelp());
 		m_interface->stop(true);

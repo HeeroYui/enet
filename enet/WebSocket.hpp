@@ -22,6 +22,7 @@ namespace enet {
 			echrono::Steady m_lastReceive;
 			echrono::Steady m_lastSend;
 			ethread::Mutex m_mutex;
+			bool m_redirectInProgress = false;
 		public:
 			const echrono::Steady& getLastTimeReceive() {
 				return m_lastReceive;
@@ -52,6 +53,12 @@ namespace enet {
 				m_protocol = _protocol;
 			}
 		public:
+			/**
+			 * @brief Get the address of the connection source IP:port or empty string
+			 * @return string with the remote address name.
+			 */
+			const etk::String& getRemoteAddress() const;
+		public:
 			using Observer = etk::Function<void(etk::Vector<uint8_t>&, bool)>; //!< Define an Observer: function pointer
 		protected:
 			Observer m_observer;
@@ -73,7 +80,15 @@ namespace enet {
 			}
 		// Only server:
 		public:
-			using ObserverUriCheck = etk::Function<bool(const etk::String&, const etk::Vector<etk::String>&)>; //!< Define an Observer: function pointer
+			/**
+			 * @brief Define an Observer: function pointer
+			 * @param[in] _uri Current HTTP URI
+			 * @param[in] _protocols List of protocol requested
+			 * @return "OK" Connection accepted ==> send header
+			 * @return "CLOSE" Close the current connection: 404
+			 * @return "REDIRECT:IP:port" Redirect at the specific IP and port
+			 */
+			using ObserverUriCheck = etk::Function<etk::String(const etk::String&, const etk::Vector<etk::String>&)>;
 		protected:
 			ObserverUriCheck m_observerUriCheck;
 		public:
@@ -84,7 +99,7 @@ namespace enet {
 			 * @param[in] _args Argument optinnal the user want to add.
 			 */
 			template<class CLASS_TYPE>
-			void connectUri(CLASS_TYPE* _class, bool (CLASS_TYPE::*_func)(const etk::String&, const etk::Vector<etk::String>&)) {
+			void connectUri(CLASS_TYPE* _class, etk::String (CLASS_TYPE::*_func)(const etk::String&, const etk::Vector<etk::String>&)) {
 				m_observerUriCheck = [=](const etk::String& _value, const etk::Vector<etk::String>& _protocols){
 					return (*_class.*_func)(_value, _protocols);
 				};
