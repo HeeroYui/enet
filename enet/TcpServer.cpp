@@ -183,8 +183,57 @@ enet::Tcp enet::TcpServer::waitNext() {
 		
 		return enet::Tcp();
 	}
-	ENET_INFO("End configuring Socket ... Find New one");
-	return enet::Tcp(socketIdClient, m_host + ":" + etk::toString(m_port));
+	etk::String remoteAddress;
+	{
+		struct sockaddr_storage addr;
+		char ipstr[INET6_ADDRSTRLEN];
+		socklen_t len = sizeof(addr);
+		getpeername(socketIdClient, (struct sockaddr*)&addr, &len);
+		// deal with both IPv4 and IPv6:
+		if (addr.ss_family == AF_INET) {
+			struct sockaddr_in *s = (struct sockaddr_in *)&addr;
+			int port = ntohs(s->sin_port);
+			remoteAddress = etk::toString(s->sin_addr.s_addr&0xFF);
+			remoteAddress += ".";
+			remoteAddress += etk::toString((s->sin_addr.s_addr>>8)&0xFF);
+			remoteAddress += ".";
+			remoteAddress += etk::toString((s->sin_addr.s_addr>>16)&0xFF);
+			remoteAddress += ".";
+			remoteAddress += etk::toString((s->sin_addr.s_addr>>24)&0xFF);
+			remoteAddress += ":";
+			remoteAddress += etk::toString(port);
+		} else { // AF_INET6
+			struct sockaddr_in6 *s = (struct sockaddr_in6 *)&addr;
+			int port = ntohs(s->sin6_port);
+			remoteAddress = etk::toHex(s->sin6_addr.s6_addr[0], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[1], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[2], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[3], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[4], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[5], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[6], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[7], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[8], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[9], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[10], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[11], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[12], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[13], 2);
+			remoteAddress += ".";
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[14], 2);
+			remoteAddress += etk::toHex(s->sin6_addr.s6_addr[15], 2);
+			remoteAddress += ":";
+			remoteAddress += etk::toString(port);
+		}
+	}
+	ENET_ERROR("End configuring Socket ... Find New one FROM " << remoteAddress);
+	return enet::Tcp(socketIdClient, m_host + ":" + etk::toString(m_port), remoteAddress);
 }
 
 
