@@ -53,12 +53,13 @@ enet::Tcp::Tcp() :
 }
 
 #ifdef __TARGET_OS__Windows
-	enet::Tcp::Tcp(SOCKET _idSocket, const etk::String& _name) :
+	enet::Tcp::Tcp(SOCKET _idSocket, const etk::String& _name, const etk::String& _remoteName) :
 #else
-	enet::Tcp::Tcp(int32_t _idSocket, const etk::String& _name) :
+	enet::Tcp::Tcp(int32_t _idSocket, const etk::String& _name, const etk::String& _remoteName) :
 #endif
   m_socketId(_idSocket),
   m_name(_name),
+  m_remoteName(_remoteName),
   m_status(status::link) {
 	#ifdef ENET_STORE_INPUT
 		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::toString(baseID++) + ".tcp");
@@ -69,6 +70,7 @@ enet::Tcp::Tcp() :
 enet::Tcp::Tcp(Tcp&& _obj) :
   m_socketId(_obj.m_socketId),
   m_name(_obj.m_name),
+  m_remoteName(_obj.m_remoteName),
   m_status(_obj.m_status) {
 	#ifdef ENET_STORE_INPUT
 		m_nodeStoreInput = etk::FSNode("CACHE:StoreTCPdata_" + etk::toString(baseID++) + ".tcp");

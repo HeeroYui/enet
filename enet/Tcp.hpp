@@ -34,9 +34,9 @@ namespace enet {
 		public:
 			Tcp();
 			#ifdef __TARGET_OS__Windows
-				Tcp(SOCKET _idSocket, const etk::String& _name);
+				Tcp(SOCKET _idSocket, const etk::String& _name, const etk::String& _remoteName="");
 			#else
-				Tcp(int32_t _idSocket, const etk::String& _name);
+				Tcp(int32_t _idSocket, const etk::String& _name, const etk::String& _remoteName="");
 			#endif
 			// move constructor
 			Tcp(Tcp&& _obj);
@@ -52,8 +52,18 @@ namespace enet {
 			 * @brief Get the decriptive name hot the host:port
 			 * @return the string requested
 			 */
-			const etk::String& getName() {
+			const etk::String& getName() const {
 				return m_name;
+			}
+		private:
+			etk::String m_remoteName; //!< remote IP:port.
+		public:
+			/**
+			 * @brief Get the decriptive name hot the host:port
+			 * @return the string requested
+			 */
+			const etk::String& getRemoteName() const {
+				return m_remoteName;
 			}
 		public:
 			enum class status {
