@@ -161,7 +161,7 @@ void enet::Http::redirectTo(const etk::String& _addressRedirect, bool _inThreadS
 void enet::Http::start() {
 	ENET_DEBUG("connect [START]");
 	m_threadRunning = true;
-	m_thread = new ethread::Thread([&](){ threadCallback();});
+	m_thread = ETK_NEW(ethread::Thread, [&](){ threadCallback();});
 	if (m_thread == nullptr) {
 		m_threadRunning = false;
 		ENET_ERROR("creating callback thread!");
@@ -192,7 +192,7 @@ void enet::Http::stop(bool _inThreadStop){
 			ENET_DEBUG("wait join Thread ...");
 			m_thread->join();
 			ENET_DEBUG("wait join Thread (done)");
-			delete m_thread;
+			ETK_DELETE(ethread::Thread, m_thread);
 			m_thread = nullptr;
 		}
 	}
