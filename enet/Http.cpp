@@ -155,7 +155,7 @@ void enet::Http::redirectTo(const etk::String& _addressRedirect, bool _inThreadS
 	}
 	stop(_inThreadStop);
 	m_headerIsSend = false;
-	m_connection = etk::move(connectTcpClient(_addressRedirect));
+	m_connection = etk::move(connectTcpClient(_addressRedirect, 5, echrono::seconds(1)));
 }
 
 void enet::Http::start() {
