@@ -42,6 +42,7 @@ def configure(target, my_module):
 	    'enet/Http.cpp',
 	    'enet/Ftp.cpp',
 	    'enet/WebSocket.cpp',
+	    'enet/pourcentEncoding.cpp',
 	    ])
 	my_module.add_header_file([
 	    'enet/enet.hpp',
@@ -53,6 +54,7 @@ def configure(target, my_module):
 	    'enet/Http.hpp',
 	    'enet/Ftp.hpp',
 	    'enet/WebSocket.hpp',
+	    'enet/pourcentEncoding.hpp',
 	    ])
 	if "Windows" in target.get_type():
 		my_module.add_depend("ws2");
