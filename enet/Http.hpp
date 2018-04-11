@@ -162,6 +162,7 @@ namespace enet {
 		HTTP_POST,
 		HTTP_PUT,
 		HTTP_DELETE,
+		HTTP_OPTIONS,
 	};
 	etk::Stream& operator <<(etk::Stream& _os, enum enet::HTTPReqType _obj);
 	class HttpRequest : public HttpHeader {

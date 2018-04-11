@@ -248,6 +248,9 @@ namespace etk {
 		} else if (_value == "DELETE") {
 			_variableRet = enet::HTTPReqType::HTTP_DELETE;
 			return true;
+		} else if (_value == "OPTIONS") {
+			_variableRet = enet::HTTPReqType::HTTP_OPTIONS;
+			return true;
 		}
 		return false;
 	}
@@ -259,6 +262,7 @@ namespace etk {
 			case enet::HTTPReqType::HTTP_POST: return "POST";
 			case enet::HTTPReqType::HTTP_PUT: return "PUT";
 			case enet::HTTPReqType::HTTP_DELETE: return "DELETE";
+			case enet::HTTPReqType::HTTP_OPTIONS: return "OPTIONS";
 		}
 		return "UNKNOW";
 	}
@@ -364,8 +368,14 @@ namespace etk {
 
 void enet::Http::setRequestHeader(const enet::HttpRequest& _req) {
 	m_requestHeader = _req;
-	if (m_requestHeader.getKey("User-Agent") == "") {
-		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+	if (m_isServer == true) {
+		if (m_requestHeader.getKey("Server") == "") {
+			m_requestHeader.setKey("Server", "e-net (ewol network interface)");
+		}
+	} else {
+		if (m_requestHeader.getKey("User-Agent") == "") {
+			m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+		}
 	}
 	etk::String value = m_requestHeader.generate();
 	write(value, false);
@@ -373,8 +383,14 @@ void enet::Http::setRequestHeader(const enet::HttpRequest& _req) {
 
 void enet::Http::setAnswerHeader(const enet::HttpAnswer& _req) {
 	m_answerHeader = _req;
-	if (m_requestHeader.getKey("User-Agent") == "") {
-		m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+	if (m_isServer == true) {
+		if (m_requestHeader.getKey("Server") == "") {
+			m_requestHeader.setKey("Server", "e-net (ewol network interface)");
+		}
+	} else {
+		if (m_requestHeader.getKey("User-Agent") == "") {
+			m_requestHeader.setKey("User-Agent", "e-net (ewol network interface)");
+		}
 	}
 	etk::String value = m_answerHeader.generate();
 	write(value, false);
@@ -438,7 +454,8 @@ void enet::Http::getHeader() {
 	          || listLineOne[0] == "POST"
 	          || listLineOne[0] == "HEAD"
 	          || listLineOne[0] == "DELETE"
-	          || listLineOne[0] == "PUT" ) ) {
+	          || listLineOne[0] == "PUT"
+	          || listLineOne[0] == "OPTIONS" ) ) {
 		// HTTP CALL
 		if (m_isServer == false) {
 			// can not have call in client mode
@@ -637,7 +654,7 @@ etk::String enet::HttpHeader::generateKeys() const {
 	for (auto &it : m_map) {
 		if (    it.first != ""
 		     && it.second != "") {
-			out += escapeChar(it.first) + " : " + escapeChar(it.second) + "\r\n";
+			out += escapeChar(it.first) + ": " + escapeChar(it.second) + "\r\n";
 		}
 	}
 	return out;
