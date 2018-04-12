@@ -10,6 +10,7 @@
 #include <etk/Stream.hpp>
 #include <etk/stdTools.hpp>
 #include <enet/TcpClient.hpp>
+#include <enet/pourcentEncoding.hpp>
 extern "C" {
 	#include <string.h>
 }
@@ -471,7 +472,14 @@ void enet::Http::getHeader() {
 		etk::from_string(valueType, listLineOne[0]);
 		m_requestHeader.setType(valueType);
 		// get URI:
-		m_requestHeader.setUri(listLineOne[1]);
+		etk::String basicUri = listLineOne[1];
+		size_t pos = basicUri.find('?');
+		if (pos == etk::String::npos) {
+			m_requestHeader.setUri(listLineOne[1]);
+		} else {
+			m_requestHeader.setUri(basicUri.extract(0, pos));
+			m_requestHeader.setQuery(pourcentUriDecode(basicUri.extract(pos+1)));
+		}
 		// Get http version:
 		enum enet::HTTPProtocol valueProtocol;
 		etk::from_string(valueProtocol, listLineOne[2]);
@@ -649,6 +657,14 @@ etk::String enet::HttpHeader::getKey(const etk::String& _key) const {
 	return "";
 }
 
+bool enet::HttpHeader::existKey(const etk::String& _key) const {
+	auto it = m_map.find(_key);
+	if (it != m_map.end()) {
+		return true;
+	}
+	return false;
+}
+
 etk::String enet::HttpHeader::generateKeys() const {
 	etk::String out;
 	for (auto &it : m_map) {
@@ -658,6 +674,45 @@ etk::String enet::HttpHeader::generateKeys() const {
 		}
 	}
 	return out;
+}
+
+void enet::HttpHeader::setQuery(const etk::Map<etk::String, etk::String>& _value) {
+	m_query = _value;
+}
+void enet::HttpHeader::setQueryKey(const etk::String& _key, const etk::String& _value) {
+	auto it = m_query.find(_key);
+	if (it == m_query.end()) {
+		m_query.add(_key, _value);
+	} else {
+		it->second = _value;
+	}
+}
+
+void enet::HttpHeader::rmQueryKey(const etk::String& _key) {
+	auto it = m_query.find(_key);
+	if (it != m_query.end()) {
+		m_query.erase(it);
+	}
+}
+
+etk::String enet::HttpHeader::getQueryKey(const etk::String& _key) const {
+	auto it = m_query.find(_key);
+	if (it != m_query.end()) {
+		return it->second;
+	}
+	return "";
+}
+
+bool enet::HttpHeader::existQueryKey(const etk::String& _key) const {
+	auto it = m_query.find(_key);
+	if (it != m_query.end()) {
+		return true;
+	}
+	return false;
+}
+
+etk::String enet::HttpHeader::generateQueryKeys() const {
+	return enet::pourcentUriEncode(m_query);
 }
 
 enet::HttpHeader::HttpHeader():
@@ -682,6 +737,13 @@ void enet::HttpAnswer::display() const {
 	ENET_PRINT("    message=" << m_helpMessage);
 	ENET_PRINT("    Options:");
 	for (auto &it : m_map) {
+		if (    it.first != ""
+		     && it.second != "") {
+			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
+		}
+	}
+	ENET_PRINT("    query:");
+	for (auto &it : m_query) {
 		if (    it.first != ""
 		     && it.second != "") {
 			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
@@ -739,6 +801,13 @@ void enet::HttpRequest::display() const {
 			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
 		}
 	}
+	ENET_PRINT("    query:");
+	for (auto &it : m_query) {
+		if (    it.first != ""
+		     && it.second != "") {
+			ENET_PRINT("        '" + it.first + "' = '" + it.second + "'");
+		}
+	}
 }
 
 etk::String enet::HttpRequest::generate() const {
@@ -746,6 +815,10 @@ etk::String enet::HttpRequest::generate() const {
 	out += etk::toString(m_req);
 	out += " ";
 	out += m_uri;
+	etk::String querryData = generateQueryKeys();
+	if (querryData.empty() != 0) {
+		out += "?" + querryData;
+	}
 	out += " ";
 	out += etk::toString(m_protocol);
 	out += "\r\n";

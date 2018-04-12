@@ -116,13 +116,23 @@ namespace enet {
 		protected:
 			// key, val
 			etk::Map<etk::String, etk::String> m_map;
+			etk::Map<etk::String, etk::String> m_query;
 			enum HTTPProtocol m_protocol;
 		public:
 			void setKey(const etk::String& _key, const etk::String& _value);
 			void rmKey(const etk::String& _key);
 			etk::String getKey(const etk::String& _key) const;
+			bool existKey(const etk::String& _key) const;
 		protected:
 			etk::String generateKeys() const;
+		public:
+			void setQuery(const etk::Map<etk::String, etk::String>& _value);
+			void setQueryKey(const etk::String& _key, const etk::String& _value);
+			void rmQueryKey(const etk::String& _key);
+			etk::String getQueryKey(const etk::String& _key) const;
+			bool existQueryKey(const etk::String& _key) const;
+		protected:
+			etk::String generateQueryKeys() const;
 		public:
 			enum HTTPProtocol getProtocol() const {
 				return m_protocol;
