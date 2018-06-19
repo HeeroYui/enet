@@ -72,7 +72,7 @@ void enet::TcpServer::setPort(uint16_t _port) {
 		}
 		ENET_INFO("Start connection on " << m_host << ":" << m_port);
 		
-		struct addrinfo *result = nullptr;
+		struct addrinfo *result = null;
 		struct addrinfo hints;
 		ZeroMemory(&hints, sizeof(hints));
 		hints.ai_family = AF_INET;
@@ -82,7 +82,7 @@ void enet::TcpServer::setPort(uint16_t _port) {
 		
 		// Resolve the server address and port
 		etk::String portValue = etk::toString(m_port);
-		int iResult = getaddrinfo(nullptr, portValue.c_str(), &hints, &result);
+		int iResult = getaddrinfo(null, portValue.c_str(), &hints, &result);
 		if (iResult != 0) {
 			ENET_ERROR("getaddrinfo failed with error: " << iResult);
 			return 1;

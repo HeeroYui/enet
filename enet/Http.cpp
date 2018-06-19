@@ -105,7 +105,7 @@ enet::Http::Http(enet::Tcp _connection, bool _isServer) :
   m_isServer(_isServer),
   m_connection(etk::move(_connection)),
   m_headerIsSend(false),
-  m_thread(nullptr),
+  m_thread(null),
   m_threadRunning(false) {
 	//setSendHeaderProperties("User-Agent", "e-net (ewol network interface)");
 	/*
@@ -132,14 +132,14 @@ void enet::Http::threadCallback() {
 				continue;
 			}
 		}
-		if (m_observerRaw != nullptr) {
+		if (m_observerRaw != null) {
 			m_observerRaw(m_connection);
 		} else {
 			m_temporaryBuffer.resize(67000);
 			int32_t len = m_connection.read(&m_temporaryBuffer[0], m_temporaryBuffer.size());
 			if (len > 0) {
 				ENET_INFO("Call client with datas ...");
-				if (m_observer != nullptr) {
+				if (m_observer != null) {
 					m_observer(m_temporaryBuffer);
 				}
 			}
@@ -163,7 +163,7 @@ void enet::Http::start() {
 	ENET_DEBUG("connect [START]");
 	m_threadRunning = true;
 	m_thread = ETK_NEW(ethread::Thread, [&](){ threadCallback();});
-	if (m_thread == nullptr) {
+	if (m_thread == null) {
 		m_threadRunning = false;
 		ENET_ERROR("creating callback thread!");
 		return;
@@ -189,12 +189,12 @@ void enet::Http::stop(bool _inThreadStop){
 		m_connection.unlink();
 	}
 	if (_inThreadStop == false) {
-		if (m_thread != nullptr) {
+		if (m_thread != null) {
 			ENET_DEBUG("wait join Thread ...");
 			m_thread->join();
 			ENET_DEBUG("wait join Thread (done)");
 			ETK_DELETE(ethread::Thread, m_thread);
-			m_thread = nullptr;
+			m_thread = null;
 		}
 	}
 	ENET_DEBUG("disconnect [STOP]");
@@ -547,11 +547,11 @@ void enet::Http::getHeader() {
 	}
 	m_headerIsSend = true;
 	if (m_isServer == false) {
-		if (m_observerAnswer != nullptr) {
+		if (m_observerAnswer != null) {
 			m_observerAnswer(m_answerHeader);
 		}
 	} else {
-		if (m_observerRequest != nullptr) {
+		if (m_observerRequest != null) {
 			m_observerRequest(m_requestHeader);
 		}
 	}

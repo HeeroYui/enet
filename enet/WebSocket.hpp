@@ -38,7 +38,7 @@ namespace enet {
 			void start(const etk::String& _uri="", const etk::Vector<etk::String>& _listProtocols=etk::Vector<etk::String>());
 			void stop(bool _inThread=false);
 			bool isAlive() const {
-				if (m_interface == nullptr) {
+				if (m_interface == null) {
 					return false;
 				}
 				return m_interface->isAlive();

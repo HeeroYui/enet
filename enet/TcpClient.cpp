@@ -79,7 +79,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			hints.ai_protocol = IPPROTO_TCP;
 			
 			// Resolve the server address and port
-			struct addrinfo* result = nullptr;
+			struct addrinfo* result = null;
 			etk::String portValue = etk::toString(_port);
 			int iResult = getaddrinfo(_hostname.c_str(), portValue.c_str(), &hints, &result);
 			if (iResult != 0) {
@@ -89,7 +89,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			
 			// Attempt to connect to an address until one succeeds
 			for(struct addrinfo* ptr=result;
-			    ptr != nullptr;
+			    ptr != null;
 			    ptr=ptr->ai_next) {
 				ENET_DEBUG(" find one ...");
 				// Create a SOCKET for connecting to server
@@ -149,7 +149,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			}
 			ENET_INFO("Try connect on socket ... (" << iii+1 << "/" << _numberRetry << ")");
 			struct sockaddr_in servAddr;
-			struct hostent* server = nullptr;
+			struct hostent* server = null;
 			if (    _hostname.c_str()[0] >= '0'
 			     && _hostname.c_str()[0] <= '9') {
 				ENET_INFO("Calling gethostbyaddr with " << _hostname);
@@ -167,7 +167,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 				// TODO : This is deprecated use getaddrinfo like windows ...
 				server = gethostbyname(_hostname.c_str());
 			}
-			if (server == nullptr) {
+			if (server == null) {
 				ENET_ERROR("ERROR, no such host : " << _hostname);
 				continue;
 			}

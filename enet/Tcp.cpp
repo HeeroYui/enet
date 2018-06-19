@@ -204,8 +204,8 @@ int32_t enet::Tcp::write(const void* _data, int32_t _len) {
 		ENET_ERROR("Can not write on unlink connection");
 		return -1;
 	}
-	if (_data == nullptr) {
-		ENET_ERROR("try write nullptr data on TCP socket");
+	if (_data == null) {
+		ENET_ERROR("try write null data on TCP socket");
 		return -1;
 	}
 	if (_len <= 0) {

@@ -29,22 +29,22 @@ namespace enet {
 
 enet::WebSocket::WebSocket() :
   m_connectionValidate(false),
-  m_interface(nullptr),
-  m_observer(nullptr),
-  m_observerUriCheck(nullptr) {
+  m_interface(null),
+  m_observer(null),
+  m_observerUriCheck(null) {
 	
 }
 
 enet::WebSocket::WebSocket(enet::Tcp _connection, bool _isServer) :
   m_connectionValidate(false),
-  m_interface(nullptr),
-  m_observer(nullptr),
-  m_observerUriCheck(nullptr) {
+  m_interface(null),
+  m_observer(null),
+  m_observerUriCheck(null) {
 	setInterface(etk::move(_connection), _isServer);
 }
 
 const etk::String& enet::WebSocket::getRemoteAddress() const {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		static const etk::String tmpOut;
 		return tmpOut;
 	}
@@ -56,17 +56,17 @@ void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 	if (_isServer == true) {
 		ememory::SharedPtr<enet::HttpServer> interface = ememory::makeShared<enet::HttpServer>(etk::move(_connection));
 		m_interface = interface;
-		if (interface != nullptr) {
+		if (interface != null) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveRequest);
 		}
 	} else {
 		ememory::SharedPtr<enet::HttpClient> interface = ememory::makeShared<enet::HttpClient>(etk::move(_connection));
 		m_interface = interface;
-		if (interface != nullptr) {
+		if (interface != null) {
 			interface->connectHeader(this, &enet::WebSocket::onReceiveAnswer);
 		}
 	}
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("can not create interface for the websocket");
 		return;
 	}
@@ -74,7 +74,7 @@ void enet::WebSocket::setInterface(enet::Tcp _connection, bool _isServer) {
 }
 
 enet::WebSocket::~WebSocket() {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		return;
 	}
 	stop(true);
@@ -96,7 +96,7 @@ static etk::String generateCheckKey(const etk::String& _key) {
 }
 
 void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::String>& _listProtocols) {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -131,7 +131,7 @@ void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::Stri
 				req.setKey("Sec-WebSocket-Protocol", protocolList);
 			}
 			ememory::SharedPtr<enet::HttpClient> interface = ememory::dynamicPointerCast<enet::HttpClient>(m_interface);
-			if (interface != nullptr) {
+			if (interface != null) {
 				interface->setHeader(req);
 				int32_t timeout = 500000; // 5 second
 				while (    timeout>=0
@@ -160,7 +160,7 @@ void enet::WebSocket::start(const etk::String& _uri, const etk::Vector<etk::Stri
 
 void enet::WebSocket::stop(bool _inThread) {
 	ENET_DEBUG("Stop interface ...");
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -309,14 +309,14 @@ void enet::WebSocket::onReceiveData(enet::Tcp& _connection) {
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_TEXT) {
 		// Close the conection by remote:
 		ENET_WARNING("Receive a Text(UTF-8) data " << m_buffer.size() << " Bytes");
-		if (m_observer != nullptr) {
+		if (m_observer != null) {
 			m_observer(m_buffer, true);
 		}
 		return;
 	}
 	if ((opcode & 0x0F) == enet::websocket::OPCODE_FRAME_BINARY) {
 		// Close the conection by remote:
-		if (m_observer != nullptr) {
+		if (m_observer != null) {
 			m_observer(m_buffer, false);
 		}
 		return;
@@ -345,7 +345,7 @@ static etk::String removeStartAndStopSpace(const etk::String& _value) {
 
 void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 	ememory::SharedPtr<enet::HttpServer> interface = ememory::dynamicPointerCast<enet::HttpServer>(m_interface);
-	if (interface == nullptr) {
+	if (interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -390,7 +390,7 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 			listProtocol[iii] = removeStartAndStopSpace(listProtocol[iii]);
 		}
 	}
-	if (m_observerUriCheck != nullptr) {
+	if (m_observerUriCheck != null) {
 		etk::String ret = m_observerUriCheck(_data.getUri(), listProtocol);
 		if (ret == "OK") {
 			// Nothing to do
@@ -427,7 +427,7 @@ void enet::WebSocket::onReceiveRequest(const enet::HttpRequest& _data) {
 }
 
 void enet::WebSocket::onReceiveAnswer(const enet::HttpAnswer& _data) {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -489,7 +489,7 @@ int32_t enet::WebSocket::writeData(uint8_t* _data, int32_t _len) {
 }
 
 int32_t enet::WebSocket::send() {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return -1;
 	}
@@ -547,7 +547,7 @@ int32_t enet::WebSocket::write(const void* _data, int32_t _len, bool _isString, 
 }
 
 void enet::WebSocket::controlPing() {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -561,7 +561,7 @@ void enet::WebSocket::controlPing() {
 }
 
 void enet::WebSocket::controlPong() {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
@@ -575,7 +575,7 @@ void enet::WebSocket::controlPong() {
 }
 
 void enet::WebSocket::controlClose() {
-	if (m_interface == nullptr) {
+	if (m_interface == null) {
 		ENET_ERROR("Nullptr interface ...");
 		return;
 	}
