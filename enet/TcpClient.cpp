@@ -176,7 +176,7 @@ enet::Tcp enet::connectTcpClient(uint8_t _ip1, uint8_t _ip2, uint8_t _ip3, uint8
 			bcopy((char *)server->h_addr, (char *)&servAddr.sin_addr.s_addr, server->h_length);
 			servAddr.sin_port = htons(_port);
 			ENET_INFO("Start connexion ...");
-			if (connect(socketId, (struct sockaddr *)&servAddr,sizeof(servAddr)) != 0) {
+			if (connect(socketId, (struct sockaddr *)&servAddr, sizeof(servAddr)) != 0) {
 				if(errno != EINPROGRESS) {
 					if(    errno != ENOENT
 					    && errno != EAGAIN
